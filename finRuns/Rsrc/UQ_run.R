@@ -382,7 +382,7 @@ if(uncSeg && file.exists(paste0("uncRuns/segRuns/samplexout_uncSeg_reg",r_no,
 }
 if(!uncSeg & !unc100){
   nSamplesr0<-nSamplesr 
-  nSamplesr<-200
+  #nSamplesr<-200
   filee <- paste0("uncRuns/regRuns/samplexout_reg",r_no,
                   "_CurrClim_Base_Base_samplesize",nSitesRunr,"_iters",nSamplesr,
                   "_pr",uncPCrobas,"_Xr",uncInput,"_ager",uncAge,
