@@ -380,7 +380,7 @@ if(uncSeg && file.exists(paste0("uncRuns/segRuns/samplexout_uncSeg_reg",r_no,
   #nii0<-(length(sampleOutput[[1]])-1)/3+1
   nii0<-as.numeric(strsplit(colnames(sampleOutput[[1]])[length(sampleOutput[[1]])],"per3.")[[1]][2])+1
 }
-if(!uncSeg){
+if(!uncSeg & !unc100){
   nSamplesr0<-nSamplesr 
   nSamplesr<-200
   filee <- paste0("uncRuns/regRuns/samplexout_reg",r_no,
