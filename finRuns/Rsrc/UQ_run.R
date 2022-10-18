@@ -285,7 +285,7 @@ if(uncRun){# sample model parameters, HcFactor and peatland emission coefficient
   pYASr <- t(matrix(pYAS,ncol=nSamplesr,nrow=length(pYAS)))#data.frame()
   pCROBmean <- rbind(colMeans(pCROBpine),colMeans(pCROBspruce),
   colMeans(pCROBbirch))
-  biasCorr<-T
+  if(!exists("biasCorr")) biasCorr<-F
   print(paste("Bias correction to parameters",biasCorr))
   for(ij in 1:nSamplesr){ 
     pCROBASr[[ij]] <- pCrobasX#pCROB
