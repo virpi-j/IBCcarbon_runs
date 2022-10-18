@@ -285,25 +285,34 @@ if(uncRun){# sample model parameters, HcFactor and peatland emission coefficient
   pYASr <- t(matrix(pYAS,ncol=nSamplesr,nrow=length(pYAS)))#data.frame()
   pCROBmean <- rbind(colMeans(pCROBpine),colMeans(pCROBspruce),
   colMeans(pCROBbirch))
+  biasCorr<-T
+  print(paste("Bias correction to parameters",biasCorr))
   for(ij in 1:nSamplesr){ 
     pCROBASr[[ij]] <- pCrobasX#pCROB
     if(uncPCrobas & ij>1){
+      if(biasCorr){
       pCROBASr[[ij]][parindCrob,1:3]<-t(rbind(pCROBpine[parids1[ij],],
                                               pCROBspruce[parids1[ij],],
                                               pCROBbirch[parids1[ij],]))+
       pCrobasX[parindCrob,1:3]-t(pCROBmean)
-#      pCROBASr[[ij]][parindCrob,1:3]<-t(rbind(pCROBpine[parids1[ij],],
-#                                              pCROBspruce[parids1[ij],],
-#                                              pCROBbirch[parids1[ij],]))
+      } else {
+      pCROBASr[[ij]][parindCrob,1:3]<-t(rbind(pCROBpine[parids1[ij],],
+                                              pCROBspruce[parids1[ij],],
+                                              pCROBbirch[parids1[ij],]))}
     }
     if(uncPPrel & ij>1){
-    #  pPRELr[ij,parindPrel] <- pPREL_unc[parids2[ij],]
-      pPRELr[ij,parindPrel] <- pPREL_unc[parids2[ij],]+
+      if(biasCorr){
+        pPRELr[ij,parindPrel] <- pPREL_unc[parids2[ij],]+
         pPREL[parindPrel] - colMeans(pPREL_unc)
+      } else {
+         pPRELr[ij,parindPrel] <- pPREL_unc[parids2[ij],]
+      }
     }
     if(uncPYas & ij>1){
-#      pYASr[ij,] <- pYas_unc[parids3[ij],]
-      pYASr[ij,] <- pYas_unc[parids3[ij],]+pYAS-colMeans(pYASr)
+      if(biasCorr){
+        pYASr[ij,] <- pYas_unc[parids3[ij],]+pYAS-colMeans(pYASr)
+      } else {
+        pYASr[ij,] <- pYas_unc[parids3[ij],]}
     }
     
     if(uncPeat & !uncSeg & !loadParids){
