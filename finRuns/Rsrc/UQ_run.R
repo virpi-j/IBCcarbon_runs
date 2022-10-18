@@ -283,19 +283,27 @@ if(uncRun){# sample model parameters, HcFactor and peatland emission coefficient
   pCROBASr <- list()
   pPRELr <-  t(matrix(pPREL,ncol=nSamplesr,nrow=length(pPREL)))#data.frame()
   pYASr <- t(matrix(pYAS,ncol=nSamplesr,nrow=length(pYAS)))#data.frame()
+  pCROBmean <- rbind(colMeans(pCROBpine),colMeans(pCROBspruce),
+  colMeans(pCROBbirch))
   for(ij in 1:nSamplesr){ 
     pCROBASr[[ij]] <- pCrobasX#pCROB
     if(uncPCrobas & ij>1){
       pCROBASr[[ij]][parindCrob,1:3]<-t(rbind(pCROBpine[parids1[ij],],
                                               pCROBspruce[parids1[ij],],
-                                              pCROBbirch[parids1[ij],]))
+                                              pCROBbirch[parids1[ij],]))+
+      pCrobasX[parindCrob,1:3]-t(pCROBmean)
+#      pCROBASr[[ij]][parindCrob,1:3]<-t(rbind(pCROBpine[parids1[ij],],
+#                                              pCROBspruce[parids1[ij],],
+#                                              pCROBbirch[parids1[ij],]))
     }
-    #pPRELr <- rbind(pPRELr, pPREL)
     if(uncPPrel & ij>1){
-      pPRELr[ij,parindPrel] <- pPREL_unc[parids2[ij],]
+    #  pPRELr[ij,parindPrel] <- pPREL_unc[parids2[ij],]
+      pPRELr[ij,parindPrel] <- pPREL_unc[parids2[ij],]+
+        pPREL[parindPrel] - colMeans(pPREL_unc)
     }
     if(uncPYas & ij>1){
-      pYASr[ij,] <- pYas_unc[parids3[ij],]
+#      pYASr[ij,] <- pYas_unc[parids3[ij],]
+      pYASr[ij,] <- pYas_unc[parids3[ij],]+pYAS-colMeans(pYASr)
     }
     
     if(uncPeat & !uncSeg & !loadParids){
@@ -534,6 +542,7 @@ for(nii in nii0:niter2){
       initVar=NULL
       initSoilC=NULL
       reInit=F
+      sampleX=NULL
       #funX = regionPrebas
       initSoilCreStart=NULL
       outModReStart=NULL
