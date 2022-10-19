@@ -285,7 +285,7 @@ if(uncRun){# sample model parameters, HcFactor and peatland emission coefficient
   pYASr <- t(matrix(pYAS,ncol=nSamplesr,nrow=length(pYAS)))#data.frame()
   pCROBmean <- rbind(colMeans(pCROBpine),colMeans(pCROBspruce),
   colMeans(pCROBbirch))
-  if(!exists("biasCorr")) biasCorr<-F
+  if(!exists("biasCorr")) biasCorr<-T
   print(paste("Bias correction to parameters",biasCorr))
   for(ij in 1:nSamplesr){ 
     pCROBASr[[ij]] <- pCrobasX#pCROB
@@ -399,7 +399,7 @@ if(uncSeg && file.exists(paste0("uncRuns/segRuns/samplexout_uncSeg_reg",r_no,
 }
 if(!uncSeg & !unc100){
   nSamplesr0<-nSamplesr 
-  #nSamplesr<-200
+  nSamplesr<-50 # file where the old results are
   filee <- paste0("uncRuns/regRuns/samplexout_reg",r_no,
                   "_CurrClim_Base_Base_samplesize",nSitesRunr,"_iters",nSamplesr,
                   "_pr",uncPCrobas,"_Xr",uncInput,"_ager",uncAge,
