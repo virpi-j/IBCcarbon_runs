@@ -472,7 +472,7 @@ if(!uncSeg & !unc100){
 rspecial <- 50
 if(!uncSeg & nii0!=1){
   niter <- ceiling(nSamplesr/nParRuns)
-  nii0 <- ceiling(nii0/nParRuns)+1
+  nii0 <- floor(nii0/nParRuns)+1
   if(r_no==rspecial){ 
     nii0 <- 10
     sampleOutput<-list()
