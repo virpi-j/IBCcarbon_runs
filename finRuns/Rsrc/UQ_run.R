@@ -487,7 +487,7 @@ niter2 <- niter
 if(uncSeg) niter2 <- 53
 
 if(!exists("landClassUnman")) landClassUnman <- 2
-
+print(paste("landClassUnman=",landClassUnman))
 for(nii in nii0:niter2){
   toMem <- ls()
   startRun <- Sys.time() 
