@@ -576,8 +576,12 @@ for(nii in nii0:niter2){
             rcpsname <- "RCP85"
           } 
           print(harvinten)
+          
+
+
           #source_url("https://raw.githubusercontent.com/virpi-j/IBCcarbon_runs/master/general/functions.r")
           outtmp <- runModel(jx, outType=outType, harvScen=harvscen,uncRCP=uncRCP,
+                             compHarvX = compHarvX, landClassUnman=landClassUnman,
                              harvInten=harvinten, cons10run = zon10, procDrPeat = uncPeat)
           outXcc[[ind]] <- outtmp
           names(outXcc)[ind] <- paste0(harvscen,"_",harvinten,"_",rcpsname)
@@ -591,6 +595,7 @@ for(nii in nii0:niter2){
             print(harvinten)
             outtmp <- runModel(jx, outType=outType, harvScen=harvscen,uncRCP=uncRCP,
                                harvInten=harvinten, cons10run = zon10, procDrPeat = uncPeat,
+                               compHarvX = compHarvX, landClassUnman=landClassUnman,
                                outModReStart = reStartMod, initSoilCreStart = reStartSoil,
                                funPreb = reStartRegionPrebas,reStartYear = reStartYearUnc)
             outXcc[[ind]] <- outtmp
@@ -661,6 +666,7 @@ for(nii in nii0:niter2){
                              } 
                              #source_url("https://raw.githubusercontent.com/virpi-j/IBCcarbon_runs/master/general/functions.r")
                              outtmp <- runModel(jx, outType=outType, harvScen=harvscen,uncRCP=uncRCP,
+                                                compHarvX = compHarvX, landClassUnman=landClassUnman,
                                                 harvInten=harvinten, cons10run = zon10, procDrPeat = uncPeat)
                              outXcc[[ind]] <- outtmp
                              names(outXcc)[ind] <- paste0(harvscen,"_",harvinten,"_",rcpsname)
@@ -673,6 +679,7 @@ for(nii in nii0:niter2){
                                if(harvinten=="NoHarv") harvscen<-"NoHarv"
                                outtmp <- runModel(jx, outType=outType, harvScen=harvscen,uncRCP=uncRCP,
                                                   harvInten=harvinten, cons10run = zon10, procDrPeat = uncPeat,
+                                                  compHarvX = compHarvX, landClassUnman=landClassUnman,
                                                   outModReStart = reStartMod, initSoilCreStart = reStartSoil,
                                                   funPreb = reStartRegionPrebas,reStartYear = reStartYearUnc)
                                outXcc[[ind]] <- outtmp
