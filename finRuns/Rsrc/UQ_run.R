@@ -546,8 +546,8 @@ for(nii in nii0:niter2){
       coefCH4 = 0.34#g m-2 y-1
       coefN20_1 = 0.23
       coefN20_2 = 0.077#g m-2 y-1
-      landClassUnman=NULL
-      compHarvX = 0
+      landClassUnman=1:2
+      compHarvX = 2
       initVar=NULL
       initSoilC=NULL
       reInit=F
@@ -577,8 +577,6 @@ for(nii in nii0:niter2){
           } 
           print(harvinten)
           
-
-
           #source_url("https://raw.githubusercontent.com/virpi-j/IBCcarbon_runs/master/general/functions.r")
           outtmp <- runModel(jx, outType=outType, harvScen=harvscen,uncRCP=uncRCP,
                              compHarvX = compHarvX, landClassUnman=landClassUnman,
