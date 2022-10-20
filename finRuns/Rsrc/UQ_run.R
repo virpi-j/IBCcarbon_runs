@@ -486,7 +486,7 @@ print(paste("start from iteration",nii0))
 niter2 <- niter
 if(uncSeg) niter2 <- 53
 
-if(!exists(landClassUnman)) landClassUnman <- 2
+if(!exists("landClassUnman")) landClassUnman <- 2
 
 for(nii in nii0:niter2){
   toMem <- ls()
