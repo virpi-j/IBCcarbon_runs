@@ -310,7 +310,7 @@ if(uncRun){# sample model parameters, HcFactor and peatland emission coefficient
     }
     if(uncPYas & ij>1){
       if(biasCorr){
-        pYASr[ij,] <- pYas_unc[parids3[ij],]+pYAS-colMeans(pYASr)
+        pYASr[ij,] <- pYas_unc[parids3[ij],]+pYAS-colMeans(pYas_unc)
       } else {
         pYASr[ij,] <- pYas_unc[parids3[ij],]}
     }
@@ -399,7 +399,7 @@ if(uncSeg && file.exists(paste0("uncRuns/segRuns/samplexout_uncSeg_reg",r_no,
 }
 if(!uncSeg & !unc100){
   nSamplesr0<-nSamplesr 
-  nSamplesr<-50 # file where the old results are
+  nSamplesr<-nSamplesSaved # file where the old results are
   filee <- paste0("uncRuns/regRuns/samplexout_reg",r_no,
                   "_CurrClim_Base_Base_samplesize",nSitesRunr,"_iters",nSamplesr,
                   "_pr",uncPCrobas,"_Xr",uncInput,"_ager",uncAge,
