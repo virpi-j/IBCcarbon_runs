@@ -88,9 +88,9 @@ if(file.exists(paste0("uncRuns/peatID_reg",r_no,".rdata"))){
 }
 data.all[,peatID:=peatIDs]
 if(zon10){
-  if(file.exists(paste0("uncRuns/cons10DataID_reg",r_no,".rdata"))){
-    load(paste0("uncRuns/cons10DataID_reg",r_no,".rdata"))
-  } else {
+  #if(file.exists(paste0("uncRuns/cons10DataID_reg",r_no,".rdata"))){
+  #  load(paste0("uncRuns/cons10DataID_reg",r_no,".rdata"))
+  #} else {
     
   print("Start 10% cons preprosessing")
   pathX <- "/scratch/project_2000994/PREBASruns/finRuns/input/maakunta/"
@@ -148,9 +148,9 @@ if(zon10){
   data.all<-rbind(data.all,cons10Dat)
   print(paste("initial set",nrow(data.all),"segments"))  
   loadUnc<-F
-  print("Save cons10 dataset.")
-  save(data.all,file=paste0("uncRuns/cons10DataID_reg",r_no,".rdata"))
-  }
+  #print("Save cons10 dataset.")
+  #save(data.all,file=paste0("uncRuns/cons10DataID_reg",r_no,".rdata"))
+  #}
   
 }
 areas_all <- data.table(areatot = sum(data.all$area), 
