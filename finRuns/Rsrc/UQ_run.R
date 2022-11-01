@@ -151,7 +151,7 @@ if(zon10){
       cons10DatIn <- rbind(cons10DatIn,inCons10)
       cons10DatOut <- rbind(cons10DatOut,outCons10)
     } else {
-      data.all[maakuntaID==ID] <- Cons10DatOut[i,]
+      data.all[maakuntaID==ID] <- cons10DatOut[i,]
     }
     if(i %% 1000==0) print(paste0(i," of ",nX))
   }
