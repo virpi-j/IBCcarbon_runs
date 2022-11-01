@@ -130,6 +130,7 @@ if(zon10){
     load(paste0("uncRuns/cons10DataID_reg",r_no,".rdata"))
     split_new<-F
   } 
+  print(paste("New splitting ="),split_new)
   for(i in 1:nX){
     ID <- toSplit$maakuntaID[i]
     newID <- maxMaakuntaID + i
