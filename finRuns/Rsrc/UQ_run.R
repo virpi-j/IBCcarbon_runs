@@ -14,11 +14,16 @@ library(data.table)
 library(devtools)
 library(MASS)
 library(stringr)
+
 CSCrun=T
 devtools::source_url("https://raw.githubusercontent.com/ForModLabUHel/IBCcarbon_runs/master/finRuns/Rsrc/loadPackages.r")
 
 if(zon10){
+  library(Rprebasso)
   library(raster)
+  library(sf)
+  library(stars)
+  library(dplyr)
 }
 ststDeadW<-FALSE
 #source("localSettings.r")
@@ -82,6 +87,60 @@ if(file.exists(paste0("uncRuns/peatID_reg",r_no,".rdata"))){
   save(peatIDs, file=paste0("uncRuns/peatID_reg",r_no,".rdata"))
 }
 data.all[,peatID:=peatIDs]
+if(zon10){
+  print("Start 10% cons preprosessing")
+  pathX <- "/scratch/project_2000994/PREBASruns/finRuns/input/maakunta/"
+  
+  load(paste0(pathX,"maakunta_",r_no,"_IDsTab.rdata"))
+  load(paste0(pathX,"data.all_maakunta_",r_no,".rdata"))
+  cons10 <- raster(paste0("/scratch/project_2000994/PREBASruns/metadata/Local_protection/maak_",r_no,"_local_protection.tif"))
+  
+  setkey(data.IDs,maakuntaID)
+  setkey(data.all,maakuntaID)
+  
+  maakIDrast <- rasterFromXYZ(data.IDs[,.(x,y,maakuntaID)])
+  cons10[cons10==0] <- NA
+  cons10x <- resample(cons10,maakIDrast,method="ngb")
+  
+  maakIDcons10 <- mask(maakIDrast, cons10x)
+  
+  kk <- data.table(rasterToPoints(maakIDcons10))
+  setnames(kk,c("x","y","maakuntaID"))
+  setkey(kk,x,y,maakuntaID)
+  setkey(data.IDs,x,y,maakuntaID)
+  kk$cons10 <- 1
+  gg <- merge(kk,data.IDs,all=T)
+  setkey(gg,maakuntaID,cons10)
+  
+  cons10Pix <- gg[, .(.N), by = .(maakuntaID,cons10)]
+  
+  cons10Dat <- data.table()
+  
+  toSplit <- data.all[cons==0 & maakuntaID %in% cons10Pix[cons10==1]$maakuntaID]
+  data.allOld <- data.all
+  data.all$cons10=0
+  nX <- nrow(toSplit)
+  maxMaakuntaID<-max(data.all$maakuntaID)
+  print(paste("split",nX,"segments"))
+  for(i in 1:nX){
+    ID <- toSplit$maakuntaID[i]
+    newID <- maxMaakuntaID + i
+    nCons = cons10Pix[maakuntaID==ID & cons10==1]$N
+    # data.all[maakuntaID==ID,nPix:=nPix-nCons]
+    outCons10 <- inCons10 <- data.all[maakuntaID==ID]
+    outCons10[maakuntaID==ID,nPix:=nPix-nCons]
+    #inCons10$oldMaakID <- outCons10$oldMaakID <- ID
+    inCons10$cons = inCons10$cons10=1
+    inCons10$nPix = nCons
+    inCons10$maakuntaID = newID
+    data.all[maakuntaID==ID] <- outCons10
+    cons10Dat<-rbind(cons10Dat,inCons10)
+    
+    if(i %% 1000==0) print(paste0(i," of ",nX))
+  }
+  data.all<-rbind(data.all,cons10Dat)
+  print(paste("initial set",nrow(data.all),"segments"))  
+}
 areas_all <- data.table(areatot = sum(data.all$area), 
                         area_min = sum(data.all$area[data.all$peatID==100]),
                         area_drpeat = sum(data.all$area[data.all$peatID==400]),
