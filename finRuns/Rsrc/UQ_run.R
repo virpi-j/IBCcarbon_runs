@@ -92,7 +92,7 @@ if(zon10){
   pathX <- "/scratch/project_2000994/PREBASruns/finRuns/input/maakunta/"
   
   load(paste0(pathX,"maakunta_",r_no,"_IDsTab.rdata"))
-  load(paste0(pathX,"data.all_maakunta_",r_no,".rdata"))
+  #load(paste0(pathX,"data.all_maakunta_",r_no,".rdata"))
   cons10 <- raster(paste0("/scratch/project_2000994/PREBASruns/metadata/Local_protection/maak_",r_no,"_local_protection.tif"))
   
   setkey(data.IDs,maakuntaID)
@@ -117,7 +117,7 @@ if(zon10){
   cons10Dat <- data.table()
   
   toSplit <- data.all[cons==0 & maakuntaID %in% cons10Pix[cons10==1]$maakuntaID]
-  data.allOld <- data.all
+  #data.allOld <- data.all
   data.all$cons10=0
   nX <- nrow(toSplit)
   maxMaakuntaID<-max(data.all$maakuntaID)
