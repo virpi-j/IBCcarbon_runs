@@ -151,7 +151,13 @@ if(zon10){
       cons10DatIn <- rbind(cons10DatIn,inCons10)
       cons10DatOut <- rbind(cons10DatOut,outCons10)
     } else {
-      data.all[maakuntaID==ID] <- cons10DatOut[i,]
+      outCons10 <- inCons10 <- data.all[maakuntaID==ID]
+      outCons10$N <- consDat[i,3]
+      outCons10[,area:=N*16^2/10000]
+      data.all[maakuntaID==ID] <- outCons10
+      inCons10$N = consDat[i,2]
+      inCons10[,area:=N*16^2/10000]
+      cons10DatIn <- rbind(cons10DatIn,inCons10)
     }
     if(i %% 1000==0) print(paste0(i," of ",nX))
   }
@@ -160,7 +166,8 @@ if(zon10){
   loadUnc<-F
   if(split_new){
     print("Save cons10 datasets.")
-    save(cons10DatIn,cons10DatOut,file=paste0("uncRuns/cons10DataID_reg",r_no,".rdata"))
+    consDat<-cbind(cons10DatIn$maakuntaID,cons10DatIn$N,cons10DatOut$N)
+    save(consDat,file=paste0("uncRuns/cons10DataID_reg",r_no,".rdata"))
   }
   
 }
