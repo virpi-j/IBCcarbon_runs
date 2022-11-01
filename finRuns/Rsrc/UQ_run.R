@@ -118,48 +118,51 @@ if(zon10){
   cons10DatIn <- data.table()
   cons10DatOut <- data.table()
   
-  toSplit <- data.all[cons==0 & maakuntaID %in% cons10Pix[cons10==1]$maakuntaID]
-  #data.allOld <- data.all
-  data.all$cons10=0
-  nX <- nrow(toSplit)
-  maxMaakuntaID<-max(data.all$maakuntaID)
-  print(paste("split",nX,"segments"))
-  
   split_new<-T
   if(file.exists(paste0("uncRuns/cons10DataID_reg",r_no,".rdata"))){
     load(paste0("uncRuns/cons10DataID_reg",r_no,".rdata"))
     split_new<-F
   } 
-  print(paste("New splitting =",split_new))
-  for(i in 1:nX){
-    ID <- toSplit$maakuntaID[i]
-    newID <- maxMaakuntaID + i
-    if(split_new){
-      nCons = cons10Pix[maakuntaID==ID & cons10==1]$N
-      # data.all[maakuntaID==ID,nPix:=nPix-nCons]
-      outCons10 <- inCons10 <- data.all[maakuntaID==ID]
-      outCons10[maakuntaID==ID,N:=N-nCons]
-      outCons10[maakuntaID==ID,area:=N*16^2/10000]
-      #outCons10[maakuntaID==ID,nPix:=nPix-nCons]
-      #inCons10$oldMaakID <- outCons10$oldMaakID <- ID
-      inCons10$cons = inCons10$cons10=1
-      inCons10$N = nCons
-      inCons10[,area:=N*16^2/10000]
-      inCons10$maakuntaID = newID
-      data.all[maakuntaID==ID] <- outCons10
-      #cons10Dat<- rbind(cons10Dat,inCons10)
-      cons10DatIn <- rbind(cons10DatIn,inCons10)
-      cons10DatOut <- rbind(cons10DatOut,outCons10)
-    } else {
-      outCons10 <- inCons10 <- data.all[maakuntaID==ID]
-      outCons10$N <- consDat[i,3]
-      outCons10[,area:=N*16^2/10000]
-      data.all[maakuntaID==ID] <- outCons10
-      inCons10$N = consDat[i,2]
-      inCons10[,area:=N*16^2/10000]
-      cons10DatIn <- rbind(cons10DatIn,inCons10)
+  if(split_new){
+    toSplit <- data.all[cons==0 & maakuntaID %in% cons10Pix[cons10==1]$maakuntaID]
+    #data.allOld <- data.all
+    data.all$cons10=0
+    nX <- nrow(toSplit)
+    maxMaakuntaID<-max(data.all$maakuntaID)
+    print(paste("split",nX,"segments"))
+    
+    print(paste("New splitting =",split_new))
+    for(i in 1:nX){
+      ID <- toSplit$maakuntaID[i]
+      newID <- maxMaakuntaID + i
+      if(split_new){
+        nCons = cons10Pix[maakuntaID==ID & cons10==1]$N
+        # data.all[maakuntaID==ID,nPix:=nPix-nCons]
+        outCons10 <- inCons10 <- data.all[maakuntaID==ID]
+        outCons10[maakuntaID==ID,N:=N-nCons]
+        outCons10[maakuntaID==ID,area:=N*16^2/10000]
+        #outCons10[maakuntaID==ID,nPix:=nPix-nCons]
+        #inCons10$oldMaakID <- outCons10$oldMaakID <- ID
+        inCons10$cons = inCons10$cons10=1
+        inCons10$N = nCons
+        inCons10[,area:=N*16^2/10000]
+        inCons10$maakuntaID = newID
+        data.all[maakuntaID==ID] <- outCons10
+        #cons10Dat<- rbind(cons10Dat,inCons10)
+        cons10DatIn <- rbind(cons10DatIn,inCons10)
+        cons10DatOut <- rbind(cons10DatOut,outCons10)
+      }
+      if(i %% 1000==0) print(paste0(i," of ",nX))
     }
-    if(i %% 1000==0) print(paste0(i," of ",nX))
+  } else {
+    print("load previously split data")
+    ntmp<-which(data.all$cons==0 & data.all$maakuntaID %in% cons10Pix[cons10==1]$maakuntaID)
+    data.all[ntmp,]$N<-consDat[,3]    
+    data.all[ntmp,area:=N*16^2/10000]
+    cons10DatIn<-data.all[ntmp,]
+    cons10DatIn$cons = cons10DatIn$cons10=1
+    cons10DatIn$N<-consDat[,2]
+    cons10DatIn[,area:=N*16^2/10000]
   }
   data.all<-rbind(data.all,cons10DatIn)
   print(paste("initial set",nrow(data.all),"segments"))  
@@ -169,7 +172,8 @@ if(zon10){
     consDat<-cbind(cons10DatIn$maakuntaID,cons10DatIn$N,cons10DatOut$N)
     save(consDat,file=paste0("uncRuns/cons10DataID_reg",r_no,".rdata"))
   }
-  
+  rm(list=c("cons10DatIn","cons10DatOut"))
+  gc()
 }
 areas_all <- data.table(areatot = sum(data.all$area), 
                         area_min = sum(data.all$area[data.all$peatID==100]),
