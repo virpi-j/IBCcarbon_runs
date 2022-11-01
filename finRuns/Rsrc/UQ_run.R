@@ -87,6 +87,18 @@ if(file.exists(paste0("uncRuns/peatID_reg",r_no,".rdata"))){
   save(peatIDs, file=paste0("uncRuns/peatID_reg",r_no,".rdata"))
 }
 data.all[,peatID:=peatIDs]
+areas_all <- data.table(areatot = sum(data.all$area), 
+                        areacons = sum(data.all[cons==1]$area),
+                        area_min = sum(data.all$area[data.all$peatID==100]),
+                        area_drpeat = sum(data.all$area[data.all$peatID==400]),
+                        area_undrpeat = sum(data.all$area[data.all$peatID==700]),
+                        area_nonfor = sum(data.all$area[data.all$peatID==0]),
+                        area_min_cons = sum(data.all$area[data.all$peatID==100 & data.all$cons==1]),
+                        area_drpeat_cons = sum(data.all$area[data.all$peatID==400 & data.all$cons==1]),
+                        area_undrpeat_cons = sum(data.all$area[data.all$peatID==700 & data.all$cons==1]),
+                        area_nonfor_cons = sum(data.all$area[data.all$peatID==0 & data.all$cons==1]))
+print(areas_all)
+
 if(zon10){
     
   print("Start 10% cons preprosessing")
@@ -174,7 +186,6 @@ if(zon10){
   }
   rm(list=c("cons10DatIn","cons10DatOut"))
   gc()
-}
 areas_all <- data.table(areatot = sum(data.all$area), 
                         areacons = sum(data.all[cons==1]$area),
                         area_min = sum(data.all$area[data.all$peatID==100]),
@@ -186,6 +197,7 @@ areas_all <- data.table(areatot = sum(data.all$area),
                         area_undrpeat_cons = sum(data.all$area[data.all$peatID==700 & data.all$cons==1]),
                         area_nonfor_cons = sum(data.all$area[data.all$peatID==0 & data.all$cons==1]))
 print(areas_all)
+}
 if(ExcludeUndrPeatlands){
   # Exclude undrained peatlands
   undrpeatX <- data.all$peatID==undrPeatID
