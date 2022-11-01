@@ -140,6 +140,7 @@ if(zon10){
   }
   data.all<-rbind(data.all,cons10Dat)
   print(paste("initial set",nrow(data.all),"segments"))  
+  loadUnc<-F
 }
 areas_all <- data.table(areatot = sum(data.all$area), 
                         area_min = sum(data.all$area[data.all$peatID==100]),
@@ -644,7 +645,7 @@ for(nii in nii0:niter2){
           #source_url("https://raw.githubusercontent.com/virpi-j/IBCcarbon_runs/master/general/functions.r")
           outtmp <- runModel(jx, outType=outType, harvScen=harvscen,uncRCP=uncRCP,
                              compHarvX = compHarvX, landClassUnman=landClassUnman,
-                             harvInten=harvinten, cons10run = zon10, procDrPeat = uncPeat)
+                             harvInten=harvinten, procDrPeat = uncPeat)
           outXcc[[ind]] <- outtmp
           names(outXcc)[ind] <- paste0(harvscen,"_",harvinten,"_",rcpsname)
           ind<-ind+1
@@ -656,7 +657,7 @@ for(nii in nii0:niter2){
             if(harvinten=="NoHarv") harvscen<-"NoHarv"
             print(harvinten)
             outtmp <- runModel(jx, outType=outType, harvScen=harvscen,uncRCP=uncRCP,
-                               harvInten=harvinten, cons10run = zon10, procDrPeat = uncPeat,
+                               harvInten=harvinten, procDrPeat = uncPeat,
                                compHarvX = compHarvX, landClassUnman=landClassUnman,
                                outModReStart = reStartMod, initSoilCreStart = reStartSoil,
                                funPreb = reStartRegionPrebas,reStartYear = reStartYearUnc)
@@ -729,7 +730,7 @@ for(nii in nii0:niter2){
                              #source_url("https://raw.githubusercontent.com/virpi-j/IBCcarbon_runs/master/general/functions.r")
                              outtmp <- runModel(jx, outType=outType, harvScen=harvscen,uncRCP=uncRCP,
                                                 compHarvX = compHarvX, landClassUnman=landClassUnman,
-                                                harvInten=harvinten, cons10run = zon10, procDrPeat = uncPeat)
+                                                harvInten=harvinten,  procDrPeat = uncPeat)
                              outXcc[[ind]] <- outtmp
                              names(outXcc)[ind] <- paste0(harvscen,"_",harvinten,"_",rcpsname)
                              ind<-ind+1
@@ -740,7 +741,7 @@ for(nii in nii0:niter2){
                                harvscen <- "Base"
                                if(harvinten=="NoHarv") harvscen<-"NoHarv"
                                outtmp <- runModel(jx, outType=outType, harvScen=harvscen,uncRCP=uncRCP,
-                                                  harvInten=harvinten, cons10run = zon10, procDrPeat = uncPeat,
+                                                  harvInten=harvinten, procDrPeat = uncPeat,
                                                   compHarvX = compHarvX, landClassUnman=landClassUnman,
                                                   outModReStart = reStartMod, initSoilCreStart = reStartSoil,
                                                   funPreb = reStartRegionPrebas,reStartYear = reStartYearUnc)
@@ -799,7 +800,7 @@ for(nii in nii0:niter2){
         print(sampleXs[[1]][[harvindRCP]][1,])
         print(harvindRCP)
         hscen <- harvscen
-        if(zon10) hscen <- paste0(hscen,"zon10")
+        #if(zon10) hscen <- paste0(hscen,"zon10")
         m <- ncol(sampleXs[[1]][[1]]) # how many variables
         n <- length(sampleXs) # how many new similations
         varNams <- names(sampleXs[[1]][[1]])#names(sampleXs[[1]])
@@ -841,9 +842,10 @@ for(nii in nii0:niter2){
                                                               "_pr",uncPCrobas,"_Xr",uncInput,"_ager",uncAge,
                                                               "_Cr",uncClim,"_str",uncSiteType,".rdata")) 
         } else {
-          if(r_no==rspecial){ 
-            save(area_total,areas_all,sampleOutputb,file=paste0("uncRuns/regRuns/samplexout_reg",r_no,
-                                                                "_",nii0,"_",rcpsname,"_",hscen,"_",harvinten,                                    
+          if(zon10){ 
+            save(area_total,areas_all,sampleOutputb,
+                 file=paste0("uncRuns/regRuns/samplexoutzon10_reg",r_no,
+                                                                "_",rcpsname,"_",hscen,"_",harvinten,                                    
                                                                 "_samplesize",nSitesRunr,"_iters",nSamplesr,
                                                                 "_pr",uncPCrobas,"_Xr",uncInput,"_ager",uncAge,
                                                                 "_Cr",uncClim,"_str",uncSiteType,".rdata")) 
