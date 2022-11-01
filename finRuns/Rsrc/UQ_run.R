@@ -176,6 +176,7 @@ if(zon10){
   gc()
 }
 areas_all <- data.table(areatot = sum(data.all$area), 
+                        areacons = sum(data.all[cons==1]$area),
                         area_min = sum(data.all$area[data.all$peatID==100]),
                         area_drpeat = sum(data.all$area[data.all$peatID==400]),
                         area_undrpeat = sum(data.all$area[data.all$peatID==700]),
