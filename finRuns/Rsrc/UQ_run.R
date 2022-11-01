@@ -88,6 +88,10 @@ if(file.exists(paste0("uncRuns/peatID_reg",r_no,".rdata"))){
 }
 data.all[,peatID:=peatIDs]
 if(zon10){
+  if(file.exists(paste0("uncRuns/cons10DataID_reg",r_no,".rdata"))){
+    load(paste0("uncRuns/cons10DataID_reg",r_no,".rdata"))
+  } else {
+    
   print("Start 10% cons preprosessing")
   pathX <- "/scratch/project_2000994/PREBASruns/finRuns/input/maakunta/"
   
@@ -128,10 +132,13 @@ if(zon10){
     nCons = cons10Pix[maakuntaID==ID & cons10==1]$N
     # data.all[maakuntaID==ID,nPix:=nPix-nCons]
     outCons10 <- inCons10 <- data.all[maakuntaID==ID]
-    outCons10[maakuntaID==ID,nPix:=nPix-nCons]
+    outCons10[maakuntaID==ID,N:=N-nCons]
+    outCons10[maakuntaID==ID,area:=N*16^2/10000]
+    #outCons10[maakuntaID==ID,nPix:=nPix-nCons]
     #inCons10$oldMaakID <- outCons10$oldMaakID <- ID
     inCons10$cons = inCons10$cons10=1
-    inCons10$nPix = nCons
+    inCons10$N = nCons
+    inCons10[,area:=N*16^2/10000]
     inCons10$maakuntaID = newID
     data.all[maakuntaID==ID] <- outCons10
     cons10Dat<-rbind(cons10Dat,inCons10)
@@ -141,6 +148,10 @@ if(zon10){
   data.all<-rbind(data.all,cons10Dat)
   print(paste("initial set",nrow(data.all),"segments"))  
   loadUnc<-F
+  print("Save cons10 dataset.")
+  save(data.all,file=paste0("uncRuns/cons10DataID_reg",r_no,".rdata"))
+  }
+  
 }
 areas_all <- data.table(areatot = sum(data.all$area), 
                         area_min = sum(data.all$area[data.all$peatID==100]),
@@ -151,6 +162,7 @@ areas_all <- data.table(areatot = sum(data.all$area),
                         area_drpeat_cons = sum(data.all$area[data.all$peatID==400 & data.all$cons==1]),
                         area_undrpeat_cons = sum(data.all$area[data.all$peatID==700 & data.all$cons==1]),
                         area_nonfor_cons = sum(data.all$area[data.all$peatID==0 & data.all$cons==1]))
+print(areas_all)
 if(ExcludeUndrPeatlands){
   # Exclude undrained peatlands
   undrpeatX <- data.all$peatID==undrPeatID
