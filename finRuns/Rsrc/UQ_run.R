@@ -160,7 +160,7 @@ if(zon10){
     data.all[ntmp,]$N<-consDat[,3]    
     data.all[ntmp,area:=N*16^2/10000]
     cons10DatIn<-data.all[ntmp,]
-    cons10DatIn$cons = cons10DatIn$cons10=1
+    cons10DatIn$cons =1
     cons10DatIn$N<-consDat[,2]
     cons10DatIn[,area:=N*16^2/10000]
   }
