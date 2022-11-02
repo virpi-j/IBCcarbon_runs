@@ -69,15 +69,10 @@ funX[match(varNames[c(7,11:12)],varNames[varSel])] <- "baWmean"
 #----------------------------------------------------------------------------
 parPath <- "/scratch/project_2000994/PREBASruns/metadata/paramUnc/"
 
-# Cut the joutomaa off
-#extrLandclass <- 3
-data.all <- data.all[which(!data.all$landclass%in%extrLandclass),]#!=3 & data.all$landclass!=2),]
-print(paste("Leave landclass(es)",extrLandclass,"out"))
-
-finPeats <- raster("/scratch/project_2000994/MVMIsegments/segment-IDs/pseudopty.img")
-undrPeatID <- 700  ### ID = 700 for luke database; undrained peatland
 load(paste0("input/maakunta/maakunta_",r_no,"_IDsTab.rdata"))
 data.all <- cbind(data.all,data.IDs[match(data.all$segID, data.IDs$maakuntaID),4:5])
+finPeats <- raster("/scratch/project_2000994/MVMIsegments/segment-IDs/pseudopty.img")
+undrPeatID <- 700  ### ID = 700 for luke database; undrained peatland
 if(file.exists(paste0("uncRuns/peatID_reg",r_no,".rdata"))){
   load(paste0("uncRuns/peatID_reg",r_no,".rdata"))
 } else {
@@ -87,6 +82,36 @@ if(file.exists(paste0("uncRuns/peatID_reg",r_no,".rdata"))){
   save(peatIDs, file=paste0("uncRuns/peatID_reg",r_no,".rdata"))
 }
 data.all[,peatID:=peatIDs]
+
+if(zon10){
+  print("Start 10% cons preprosessing")
+  load(paste0("input/maakunta/maakunta_",r_no,"_IDsCons10.rdata"))
+  xDat <- cons10Dat
+  consOut<-data.table()
+  data.all<-copy(data.all)
+  data.all[,newCons:=0]
+  data.all[,oldMaakID:=maakuntaID]
+  setnames(xDat,"nPix","N")
+  xDat[,area:=N*16^2/10000]
+  tmp1<-which(xDat$maakuntaID%in%data.all$maakuntaID)
+  tmp2<-match(xDat$maakuntaID[tmp1],data.all$maakuntaID)
+  xDat[tmp1,peatID:=data.all$peatID[tmp2]]
+  xDat[tmp1,x:=data.all$x[tmp2]]
+  xDat[tmp1,y:=data.all$y[tmp2]]
+  xDat[tmp1-1,peatID:=data.all$peatID[tmp2]]
+  xDat[tmp1-1,x:=data.all$x[tmp2]]
+  xDat[tmp1-1,y:=data.all$y[tmp2]]
+  xx<-match(names(data.all),names(xDat))
+  data.all[tmp2,]<-xDat[tmp1,..xx]
+  print(nrow(data.all))
+  data.all<-rbind(data.all,xDat[tmp1-1,..xx])  
+  print(nrow(data.all))
+}
+# Cut the joutomaa off
+#extrLandclass <- 3
+data.all <- data.all[which(!data.all$landclass%in%extrLandclass),]#!=3 & data.all$landclass!=2),]
+print(paste("Leave landclass(es)",extrLandclass,"out"))
+
 areas_all <- data.table(areatot = sum(data.all$area), 
                         areacons = sum(data.all[cons==1]$area),
                         area_min = sum(data.all$area[data.all$peatID==100]),
@@ -99,105 +124,6 @@ areas_all <- data.table(areatot = sum(data.all$area),
                         area_nonfor_cons = sum(data.all$area[data.all$peatID==0 & data.all$cons==1]))
 print(areas_all)
 
-if(zon10){
-    
-  print("Start 10% cons preprosessing")
-  pathX <- "/scratch/project_2000994/PREBASruns/finRuns/input/maakunta/"
-  
-  load(paste0(pathX,"maakunta_",r_no,"_IDsTab.rdata"))
-  #load(paste0(pathX,"data.all_maakunta_",r_no,".rdata"))
-  cons10 <- raster(paste0("/scratch/project_2000994/PREBASruns/metadata/Local_protection/maak_",r_no,"_local_protection.tif"))
-  
-  setkey(data.IDs,maakuntaID)
-  setkey(data.all,maakuntaID)
-  
-  maakIDrast <- rasterFromXYZ(data.IDs[,.(x,y,maakuntaID)])
-  cons10[cons10==0] <- NA
-  cons10x <- resample(cons10,maakIDrast,method="ngb")
-  
-  maakIDcons10 <- mask(maakIDrast, cons10x)
-  
-  kk <- data.table(rasterToPoints(maakIDcons10))
-  setnames(kk,c("x","y","maakuntaID"))
-  setkey(kk,x,y,maakuntaID)
-  setkey(data.IDs,x,y,maakuntaID)
-  kk$cons10 <- 1
-  gg <- merge(kk,data.IDs,all=T)
-  setkey(gg,maakuntaID,cons10)
-  
-  cons10Pix <- gg[, .(.N), by = .(maakuntaID,cons10)]
-  
-  cons10DatIn <- data.table()
-  cons10DatOut <- data.table()
-  
-  split_new<-T
-  if(file.exists(paste0("uncRuns/cons10DataID_reg",r_no,".rdata"))){
-    load(paste0("uncRuns/cons10DataID_reg",r_no,".rdata"))
-    split_new<-F
-  } 
-  if(split_new){
-    toSplit <- data.all[cons==0 & maakuntaID %in% cons10Pix[cons10==1]$maakuntaID]
-    #data.allOld <- data.all
-    data.all$cons10=0
-    nX <- nrow(toSplit)
-    maxMaakuntaID<-max(data.all$maakuntaID)
-    print(paste("split",nX,"segments"))
-    
-    print(paste("New splitting =",split_new))
-    for(i in 1:nX){
-      ID <- toSplit$maakuntaID[i]
-      newID <- maxMaakuntaID + i
-      if(split_new){
-        nCons = cons10Pix[maakuntaID==ID & cons10==1]$N
-        # data.all[maakuntaID==ID,nPix:=nPix-nCons]
-        outCons10 <- inCons10 <- data.all[maakuntaID==ID]
-        outCons10[maakuntaID==ID,N:=N-nCons]
-        outCons10[maakuntaID==ID,area:=N*16^2/10000]
-        #outCons10[maakuntaID==ID,nPix:=nPix-nCons]
-        #inCons10$oldMaakID <- outCons10$oldMaakID <- ID
-        inCons10$cons = inCons10$cons10=1
-        inCons10$N = nCons
-        inCons10[,area:=N*16^2/10000]
-        inCons10$maakuntaID = newID
-        data.all[maakuntaID==ID] <- outCons10
-        #cons10Dat<- rbind(cons10Dat,inCons10)
-        cons10DatIn <- rbind(cons10DatIn,inCons10)
-        cons10DatOut <- rbind(cons10DatOut,outCons10)
-      }
-      if(i %% 1000==0) print(paste0(i," of ",nX))
-    }
-  } else {
-    print("load previously split data")
-    ntmp<-which(data.all$cons==0 & data.all$maakuntaID %in% cons10Pix[cons10==1]$maakuntaID)
-    data.all[ntmp,]$N<-consDat[,3]    
-    data.all[ntmp,area:=N*16^2/10000]
-    cons10DatIn<-data.all[ntmp,]
-    cons10DatIn$cons =1
-    cons10DatIn$N<-consDat[,2]
-    cons10DatIn[,area:=N*16^2/10000]
-  }
-  data.all<-rbind(data.all,cons10DatIn)
-  print(paste("initial set",nrow(data.all),"segments"))  
-  loadUnc<-F
-  if(split_new){
-    print("Save cons10 datasets.")
-    consDat<-cbind(cons10DatIn$maakuntaID,cons10DatIn$N,cons10DatOut$N)
-    save(consDat,file=paste0("uncRuns/cons10DataID_reg",r_no,".rdata"))
-  }
-  rm(list=c("cons10DatIn","cons10DatOut"))
-  gc()
-areas_all <- data.table(areatot = sum(data.all$area), 
-                        areacons = sum(data.all[cons==1]$area),
-                        area_min = sum(data.all$area[data.all$peatID==100]),
-                        area_drpeat = sum(data.all$area[data.all$peatID==400]),
-                        area_undrpeat = sum(data.all$area[data.all$peatID==700]),
-                        area_nonfor = sum(data.all$area[data.all$peatID==0]),
-                        area_min_cons = sum(data.all$area[data.all$peatID==100 & data.all$cons==1]),
-                        area_drpeat_cons = sum(data.all$area[data.all$peatID==400 & data.all$cons==1]),
-                        area_undrpeat_cons = sum(data.all$area[data.all$peatID==700 & data.all$cons==1]),
-                        area_nonfor_cons = sum(data.all$area[data.all$peatID==0 & data.all$cons==1]))
-print(areas_all)
-}
 if(ExcludeUndrPeatlands){
   # Exclude undrained peatlands
   undrpeatX <- data.all$peatID==undrPeatID
@@ -239,23 +165,13 @@ if(uncRun){ # load distribution data
     if(!uncSeg){
       load(paste0("uncRuns/regRuns/opsInd_reg",r_no,"_uncSeg",uncSeg,".rdata")) 
       sampleIDs <- 1:nSamplesr
-      area_total <- areas_all[1,1]
+      area_total <- sum(data.all$area)#areas_all[1,1]
       areas <- data.all$area
       areas <- areas/area_total
-      #load(paste0("uncRuns/parids_reg",r_no,".rdata"))
     } else {
-      #  load(paste0("uncRuns/parids_reg",r_no,"uncSeg.rdata"))
     }
-  }# else {
-  #if(!uncSeg){
-  #save(parids, file=paste0("uncRuns/parids_reg",r_no,".rdata"))
-  #} else {
-  #save(parids, file=paste0("uncRuns/parids_reg",r_no,"uncSeg.rdata"))
-  #}
-  #}
-  #pCROBASr <- list()
+  }
   if(uncPCrobas){
-    #pCROBASr <- uncParCrobas(nSamples = nSamplesr)
     load(paste0(parPath,"pCROB_unc.rdata"))
     parindCrob <- parind
     pCrobdim <- nrow(pCROBbirch)
@@ -283,25 +199,13 @@ if(!uncSeg & !loadUnc){ # sample pixel indices
   area_total <- sum(data.all$area)
   areas <- data.all$area
   areas <- areas/area_total
-  #print(paste0("Sample size ",nSitesRunr," pixels"))
-  #if(!loadUnc){
-  opsInd <- list() #matrix(0, nSitesRun, nSamples) 
-  #load(paste0("input/maakunta/maakunta_",r_no,"_IDsTab.rdata"))
+  opsInd <- list() 
   for(ij in 1:nSamplesr){ 
-    opsInd[[ij]] <- sample(1:nrow(data.all), nSitesRunr, replace = sampleReplace, prob = areas)
+    opsInd[[ij]] <- sample(1:nrow(data.all), nSitesRunr, 
+                           replace = sampleReplace, prob = areas)
     ops[[ij]] <- copy(data.all[opsInd[[ij]],])
-    #ops[[ij]] <- cbind(ops[[ij]],data.IDs[match(ops[[ij]]$segID, data.IDs$maakuntaID),4:5])
   }
-  #} else {
-  #  load(paste0("input/maakunta/maakunta_",r_no,"_IDsTab.rdata"))
-  #  load(paste0("uncRuns/opsInd_reg",r_no,"_uncSeg",uncSeg,".rdata")) 
-  #  for(ij in 1:nSamplesr){ 
-  #    ops[[ij]] <- copy(data.all[opsInd[[ij]],])
-  #    ops[[ij]] <- cbind(ops[[ij]],data.IDs[match(ops[[ij]]$segID, data.IDs$maakuntaID),4:5])
-  #  }
-  #}
 } else if(uncSeg){ # if(!uncSeg & !loadUnc)
-  #setX=1
   if(!loadUnc){
     nSamples <- ceiling(dim(data.all)[1]/nSitesRun)
     sampleIDs <- split(1:nSamples,             # Applying split() function
