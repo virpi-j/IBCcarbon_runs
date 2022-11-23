@@ -59,7 +59,8 @@ if(uncSeg){
   # added; Wtot, age, Vdec, species, sitetype!
 } else {
   varOuts <- c("NEP","V","npp","VroundWood","WroundWood",
-               "grossGrowth","soilC") # Wtot!
+               "grossGrowth","soilC","Litter_fol","Litter_fr",
+               "Litter_fWoody","Litter_cWoody") # Wtot!
 }
 #cS <- c(-100^2*44/12, 1, 1, 1) # multipliers of areas (&NEE C->CO2eq) for tot.sums
 
@@ -411,11 +412,17 @@ if(uncSeg && file.exists(paste0("uncRuns/segRuns/samplexout_uncSeg_reg",r_no,
 if(!uncSeg & !unc100){
   nSamplesr0<-nSamplesr 
   nSamplesr<-nSamplesSaved # file where the old results are
+  if(zon10){
+    filee <- paste0("uncRuns/regRuns/samplexoutzon10_reg",r_no,
+                    "_CurrClim_Base_Base_samplesize",nSitesRunr,"_iters",nSamplesr,
+                    "_pr",uncPCrobas,"_Xr",uncInput,"_ager",uncAge,
+                    "_Cr",uncClim,"_str",uncSiteType,".rdata")
+  } else {
   filee <- paste0("uncRuns/regRuns/samplexout_reg",r_no,
                   "_CurrClim_Base_Base_samplesize",nSitesRunr,"_iters",nSamplesr,
                   "_pr",uncPCrobas,"_Xr",uncInput,"_ager",uncAge,
                   "_Cr",uncClim,"_str",uncSiteType,".rdata")
-  
+  }
   if(file.exists(filee)){
     sampleOutput<-list()
     for(uncRCP in uncRCPs){
@@ -432,11 +439,19 @@ if(!uncSeg & !unc100){
         harvinten <- harvintens[harvind]  
         harvindRCP <- length(harvintens)*uncRCP+harvind
         
-        filee <- paste0("uncRuns/regRuns/samplexout_reg",r_no,
-                        "_",rcpsname,"_Base_",harvintens[harvind],
-                        "_samplesize",nSitesRunr,"_iters",nSamplesr,
-                        "_pr",uncPCrobas,"_Xr",uncInput,"_ager",uncAge,
-                        "_Cr",uncClim,"_str",uncSiteType,".rdata")
+        if(zon10){
+          filee <- paste0("uncRuns/regRuns/samplexoutzon10_reg",r_no,
+                          "_",rcpsname,"_Base_",harvintens[harvind],
+                          "_samplesize",nSitesRunr,"_iters",nSamplesr,
+                          "_pr",uncPCrobas,"_Xr",uncInput,"_ager",uncAge,
+                          "_Cr",uncClim,"_str",uncSiteType,".rdata")
+        } else {
+          filee <- paste0("uncRuns/regRuns/samplexout_reg",r_no,
+                          "_",rcpsname,"_Base_",harvintens[harvind],
+                          "_samplesize",nSitesRunr,"_iters",nSamplesr,
+                          "_pr",uncPCrobas,"_Xr",uncInput,"_ager",uncAge,
+                          "_Cr",uncClim,"_str",uncSiteType,".rdata")
+        }
         load(filee)
         sampleOutput[[harvindRCP]]<-sampleOutputb
         #names(sampleOutput)[harvindRCP] <- names(sampleXs[[1]])[harvindRCP]
