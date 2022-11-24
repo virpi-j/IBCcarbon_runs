@@ -160,7 +160,7 @@ runModel <- function(sampleID, outType="dTabs", uncRCP=0,
     maxRday <- max(dat$rday)
     if(outType == "uncRun"){
       if(unc100 | nYears>50){
-        print(paste(nYears,"climate data"))
+        print(paste(nYears,"years weather data"))
         xday <- c(dat$rday,(dat$rday+maxRday),(dat$rday+maxRday*2),
                   (dat$rday+maxRday*3),(dat$rday+maxRday*4))
         dat = rbind(dat,dat,dat,dat,dat)
