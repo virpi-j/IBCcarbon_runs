@@ -279,14 +279,14 @@ if(uncRun & !loadParids){
   }
 }
 
-if(unc100 & !loadParids){
+if((unc100 | nYears>50 )& !loadParids){
   print("Generate random sets of years")
   set.seed(NULL)
   resampleYears <- matrix(sample(1:nYears,nYears*1000,replace=T),
                           ncol = nYears,nrow = 1000)
   resampleYears[,1:(2021-2015)] <- matrix(1:(2021-2015),ncol = (2021-2015),nrow = 1000, byrow = T)
   save(resampleYears, file=paste0("uncRuns/regRuns/resampleyears100.rdata"))
-} else if(unc100) {
+} else if(unc100 | nYears>50) {
   print("load random set of 100 years")
   load(paste0("uncRuns/regRuns/resampleyears100.rdata"))
 }
