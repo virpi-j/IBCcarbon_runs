@@ -34,6 +34,7 @@ if(uncSeg) outType <- "uncSeg"
 #harvinten<- "Base" # "Base", "Low", "MaxSust", "NoHarv" 
 if(!exists("nYears")) nYears <-50
 if(unc100) nYears <-100
+print(paste("Simulate",nYears,"years"))
 ##### From GitHub
 source_url("https://raw.githubusercontent.com/ForModLabUHel/IBCcarbon_runs/master/finRuns/Rsrc/settings.r")
 #source_url("https://raw.githubusercontent.com/virpi-j/IBCcarbon_runs/master/finRuns/Rsrc/settings.r")
