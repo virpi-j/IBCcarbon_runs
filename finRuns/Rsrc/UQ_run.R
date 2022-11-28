@@ -256,7 +256,7 @@ if((uncRun & uncHarv) & !loadParids){
 }
 #print(harvestLimsr[1:2,])
 
-if((uncRun & !loadParids) | nYears>50){
+if(uncRun & !loadParids){
   if(uncClim){ # weather for iterations
     set.seed(NULL)
     resampleYears <- matrix(sample(1:nYears,nYears*1000,replace=T),
