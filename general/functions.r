@@ -160,7 +160,7 @@ runModel <- function(sampleID, outType="dTabs", uncRCP=0,
     maxRday <- max(dat$rday)
     if(outType == "uncRun"){
       if(unc100 | nYears>50){
-        print(paste(nYears,"years weather data"))
+        print(paste(nYears,"years climate data"))
         xday <- c(dat$rday,(dat$rday+maxRday),(dat$rday+maxRday*2),
                   (dat$rday+maxRday*3),(dat$rday+maxRday*4))
         dat = rbind(dat,dat,dat,dat,dat)
@@ -278,7 +278,7 @@ runModel <- function(sampleID, outType="dTabs", uncRCP=0,
   ##here mix years for weather inputs for Curr Climate
   if(rcpfile=="CurrClim"){
     #if(outType=="uncRun"){
-    if(outType %in% c("uncRun","uncSeg")){
+    if(outType %in% c("uncRun","uncSeg") & (nYears==50 | nYears==100)){
       resampleYear <- resampleYears[sampleID,] 
       #sample(1:nYears,nYears,replace=T)
     }else{
