@@ -32,7 +32,8 @@ outType <- "uncRun" # Setting for the runModel-function
 if(uncSeg) outType <- "uncSeg"
 #harvscen<- "Base" #"Base", adapt","protect","protectNoAdH","adaptNoAdH","adaptTapio"
 #harvinten<- "Base" # "Base", "Low", "MaxSust", "NoHarv" 
-if(!exists("nYears")) nYears <-50
+if(!exists("nYears")){ 
+  nYears <-50}
 if(unc100) nYears <-100
 print(paste("Simulate",nYears,"years"))
 ##### From GitHub
@@ -41,9 +42,8 @@ source_url("https://raw.githubusercontent.com/ForModLabUHel/IBCcarbon_runs/maste
 
 HcFactor <- 1
 funXX<-funX
-#source_url("https://raw.githubusercontent.com/ForModLabUHel/IBCcarbon_runs/master/general/functions.r")
-#source_url("https://raw.githubusercontent.com/virpi-j/IBCcarbon_runs/master/general/functions.r")
-source_url("https://raw.githubusercontent.com/virpi-j/IBCcarbon_runs/master/general/functions_UQ.r")
+source_url("https://raw.githubusercontent.com/ForModLabUHel/IBCcarbon_runs/master/general/functions.r")
+#source_url("https://raw.githubusercontent.com/virpi-j/IBCcarbon_runs/master/general/functions_UQ.r")
 
 
 nSitesRun <- nSitesRunr
@@ -549,11 +549,9 @@ for(nii in nii0:niter2){
   }
   set.seed(.Random.seed[r_no])
   
-  #sampleXs <- lapply(sampleIDs[1:3], function(jx) { runModel(jx, outType=outType)})      
-  #sampleXs <- mclapply(sampleIDs[(1+(nii-1)*nParRuns):(nii*nParRuns)], function(jx) {
-  #source_url("https://raw.githubusercontent.com/virpi-j/IBCcarbon_runs/master/general/functions.r")
   reStartYearUnc <- 7
-  source_url("https://raw.githubusercontent.com/virpi-j/IBCcarbon_runs/master/general/functions.r")
+  source_url("https://raw.githubusercontent.com/ForModLabUHel/IBCcarbon_runs/master/general/functions.r")
+  #source_url("https://raw.githubusercontent.com/virpi-j/IBCcarbon_runs/master/general/functions.r")
   print("start runModel")
   #uncRCPs <- 0:2
   if(testRun){ # if needed to test an individual sample
@@ -677,7 +675,7 @@ for(nii in nii0:niter2){
     if(unc100){
       uncRCPs <- uncRCPs[1]
       harvintens <- c("Base","NoHarv")
-      print("Run 100 year")
+      print("Run 100 years")
     }
     sampleXs <- mclapply(sampleIDs[(1+(nii-1)*nParRuns):min(length(sampleIDs),(nii*nParRuns))], 
                          function(jx){ 

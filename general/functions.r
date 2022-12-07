@@ -122,7 +122,7 @@ runModel <- function(sampleID, outType="dTabs", uncRCP=0,
         outModReStart$initClearcut <- outModReStart$initClearcut[-x0,]
       }
     }
-}
+  }
   
   if(outType %in% c("uncRun","uncSeg")){
     area_tot <- sum(data.all$area) # ha
@@ -283,7 +283,7 @@ runModel <- function(sampleID, outType="dTabs", uncRCP=0,
       #sample(1:nYears,nYears,replace=T)
     }else{
       set.seed(10)
-      resampleYear <- sample(1:nYears,nYears)
+      resampleYear <- sample(1:nYears,nYears,replace=T)
     } 
     initPrebas$ETSy <- initPrebas$ETSy[,resampleYear]
     initPrebas$P0y <- initPrebas$P0y[,resampleYear,]
