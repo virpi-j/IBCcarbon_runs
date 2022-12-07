@@ -42,8 +42,8 @@ source_url("https://raw.githubusercontent.com/ForModLabUHel/IBCcarbon_runs/maste
 
 HcFactor <- 1
 funXX<-funX
-source_url("https://raw.githubusercontent.com/ForModLabUHel/IBCcarbon_runs/master/general/functions.r")
-#source_url("https://raw.githubusercontent.com/virpi-j/IBCcarbon_runs/master/general/functions_UQ.r")
+#source_url("https://raw.githubusercontent.com/ForModLabUHel/IBCcarbon_runs/master/general/functions.r")
+source_url("https://raw.githubusercontent.com/virpi-j/IBCcarbon_runs/master/general/functions_UQ.r")
 
 
 nSitesRun <- nSitesRunr
