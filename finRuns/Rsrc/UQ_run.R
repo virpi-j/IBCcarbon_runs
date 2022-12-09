@@ -32,10 +32,8 @@ outType <- "uncRun" # Setting for the runModel-function
 if(uncSeg) outType <- "uncSeg"
 #harvscen<- "Base" #"Base", adapt","protect","protectNoAdH","adaptNoAdH","adaptTapio"
 #harvinten<- "Base" # "Base", "Low", "MaxSust", "NoHarv" 
-if(!exists("nYears")){ 
-  nYears <-50}
+
 if(unc100) nYears <-100
-print(paste("Simulate",nYears,"years"))
 ##### From GitHub
 source_url("https://raw.githubusercontent.com/ForModLabUHel/IBCcarbon_runs/master/finRuns/Rsrc/settings.r")
 #source_url("https://raw.githubusercontent.com/virpi-j/IBCcarbon_runs/master/finRuns/Rsrc/settings.r")
@@ -43,6 +41,7 @@ source_url("https://raw.githubusercontent.com/ForModLabUHel/IBCcarbon_runs/maste
 HcFactor <- 1
 funXX<-funX
 #source_url("https://raw.githubusercontent.com/ForModLabUHel/IBCcarbon_runs/master/general/functions.r")
+#source_url("https://raw.githubusercontent.com/virpi-j/IBCcarbon_runs/master/general/functions.r")
 source_url("https://raw.githubusercontent.com/virpi-j/IBCcarbon_runs/master/general/functions_UQ.r")
 
 
@@ -279,14 +278,14 @@ if(uncRun & !loadParids){
   }
 }
 
-if((unc100 | nYears>50 )& !loadParids){
+if(unc100 & !loadParids){
   print("Generate random sets of years")
   set.seed(NULL)
   resampleYears <- matrix(sample(1:nYears,nYears*1000,replace=T),
                           ncol = nYears,nrow = 1000)
   resampleYears[,1:(2021-2015)] <- matrix(1:(2021-2015),ncol = (2021-2015),nrow = 1000, byrow = T)
   save(resampleYears, file=paste0("uncRuns/regRuns/resampleyears100.rdata"))
-} else if(unc100 | nYears>50) {
+} else if(unc100) {
   print("load random set of 100 years")
   load(paste0("uncRuns/regRuns/resampleyears100.rdata"))
 }
@@ -297,28 +296,28 @@ if(uncRun){# sample model parameters, HcFactor and peatland emission coefficient
   pPRELr <-  t(matrix(pPREL,ncol=nSamplesr,nrow=length(pPREL)))#data.frame()
   pYASr <- t(matrix(pYAS,ncol=nSamplesr,nrow=length(pYAS)))#data.frame()
   pCROBmean <- rbind(colMeans(pCROBpine),colMeans(pCROBspruce),
-  colMeans(pCROBbirch))
+                     colMeans(pCROBbirch))
   if(!exists("biasCorr")) biasCorr<-T
   print(paste("Bias correction to parameters",biasCorr))
   for(ij in 1:nSamplesr){ 
     pCROBASr[[ij]] <- pCrobasX#pCROB
     if(uncPCrobas & ij>1){
       if(biasCorr){
-      pCROBASr[[ij]][parindCrob,1:3]<-t(rbind(pCROBpine[parids1[ij],],
-                                              pCROBspruce[parids1[ij],],
-                                              pCROBbirch[parids1[ij],]))+
-      pCrobasX[parindCrob,1:3]-t(pCROBmean)
+        pCROBASr[[ij]][parindCrob,1:3]<-t(rbind(pCROBpine[parids1[ij],],
+                                                pCROBspruce[parids1[ij],],
+                                                pCROBbirch[parids1[ij],]))+
+          pCrobasX[parindCrob,1:3]-t(pCROBmean)
       } else {
-      pCROBASr[[ij]][parindCrob,1:3]<-t(rbind(pCROBpine[parids1[ij],],
-                                              pCROBspruce[parids1[ij],],
-                                              pCROBbirch[parids1[ij],]))}
+        pCROBASr[[ij]][parindCrob,1:3]<-t(rbind(pCROBpine[parids1[ij],],
+                                                pCROBspruce[parids1[ij],],
+                                                pCROBbirch[parids1[ij],]))}
     }
     if(uncPPrel & ij>1){
       if(biasCorr){
         pPRELr[ij,parindPrel] <- pPREL_unc[parids2[ij],]+
-        pPREL[parindPrel] - colMeans(pPREL_unc)
+          pPREL[parindPrel] - colMeans(pPREL_unc)
       } else {
-         pPRELr[ij,parindPrel] <- pPREL_unc[parids2[ij],]
+        pPRELr[ij,parindPrel] <- pPREL_unc[parids2[ij],]
       }
     }
     if(uncPYas & ij>1){
@@ -419,10 +418,10 @@ if(!uncSeg & !unc100){
                     "_pr",uncPCrobas,"_Xr",uncInput,"_ager",uncAge,
                     "_Cr",uncClim,"_str",uncSiteType,".rdata")
   } else {
-  filee <- paste0("uncRuns/regRuns/samplexout_reg",r_no,
-                  "_CurrClim_Base_Base_samplesize",nSitesRunr,"_iters",nSamplesr,
-                  "_pr",uncPCrobas,"_Xr",uncInput,"_ager",uncAge,
-                  "_Cr",uncClim,"_str",uncSiteType,".rdata")
+    filee <- paste0("uncRuns/regRuns/samplexout_reg",r_no,
+                    "_CurrClim_Base_Base_samplesize",nSitesRunr,"_iters",nSamplesr,
+                    "_pr",uncPCrobas,"_Xr",uncInput,"_ager",uncAge,
+                    "_Cr",uncClim,"_str",uncSiteType,".rdata")
   }
   if(file.exists(filee)){
     sampleOutput<-list()
@@ -549,9 +548,11 @@ for(nii in nii0:niter2){
   }
   set.seed(.Random.seed[r_no])
   
-  reStartYearUnc <- 7
-  source_url("https://raw.githubusercontent.com/ForModLabUHel/IBCcarbon_runs/master/general/functions.r")
+  #sampleXs <- lapply(sampleIDs[1:3], function(jx) { runModel(jx, outType=outType)})      
+  #sampleXs <- mclapply(sampleIDs[(1+(nii-1)*nParRuns):(nii*nParRuns)], function(jx) {
   #source_url("https://raw.githubusercontent.com/virpi-j/IBCcarbon_runs/master/general/functions.r")
+  reStartYearUnc <- 7
+  source_url("https://raw.githubusercontent.com/virpi-j/IBCcarbon_runs/master/general/functions.r")
   print("start runModel")
   #uncRCPs <- 0:2
   if(testRun){ # if needed to test an individual sample
@@ -675,7 +676,7 @@ for(nii in nii0:niter2){
     if(unc100){
       uncRCPs <- uncRCPs[1]
       harvintens <- c("Base","NoHarv")
-      print("Run 100 years")
+      print("Run 100 year")
     }
     sampleXs <- mclapply(sampleIDs[(1+(nii-1)*nParRuns):min(length(sampleIDs),(nii*nParRuns))], 
                          function(jx){ 
@@ -810,10 +811,10 @@ for(nii in nii0:niter2){
           if(zon10){ 
             save(area_total,areas_all,sampleOutputb,
                  file=paste0("uncRuns/regRuns/samplexoutzon10_reg",r_no,
-                                                                "_",rcpsname,"_",hscen,"_",harvinten,                                    
-                                                                "_samplesize",nSitesRunr,"_iters",nSamplesr,
-                                                                "_pr",uncPCrobas,"_Xr",uncInput,"_ager",uncAge,
-                                                                "_Cr",uncClim,"_str",uncSiteType,".rdata")) 
+                             "_",rcpsname,"_",hscen,"_",harvinten,                                    
+                             "_samplesize",nSitesRunr,"_iters",nSamplesr,
+                             "_pr",uncPCrobas,"_Xr",uncInput,"_ager",uncAge,
+                             "_Cr",uncClim,"_str",uncSiteType,".rdata")) 
           } else {
             save(area_total,areas_all,sampleOutputb,file=paste0("uncRuns/regRuns/samplexout_reg",r_no,
                                                                 "_",rcpsname,"_",hscen,"_",harvinten,                                    
