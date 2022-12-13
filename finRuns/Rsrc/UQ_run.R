@@ -703,6 +703,7 @@ for(nii in nii0:niter2){
                              outtmp <- runModel(jx, outType=outType, harvScen=harvscen,uncRCP=uncRCP,
                                                 compHarvX = compHarvX, landClassUnman=landClassUnman,
                                                 harvInten=harvinten,  procDrPeat = uncPeat)
+                             print(outtmp$VroundWood)
                              outXcc[[ind]] <- outtmp
                              names(outXcc)[ind] <- paste0(harvscen,"_",harvinten,"_",rcpsname)
                              ind<-ind+1
@@ -717,6 +718,7 @@ for(nii in nii0:niter2){
                                                   compHarvX = compHarvX, landClassUnman=landClassUnman,
                                                   outModReStart = reStartMod, initSoilCreStart = reStartSoil,
                                                   funPreb = reStartRegionPrebas,reStartYear = reStartYearUnc)
+                               print(outtmp$VroundWood)
                                outXcc[[ind]] <- outtmp
                                names(outXcc)[ind] <- paste0(harvscen,"_",harvinten,"_",rcpsname)
                                ind<-ind+1
