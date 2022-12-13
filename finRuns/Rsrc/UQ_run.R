@@ -136,7 +136,7 @@ if(ExcludeUndrPeatlands){
 data.all[,consArea:=cons]
 #print(data.all[1:2,])
 # No harvests on "kitumaa", set here as conservation area
-data.all$cons[which(data.all$landclass==2)]<-1
+#data.all$cons[which(data.all$landclass==2)]<-1
 
 filee <- paste0("uncRuns/regRuns/samplexout_reg",r_no,
                 "_CurrClim_Base_Base_samplesize",nSitesRunr,"_iters",nSamplesr,
@@ -619,6 +619,7 @@ for(nii in nii0:niter2){
           load(file=paste0("uncRuns/regRuns/restartRun_uncRun",r_no,"_",jx,".rdata"))
           for(harvind in 2:length(harvintens)){
             harvinten <- harvintens[harvind]
+            print(harvinten)
             harvscen <- "Base"
             if(harvinten=="NoHarv") harvscen<-"NoHarv"
             print(harvinten)
