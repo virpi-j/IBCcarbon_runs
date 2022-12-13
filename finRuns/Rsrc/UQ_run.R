@@ -136,7 +136,7 @@ if(ExcludeUndrPeatlands){
 data.all[,consArea:=cons]
 #print(data.all[1:2,])
 # No harvests on "kitumaa", set here as conservation area
-#data.all$cons[which(data.all$landclass==2)]<-1
+data.all$cons[which(data.all$landclass==2)]<-1
 
 filee <- paste0("uncRuns/regRuns/samplexout_reg",r_no,
                 "_CurrClim_Base_Base_samplesize",nSitesRunr,"_iters",nSamplesr,
@@ -577,7 +577,7 @@ for(nii in nii0:niter2){
       coefCH4 = 0.34#g m-2 y-1
       coefN20_1 = 0.23
       coefN20_2 = 0.077#g m-2 y-1
-      landClassUnman=1:2
+      landClassUnman=2
       compHarvX = 2
       initVar=NULL
       initSoilC=NULL
