@@ -136,7 +136,7 @@ if(ExcludeUndrPeatlands){
 data.all[,consArea:=cons]
 #print(data.all[1:2,])
 # No harvests on "kitumaa", set here as conservation area
-data.all$cons[which(data.all$landclass==2)]<-1
+#data.all$cons[which(data.all$landclass==2)]<-1
 
 filee <- paste0("uncRuns/regRuns/samplexout_reg",r_no,
                 "_CurrClim_Base_Base_samplesize",nSitesRunr,"_iters",nSamplesr,
