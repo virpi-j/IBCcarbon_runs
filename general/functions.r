@@ -159,7 +159,7 @@ runModel <- function(sampleID, outType="dTabs", uncRCP=0,
     # dat <- dat[rday %in% 1:10958] #uncomment to select some years (10958 needs to be modified)
     maxRday <- max(dat$rday)
     if(outType == "uncRun"){
-      if(unc100){
+      if(unc100 | nYears>50){
         xday <- c(dat$rday,(dat$rday+maxRday),(dat$rday+maxRday*2),
                   (dat$rday+maxRday*3),(dat$rday+maxRday*4))
         dat = rbind(dat,dat,dat,dat,dat)
@@ -278,8 +278,11 @@ runModel <- function(sampleID, outType="dTabs", uncRCP=0,
   if(rcpfile=="CurrClim"){
     #if(outType=="uncRun"){
     if(outType %in% c("uncRun","uncSeg")){
+      if(nYears %in% c(50,100)){
       resampleYear <- resampleYears[sampleID,] 
-      #sample(1:nYears,nYears,replace=T)
+      } else {
+        resampleYear <- sample(1:nYears,nYears,replace=T)
+      }
     }else{
       set.seed(10)
       resampleYear <- sample(1:nYears,nYears)
