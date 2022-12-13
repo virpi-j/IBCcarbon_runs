@@ -613,6 +613,7 @@ for(nii in nii0:niter2){
                              compHarvX = compHarvX, landClassUnman=landClassUnman,
                              harvInten=harvinten, procDrPeat = uncPeat)
           outXcc[[ind]] <- outtmp
+          print(outtmp$VroundWood)
           names(outXcc)[ind] <- paste0(harvscen,"_",harvinten,"_",rcpsname)
           ind<-ind+1
           print(paste("Load 2015-2021 results for sampleID",jx))
