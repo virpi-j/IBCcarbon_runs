@@ -512,7 +512,8 @@ print(paste("start from iteration",nii0))
 niter2 <- niter
 if(uncSeg) niter2 <- 53
 
-if(!exists("mortMod")) mortMod <- 13
+#if(!exists("mortMod")) 
+  mortMod <- 13
 if(!exists("landClassUnman")) landClassUnman <- 2
 print(paste("landClassUnman=",landClassUnman))
 print(paste("mortMod=",mortMod))
