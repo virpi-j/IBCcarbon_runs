@@ -567,6 +567,8 @@ for(nii in nii0:niter2){
     }else{
       harvScen<-harvscen
       harvInten<-harvInten
+      manualRun<-F
+      if(manualRun){
       easyInit=FALSE
       forceSaveInitSoil=F 
       cons10run = F
@@ -586,7 +588,7 @@ for(nii in nii0:niter2){
       #funX = regionPrebas
       initSoilCreStart=NULL
       outModReStart=NULL
-      reStartYear=1
+      reStartYear=1}
       if(unc100){
         uncRCPs <- uncRCPs[1]
         harvintens <- c("Base","NoHarv")
