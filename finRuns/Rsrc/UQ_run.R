@@ -630,6 +630,7 @@ for(nii in nii0:niter2){
                                outModReStart = reStartMod, initSoilCreStart = reStartSoil,
                                funPreb = reStartRegionPrebas,reStartYear = reStartYearUnc)
             outXcc[[ind]] <- outtmp
+            print(outtmp$VroundWood)
             names(outXcc)[ind] <- paste0(harvscen,"_",harvinten,"_",rcpsname)
             ind<-ind+1
           }
