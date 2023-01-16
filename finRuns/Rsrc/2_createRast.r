@@ -20,7 +20,7 @@ if(harvScen %in% c("protect","protectNoAdH")){
   setkey(data.IDs,segID,x,y)
   newIDs <- merge(data.IDs,buf.IDs[,.(x,y,consBuf,newMaakuntaID)]
                   ,by=c("x","y"),all.x=T)
-
+  
   newIDs[!is.na(newMaakuntaID),maakuntaID:=newMaakuntaID]
   newIDs$segID <- newIDs$maakuntaID
   data.IDs <- newIDs
@@ -38,9 +38,12 @@ if(!exists("varXs")) varXs <- c(varNames[varSel], specialVars)
 
 for(varX in varXs){
   # varX <- varXs[1]
-  fileXs <- list.files(path = paste0(pathtoken,pathFiles), pattern = paste0(varX,"_",harvScen,"_",rcps))
-  if(length(fileXs) != nSamples) stop(paste0(nSamples-length(fileXs)," files missing"))
-
+  fileXs <- list.files(path = paste0(pathtoken,pathFiles), pattern = paste0(varX,"_harscen",harvScen,"_harInten",harvInten,"_",rcps))
+  if(length(fileXs) != nSamples){
+    print(paste0(varX,": ",nSamples-length(fileXs)," files missing"))
+    #stop(paste0(nSamples-length(fileXs)," files missing"))
+  } else {
+    
   outX <- data.table()
   for(i in 1:length(fileXs)){
     load(paste0(pathFiles,fileXs[i]))
@@ -51,7 +54,7 @@ for(varX in varXs){
   setkey(data.IDs,segID)
   
   tabX <- merge(outX,data.IDs)
-
+  
   
   # can make a loop 
   rastX <- rasterFromXYZ(tabX[,.(x,y,per1)])
@@ -75,37 +78,47 @@ for(varX in varXs){
   rastX <- rasterFromXYZ(tabX[,.(x,y,per3)])
   crs(rastX) <- crsX
   writeRaster(rastX,filename = paste0("rasters/forCent",r_no,"/",
-                          varX,"_",min(per3),"-",max(per3),
-                          "_harscen",harvScen,
-                          "_harInten",harvInten,"_",
-                          rcpfile,".tiff"),overwrite=T)
+                                      varX,"_",min(per3),"-",max(per3),
+                                      "_harscen",harvScen,
+                                      "_harInten",harvInten,"_",
+                                      rcpfile,".tiff"),overwrite=T)
   hist(rastX, main = paste(varX,"per3"))
- 
+  
   # if(varX!="DeadWoodVolume")  file.remove(paste0(pathFiles,fileXs))
   file.remove(paste0(pathFiles,fileXs))
   print(varX)
+  }
 }
 dev.off()
 
 
 ###soilType raster
-print("creating site type raster")
-npp = raster(paste0("rasters/forCent",r_no,"/",
-                    "npp_",min(per1),"-",max(per1),
-                    "_harscen",harvScen,
-                    "_harInten",harvInten,"_",
-                    rcpfile,".tif"))
-
-fertX <- data.all[,.(segID,fert)]
-setkey(fertX,segID)
-fertX <- merge(fertX,data.IDs)
-rastFert <- rasterFromXYZ(fertX[,.(x,y,fert)])
-crs(rastFert) <- crsX
-# rastFert <- resample(rastFert, npp,method="ngb")
-
-writeRaster(rastFert,filename = paste0("rasters/forCent",r_no,"/siteType.tiff"),overwrite=T)
-
-rm(list=ls());gc()
+if(file.exists(paste0("rasters/forCent",r_no,"/",
+                      "npp_",min(per1),"-",max(per1),
+                      "_harscen",harvScen,
+                      "_harInten",harvInten,"_",
+                      rcpfile,".tif"))){
+  
+  print("creating site type raster")
+  
+  npp = raster(paste0("rasters/forCent",r_no,"/",
+                      "npp_",min(per1),"-",max(per1),
+                      "_harscen",harvScen,
+                      "_harInten",harvInten,"_",
+                      rcpfile,".tif"))
+  
+  fertX <- data.all[,.(segID,fert)]
+  setkey(fertX,segID)
+  fertX <- merge(fertX,data.IDs)
+  rastFert <- rasterFromXYZ(fertX[,.(x,y,fert)])
+  crs(rastFert) <- crsX
+  # rastFert <- resample(rastFert, npp,method="ngb")
+  
+  writeRaster(rastFert,filename = paste0("rasters/forCent",r_no,"/siteType.tiff"),overwrite=T)
+  
+  rm(list=ls());gc()
+  
+}
 
 
 print("all raster created")
