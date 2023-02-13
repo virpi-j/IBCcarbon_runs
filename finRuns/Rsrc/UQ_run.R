@@ -704,7 +704,8 @@ for(nii in nii0:niter2){
     #print(sampleXs[[1]])
   } else if(uncSeg){
     sampleXs <- mclapply(sampleIDs, function(jx) {
-      runModel(jx, outType=outType, harvScen="Base" ,harvInten="Base")}, 
+      runModel(jx, outType=outType, harvScen="Base" ,harvInten="Base", 
+               segScen=segScen)}, 
       mc.cores = nCores,mc.silent=FALSE)      ## Split this job across 10 cores
     #sampleXs <- mclapply(sampleIDs, function(jx) {
     #  runModel(jx, outType=outType, harvScen="NoHarv" ,harvInten="NoHarv")}, 
