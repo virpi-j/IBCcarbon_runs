@@ -5,7 +5,7 @@
 ## ---------------------------------------------------------------------
 ## MAIN SCRIPT: uncRun for random segments, uncSeg for random values for segments
 ## ---------------------------------------------------------------------
-runModel <- function(sampleID, outType="dTabs", uncRCP=0,
+runModel <- function(sampleID, outType="dTabs", uncRCP=0, segScen="Base",
                      harvScen,harvInten,easyInit=FALSE,
                      forceSaveInitSoil=F, cons10run = F,
                      procDrPeat=F,coeffPeat1=-240,coeffPeat2=70,
@@ -126,7 +126,7 @@ runModel <- function(sampleID, outType="dTabs", uncRCP=0,
   
   if(outType %in% c("uncRun","uncSeg")){
     area_tot <- sum(data.all$area) # ha
-    sampleX[,area := 16^2/10000] 
+    if(outType=="uncRun") sampleX[,area := 16^2/10000] 
     cA <- 1/nrow(sampleX) #area_tot/nrow(sampleX) 
     harvestLims <- as.numeric(harvestLimsr[sampleID,])
     HarvLimMaak[,1]<-harvestLims[1]*HarvLimMaak[,1]
@@ -279,7 +279,7 @@ runModel <- function(sampleID, outType="dTabs", uncRCP=0,
     #if(outType=="uncRun"){
     if(outType %in% c("uncRun","uncSeg")){
       if(nYears %in% c(50,100)){
-      resampleYear <- resampleYears[sampleID,] 
+        resampleYear <- resampleYears[sampleID,] 
       } else {
         resampleYear <- sample(1:nYears,nYears,replace=T)
       }
@@ -538,10 +538,14 @@ runModel <- function(sampleID, outType="dTabs", uncRCP=0,
                         compHarv=compHarvX,
                         startSimYear=reStartYear)
     } else if(outType=="uncSeg"){
-      print(paste0("Run sampleID",sampleID," with no harvests"))
-      initPrebas$ClCut = initPrebas$defaultThin = rep(0,nSample)
-      HarvLimX = 0
-      cutArX <- cutArX * 0.
+      if(segScen=="NoHarv"){
+        print(paste0("Run sampleID",sampleID," with no harvests"))
+        initPrebas$ClCut = initPrebas$defaultThin = rep(0,nSample)
+        HarvLimX = 0
+        cutArX <- cutArX * 0.
+      } else {
+        print(paste0("Run sampleID",sampleID," with ",harvScen))
+      }
       region <- regionPrebas(initPrebas, 
                              HarvLim = as.numeric(HarvLimX),
                              minDharv = minDharvX,

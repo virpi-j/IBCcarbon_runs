@@ -589,7 +589,8 @@ for(nii in nii0:niter2){
       #funX = regionPrebas
       initSoilCreStart=NULL
       outModReStart=NULL
-      reStartYear=1}
+      reStartYear=1
+      }
       if(unc100){
         uncRCPs <- uncRCPs[1]
         harvintens <- c("Base","NoHarv")
@@ -627,6 +628,39 @@ for(nii in nii0:niter2){
             harvscen <- "Base"
             if(harvinten=="NoHarv") harvscen<-"NoHarv"
             print(harvinten)
+            if(manualRun){
+              easyInit=FALSE
+              forceSaveInitSoil=F 
+              cons10run = F
+              funPreb = regionPrebas
+              procDrPeat=T
+              coeffPeat1=-240
+              coeffPeat2=70
+              coefCH4 = 0.34#g m-2 y-1
+              coefN20_1 = 0.23
+              coefN20_2 = 0.077#g m-2 y-1
+              landClassUnman=2
+              compHarvX = 2
+              initVar=NULL
+              initSoilC=NULL
+              reInit=F
+              sampleX=NULL
+              #funX = regionPrebas
+              initSoilCreStart=NULL
+              outModReStart=NULL
+              reStartYear=1
+              outType=outType 
+              harvScen=harvscen
+              uncRCP=uncRCP
+              harvInten=harvinten 
+              procDrPeat = uncPeat
+              compHarvX = compHarvX 
+              landClassUnman=landClassUnman
+              outModReStart = reStartMod 
+              initSoilCreStart = reStartSoil
+              funPreb = reStartRegionPrebas
+              reStartYear = reStartYearUnc
+            }
             outtmp <- runModel(jx, outType=outType, harvScen=harvscen,uncRCP=uncRCP,
                                harvInten=harvinten, procDrPeat = uncPeat,
                                compHarvX = compHarvX, landClassUnman=landClassUnman,
@@ -682,8 +716,9 @@ for(nii in nii0:niter2){
     if(unc100){
       uncRCPs <- uncRCPs[1]
       harvintens <- c("Base","NoHarv")
-      print("Run 100 year")
+      print("Run 100 years")
     }
+    if(ttoVemala) print(paste("Run",nYears,"years"))
     sampleXs <- mclapply(sampleIDs[(1+(nii-1)*nParRuns):min(length(sampleIDs),(nii*nParRuns))], 
                          function(jx){ 
                            outXcc <- list()
