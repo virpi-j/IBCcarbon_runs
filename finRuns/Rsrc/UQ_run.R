@@ -51,7 +51,7 @@ print(paste("start region",r_no,"run",outType,"- harvest scenario",harvscen,"-ha
 
 # Climate model and RCP names
 climMod <- c("CanESM2.","CNRM.","GFDL.","HadGEM2.","MIROC.")
-rcpx <- c("rcp45","rcp85")
+rcpx <- c("rcp26","rcp45","rcp85")
 
 # Give new set of outputs ------------------------------------------------
 if(uncSeg){
@@ -372,6 +372,7 @@ if(!loadParids){
   }
   print("Indexes of parameter sets saved.")
 }
+RCPnames <- c("CurrClim","RCP26","RCP45","RCP85")
 # load weather data  
 if(uncRCP == 0){
   rcpfile = rcps
@@ -383,10 +384,12 @@ if(uncRCP == 0){
     dat = rbind(dat,dat,dat)
     dat[,rday:=xday]
   }
-} else if(uncRCP==1){
-  rcpsname <- "RCP45"
-} else if(uncRCP==2){
-  rcpsname <- "RCP85"
+  #} else if(uncRCP==1){
+  #  rcpsname <- "RCP45"
+  #} else if(uncRCP==2){
+  #  rcpsname <- "RCP85"
+} else {
+  rcpsname <- RCPnames[uncRCP+1]
 } 
 ##
 sampleOutput <- list()
@@ -429,11 +432,14 @@ if(!uncSeg & !unc100){
       if(uncRCP==0){
         rcpsname <- "CurrClim"
         #rcps <- rcpsname
-      } else if(uncRCP==1){
-        rcpsname <- "RCP45"
-      } else if(uncRCP==2){
-        rcpsname <- "RCP85"
-      } 
+      } else {
+        rcpsname <- RCPnames[uncRCP+1]
+      }
+      #} else if(uncRCP==1){
+      #  rcpsname <- "RCP45"
+      #} else if(uncRCP==2){
+      #  rcpsname <- "RCP85"
+      #} 
       sampleOutputtmp<-list()
       for(harvind in 1:length(harvintens)){
         harvinten <- harvintens[harvind]  
@@ -513,7 +519,7 @@ niter2 <- niter
 if(uncSeg) niter2 <- 53
 
 #if(!exists("mortMod")) 
-  mortMod <- 13
+mortMod <- 13
 if(!exists("landClassUnman")) landClassUnman <- 2
 print(paste("landClassUnman=",landClassUnman))
 print(paste("mortMod=",mortMod))
@@ -570,26 +576,26 @@ for(nii in nii0:niter2){
       harvInten<-harvInten
       manualRun<-F
       if(manualRun){
-      easyInit=FALSE
-      forceSaveInitSoil=F 
-      cons10run = F
-      funPreb = regionPrebas
-      procDrPeat=T
-      coeffPeat1=-240
-      coeffPeat2=70
-      coefCH4 = 0.34#g m-2 y-1
-      coefN20_1 = 0.23
-      coefN20_2 = 0.077#g m-2 y-1
-      landClassUnman=2
-      compHarvX = 2
-      initVar=NULL
-      initSoilC=NULL
-      reInit=F
-      sampleX=NULL
-      #funX = regionPrebas
-      initSoilCreStart=NULL
-      outModReStart=NULL
-      reStartYear=1
+        easyInit=FALSE
+        forceSaveInitSoil=F 
+        cons10run = F
+        funPreb = regionPrebas
+        procDrPeat=T
+        coeffPeat1=-240
+        coeffPeat2=70
+        coefCH4 = 0.34#g m-2 y-1
+        coefN20_1 = 0.23
+        coefN20_2 = 0.077#g m-2 y-1
+        landClassUnman=2
+        compHarvX = 2
+        initVar=NULL
+        initSoilC=NULL
+        reInit=F
+        sampleX=NULL
+        #funX = regionPrebas
+        initSoilCreStart=NULL
+        outModReStart=NULL
+        reStartYear=1
       }
       if(unc100){
         uncRCPs <- uncRCPs[1]
@@ -605,11 +611,16 @@ for(nii in nii0:niter2){
           if(uncRCP==0){
             rcpsname <- "CurrClim"
             rcps <- rcpsname
-          } else if(uncRCP==1){
-            rcpsname <- "RCP45"
-          } else if(uncRCP==2){
-            rcpsname <- "RCP85"
-          } 
+          } else {
+            rcpsname <- RCPnames[uncRCP+1]
+          }
+          #} else if(uncRCP==1){
+          #  rcpsname <- "RCP26"
+          #} else if(uncRCP==2){
+          #  rcpsname <- "RCP45"
+          #} else if(uncRCP==3){
+          #  rcpsname <- "RCP85"
+          #} 
           print(harvinten)
           
           #source_url("https://raw.githubusercontent.com/virpi-j/IBCcarbon_runs/master/general/functions.r")
@@ -674,7 +685,7 @@ for(nii in nii0:niter2){
         }
         unlink(paste0("uncRuns/regRuns/restartRun_uncRun",r_no,"_",jx,".rdata"))
         print("2015-2021 file is deleted")
-        if(uncRCP==2 & harvinten==harvintens[4]){
+        if(uncRCP==3 & harvinten==harvintens[4]){
           unlink(paste0("initSoilCunc/forCent",r_no,"/initSoilC_",
                         outType,"_",jx,".rdata"))
           print(paste0("initsoilID",jx," deleted"))}
@@ -704,22 +715,15 @@ for(nii in nii0:niter2){
     #print(sampleXs[[1]])
   } else if(uncSeg){
     sampleXs <- mclapply(sampleIDs, function(jx) {
-      runModel(jx, outType=outType, harvScen="Base" ,harvInten="Base", 
-               segScen=segScen)}, 
+      runModel(jx, outType=outType, harvScen="Base" ,harvInten="Base")}, 
       mc.cores = nCores,mc.silent=FALSE)      ## Split this job across 10 cores
-    #sampleXs <- mclapply(sampleIDs, function(jx) {
-    #  runModel(jx, outType=outType, harvScen="NoHarv" ,harvInten="NoHarv")}, 
-    #  mc.cores = nCores,mc.silent=FALSE)      ## Split this job across 10 cores
   } else {
-    #   sampleXs <- lapply(sampleIDs, function(jx) { 
-    #      runModel(jx, outType=outType, harvScen=harvscen,
-    #               harvInten=harvinten, cons10run = zon10)})
     if(unc100){
       uncRCPs <- uncRCPs[1]
       harvintens <- c("Base","NoHarv")
       print("Run 100 years")
     }
-    if(ttoVemala) print(paste("Run",nYears,"years"))
+    if(toVemala) print(paste("Run",nYears,"years"))
     sampleXs <- mclapply(sampleIDs[(1+(nii-1)*nParRuns):min(length(sampleIDs),(nii*nParRuns))], 
                          function(jx){ 
                            outXcc <- list()
@@ -730,11 +734,14 @@ for(nii in nii0:niter2){
                              if(uncRCP==0){
                                rcpsname <- "CurrClim"
                                rcps <- rcpsname
-                             } else if(uncRCP==1){
-                               rcpsname <- "RCP45"
-                             } else if(uncRCP==2){
-                               rcpsname <- "RCP85"
-                             } 
+                             } else {
+                               rcpsname <- RCPnames[uncRCP+1]
+                             }
+                             #} else if(uncRCP==1){
+                             #   rcpsname <- "RCP45"
+                             # } else if(uncRCP==2){
+                             #   rcpsname <- "RCP85"
+                             # } 
                              #source_url("https://raw.githubusercontent.com/virpi-j/IBCcarbon_runs/master/general/functions.r")
                              outtmp <- runModel(jx, outType=outType, harvScen=harvscen,uncRCP=uncRCP,
                                                 compHarvX = compHarvX, landClassUnman=landClassUnman,
@@ -799,11 +806,14 @@ for(nii in nii0:niter2){
       if(uncRCP==0){
         rcpsname <- "CurrClim"
         #rcps <- rcpsname
-      } else if(uncRCP==1){
-        rcpsname <- "RCP45"
-      } else if(uncRCP==2){
-        rcpsname <- "RCP85"
-      } 
+      } else {
+        rcpsname <- RCPnames[uncRCP+1]
+      }
+      #} else if(uncRCP==1){
+      #  rcpsname <- "RCP45"
+      #} else if(uncRCP==2){
+      #  rcpsname <- "RCP85"
+      #} 
       for(harvind in 1:length(harvintens)){
         harvinten <- harvintens[harvind]  
         harvindRCP <- length(harvintens)*uncRCP+harvind
