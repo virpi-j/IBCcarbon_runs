@@ -49,7 +49,7 @@ nSitesRun <- nSitesRunr
 print(paste("start region",r_no,"run",outType,"- harvest scenario",harvscen,"-harvest intensity", harvinten,
             "- set size",nSitesRun,"- no of repetitions", nSamplesr))
 
-# Climate model and RCP names
+# Climate model and RCP names0
 climMod <- c("CanESM2.","CNRM.","GFDL.","HadGEM2.","MIROC.")
 rcpx <- c("rcp26","rcp45","rcp85")
 
@@ -623,7 +623,7 @@ for(nii in nii0:niter2){
           #} 
           print(harvinten)
           
-          #source_url("https://raw.githubusercontent.com/virpi-j/IBCcarbon_runs/master/general/functions.r")
+          source_url("https://raw.githubusercontent.com/virpi-j/IBCcarbon_runs/master/general/functions.r")
           outtmp <- runModel(jx, outType=outType, harvScen=harvscen,uncRCP=uncRCP,
                              compHarvX = compHarvX, landClassUnman=landClassUnman,
                              harvInten=harvinten, procDrPeat = uncPeat)
