@@ -153,6 +153,9 @@ runModel <- function(sampleID, outType="dTabs", uncRCP=0, segScen="Base",
   ## ---------------------------------------------------------
   i = 0
   rcpfile = rcps
+  climate_url <- "https://a3s.fi/swift/v1/AUTH_70b34f161b3643938200c2ec96aa2ca0/RCP/"
+  if(uncRCP>0) source_url(paste(climatepath, rcpfile,".rdata", sep=""))
+  
   load(paste(climatepath, rcpfile,".rdata", sep=""))  
   if(rcpfile=="CurrClim"){
     #####process data considering only current climate###
