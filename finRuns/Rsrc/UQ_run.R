@@ -360,9 +360,6 @@ if(uncRun){# sample model parameters, HcFactor and peatland emission coefficient
     print(paste("opsInds saved for region",r_no))
     #}
   } else if(!uncSeg & loadUnc){
-    if(!uncSeg & !loadUnc){ # if region level uncertainty run, sample input variables
-      # sample input values for the samples
-      #if(uncInput){
       print(paste0("Load input uncertainties for ",length(sampleIDs)," sample sets..."))
       load(paste0("uncRuns/regRuns/opsInd_reg",r_no,"_uncSeg",uncSeg,".rdata"))
       print(paste("opsInd and ops loaded for region",r_no))
