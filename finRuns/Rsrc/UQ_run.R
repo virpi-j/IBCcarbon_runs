@@ -364,7 +364,7 @@ if(uncRun){# sample model parameters, HcFactor and peatland emission coefficient
     #if(uncInput){
     print(paste0("Load input uncertainties for ",length(sampleIDs)," sample sets..."))
     load(paste0("uncRuns/regRuns/opsInd_reg",r_no,"_uncSeg",uncSeg,".rdata"))
-    print(paste("opsIndsloaded for region",r_no))
+    print(paste("opsInds and ops loaded for region",r_no))
   } #if(!uncSeg & !loadUnc)   
 }
 
@@ -565,7 +565,8 @@ for(nii in nii0:niter2){
   #sampleXs <- mclapply(sampleIDs[(1+(nii-1)*nParRuns):(nii*nParRuns)], function(jx) {
   #source_url("https://raw.githubusercontent.com/virpi-j/IBCcarbon_runs/master/general/functions.r")
   reStartYearUnc <- 7
-  source_url("https://raw.githubusercontent.com/virpi-j/IBCcarbon_runs/master/general/functions.r")
+  #source_url("https://raw.githubusercontent.com/virpi-j/IBCcarbon_runs/master/general/functions.r")
+  source_url("https://raw.githubusercontent.com/ForModLabUHel/IBCcarbon_runs/master/general/functions.r")
   print("start runModel")
   #uncRCPs <- 0:2
   if(testRun){ # if needed to test an individual sample
@@ -629,7 +630,8 @@ for(nii in nii0:niter2){
           #} 
           print(harvinten)
           
-          source_url("https://raw.githubusercontent.com/virpi-j/IBCcarbon_runs/master/general/functions.r")
+          #source_url("https://raw.githubusercontent.com/virpi-j/IBCcarbon_runs/master/general/functions.r")
+          source_url("https://raw.githubusercontent.com/ForModLabUHel/IBCcarbon_runs/master/general/functions.r")
           outtmp <- runModel(jx, outType=outType, harvScen=harvscen,uncRCP=uncRCP,
                              compHarvX = compHarvX, landClassUnman=landClassUnman,
                              harvInten=harvinten, procDrPeat = uncPeat)
@@ -859,6 +861,7 @@ for(nii in nii0:niter2){
         sampleOutput[[harvindRCP]]<-sampleOutputb
         names(sampleOutput)[harvindRCP] <- names(sampleXs[[1]])[harvindRCP]
         if(grepl("Curr", names(sampleXs[[1]]))[harvindRCP]) rcpsname <- "CurrClim"
+        if(grepl("RCP26", names(sampleXs[[1]]))[harvindRCP]) rcpsname <- "RCP26"
         if(grepl("RCP45", names(sampleXs[[1]]))[harvindRCP]) rcpsname <- "RCP45"
         if(grepl("RCP85", names(sampleXs[[1]]))[harvindRCP]) rcpsname <- "RCP85"
         if(unc100){
