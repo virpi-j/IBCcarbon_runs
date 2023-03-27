@@ -779,7 +779,7 @@ for(nii in nii0:niter2){
       for(harvind in 1:length(harvintens)){
         harvinten <- harvintens[harvind]  
         harvindRCP <- length(harvintens)*(uncRCPi-1)+harvind
-        print(sampleXs[[1]][[harvindRCP]][1,])
+        #print(sampleXs[[1]][[harvindRCP]][1,])
         print(harvindRCP)
         hscen <- harvscen
         #if(zon10) hscen <- paste0(hscen,"zon10")
