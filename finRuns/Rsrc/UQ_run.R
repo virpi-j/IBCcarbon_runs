@@ -423,12 +423,12 @@ if(!uncSeg & !unc100){
   nSamplesr<-nSamplesSaved # file where the old results are
   if(zon10){
     filee <- paste0("uncRuns/regRuns/samplexoutzon10_reg",r_no,
-                    "_CurrClim_Base_Base_samplesize",nSitesRunr,"_iters",nSamplesr,
+                    "_RCP45_Base_Base_samplesize",nSitesRunr,"_iters",nSamplesr,
                     "_pr",uncPCrobas,"_Xr",uncInput,"_ager",uncAge,
                     "_Cr",uncClim,"_str",uncSiteType,".rdata")
   } else {
     filee <- paste0("uncRuns/regRuns/samplexout_reg",r_no,
-                    "_CurrClim_Base_Base_samplesize",nSitesRunr,"_iters",nSamplesr,
+                    "_RCP45_Base_Base_samplesize",nSitesRunr,"_iters",nSamplesr,
                     "_pr",uncPCrobas,"_Xr",uncInput,"_ager",uncAge,
                     "_Cr",uncClim,"_str",uncSiteType,".rdata")
   }
@@ -441,11 +441,6 @@ if(!uncSeg & !unc100){
       } else {
         rcpsname <- RCPnames[uncRCP+1]
       }
-      #} else if(uncRCP==1){
-      #  rcpsname <- "RCP45"
-      #} else if(uncRCP==2){
-      #  rcpsname <- "RCP85"
-      #} 
       sampleOutputtmp<-list()
       for(harvind in 1:length(harvintens)){
         harvinten <- harvintens[harvind]  
