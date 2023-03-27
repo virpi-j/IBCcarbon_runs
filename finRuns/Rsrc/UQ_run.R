@@ -423,12 +423,12 @@ if(!uncSeg & !unc100){
   nSamplesr<-nSamplesSaved # file where the old results are
   if(zon10){
     filee <- paste0("uncRuns/regRuns/samplexoutzon10_reg",r_no,
-                    "_RCP45_Base_Base_samplesize",nSitesRunr,"_iters",nSamplesr,
+                    "_RCP45_Base_Base_samplesize",nSitesRunr,"_iters",nSamplesr0,
                     "_pr",uncPCrobas,"_Xr",uncInput,"_ager",uncAge,
                     "_Cr",uncClim,"_str",uncSiteType,".rdata")
   } else {
     filee <- paste0("uncRuns/regRuns/samplexout_reg",r_no,
-                    "_RCP45_Base_Base_samplesize",nSitesRunr,"_iters",nSamplesr,
+                    "_RCP45_Base_Base_samplesize",nSitesRunr,"_iters",nSamplesr0,
                     "_pr",uncPCrobas,"_Xr",uncInput,"_ager",uncAge,
                     "_Cr",uncClim,"_str",uncSiteType,".rdata")
   }
@@ -449,13 +449,13 @@ if(!uncSeg & !unc100){
         if(zon10){
           filee <- paste0("uncRuns/regRuns/samplexoutzon10_reg",r_no,
                           "_",rcpsname,"_Base_",harvintens[harvind],
-                          "_samplesize",nSitesRunr,"_iters",nSamplesr,
+                          "_samplesize",nSitesRunr,"_iters",nSamplesr0,
                           "_pr",uncPCrobas,"_Xr",uncInput,"_ager",uncAge,
                           "_Cr",uncClim,"_str",uncSiteType,".rdata")
         } else {
           filee <- paste0("uncRuns/regRuns/samplexout_reg",r_no,
                           "_",rcpsname,"_Base_",harvintens[harvind],
-                          "_samplesize",nSitesRunr,"_iters",nSamplesr,
+                          "_samplesize",nSitesRunr,"_iters",nSamplesr0,
                           "_pr",uncPCrobas,"_Xr",uncInput,"_ager",uncAge,
                           "_Cr",uncClim,"_str",uncSiteType,".rdata")
         }
