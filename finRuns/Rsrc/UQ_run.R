@@ -440,12 +440,12 @@ if(!uncSeg & !unc100){
         rcpsname <- "CurrClim"
         #rcps <- rcpsname
       } else {
-        rcpsname <- RCPnames[uncRCPi]
+        rcpsname <- RCPnames[uncRCPi+1]
       }
       sampleOutputtmp<-list()
       for(harvind in 1:length(harvintens)){
         harvinten <- harvintens[harvind]  
-        harvindRCP <- length(harvintens)*uncRCPi+harvind
+        harvindRCP <- length(harvintens)*(uncRCPi-1)+harvind
         
         if(zon10){
           filee <- paste0("uncRuns/regRuns/samplexoutzon10_reg",r_no,
