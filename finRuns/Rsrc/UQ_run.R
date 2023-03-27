@@ -434,17 +434,18 @@ if(!uncSeg & !unc100){
   }
   if(file.exists(filee)){
     sampleOutput<-list()
-    for(uncRCP in uncRCPs){
+    for(uncRCPi in 1:length(uncRCPs)){
+      uncRCP <- uncRCPs[uncRCPi]
       if(uncRCP==0){
         rcpsname <- "CurrClim"
         #rcps <- rcpsname
       } else {
-        rcpsname <- RCPnames[uncRCP+1]
+        rcpsname <- RCPnames[uncRCPi]
       }
       sampleOutputtmp<-list()
       for(harvind in 1:length(harvintens)){
         harvinten <- harvintens[harvind]  
-        harvindRCP <- length(harvintens)*uncRCP+harvind
+        harvindRCP <- length(harvintens)*uncRCPi+harvind
         
         if(zon10){
           filee <- paste0("uncRuns/regRuns/samplexoutzon10_reg",r_no,
