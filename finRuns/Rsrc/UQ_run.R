@@ -607,6 +607,15 @@ for(nii in nii0:niter2){
       sampleXs <- lapply(sampleIDs, function(jx) { 
         outXcc <- list()
         ind <-1
+        
+        # Initialize soil and deadwood
+        rcpsname <- "CurrClim"
+        rcps <- rcpsname
+        print(harvinten)
+        outtmp <- runModel(jx, outType=outType, harvScen="Base",uncRCP=0,
+                           compHarvX = compHarvX, landClassUnman=landClassUnman,
+                           harvInten="Base", procDrPeat = uncPeat)
+        
         for(uncRCP in uncRCPs){
           harvscen<-"Base" 
           harvinten <- "Base"
