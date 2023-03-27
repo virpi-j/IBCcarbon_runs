@@ -139,7 +139,7 @@ data.all[,consArea:=cons]
 #data.all$cons[which(data.all$landclass==2)]<-1
 
 filee <- paste0("uncRuns/regRuns/samplexout_reg",r_no,
-                "_CurrClim_Base_Base_samplesize",nSitesRunr,"_iters",nSamplesr,
+                "_RCP45_Base_Base_samplesize",nSitesRunr,"_iters",nSamplesr,
                 "_pr",uncPCrobas,"_Xr",uncInput,"_ager",uncAge,
                 "_Cr",uncClim,"_str",uncSiteType,".rdata")
 
@@ -770,7 +770,9 @@ for(nii in nii0:niter2){
     save(area_total,areas_all,sampleXs,
          file=paste0("uncRuns/regRuns/samplexout_reg",r_no,
                      "_tmp.rdata")) 
-    for(uncRCP in uncRCPs){
+
+    for(uncRCPi in 1:length(uncRCPs)){
+      uncRCP <- uncRCPs[uncRCPi]
       harvinten <- "Base"
       if(uncRCP==0){
         rcpsname <- "CurrClim"
@@ -778,14 +780,9 @@ for(nii in nii0:niter2){
       } else {
         rcpsname <- RCPnames[uncRCP+1]
       }
-      #} else if(uncRCP==1){
-      #  rcpsname <- "RCP45"
-      #} else if(uncRCP==2){
-      #  rcpsname <- "RCP85"
-      #} 
       for(harvind in 1:length(harvintens)){
         harvinten <- harvintens[harvind]  
-        harvindRCP <- length(harvintens)*uncRCP+harvind
+        harvindRCP <- length(harvintens)*(uncRCPi-1)+harvind
         print(sampleXs[[1]][[harvindRCP]][1,])
         print(harvindRCP)
         hscen <- harvscen
@@ -805,7 +802,7 @@ for(nii in nii0:niter2){
               xx <- t(as.matrix(sampleXs[[k]][[harvindRCP]])[,j])
               if(harvind>1 & (grepl("round",varNams[j]) | grepl("energy",varNams[j]))){
                 xx[1:reStartYearUnc] <- t(as.matrix(sampleXs[[k]]
-                                                    [[length(harvintens)*uncRCP+1]])[1:reStartYearUnc,j])
+                                                    [[length(harvintens)*uncRCPi]])[1:reStartYearUnc,j])
               }
               x <- rbind(x, xx)#,with=FALSE]))
             } else if(k == 1) {
