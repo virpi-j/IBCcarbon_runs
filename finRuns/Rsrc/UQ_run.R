@@ -420,7 +420,7 @@ if(uncSeg && file.exists(paste0("uncRuns/segRuns/samplexout_uncSeg_reg",r_no,
 }
 if(!uncSeg & !unc100){
   nSamplesr0<-nSamplesr 
-  nSamplesr<-nSamplesSaved # file where the old results are
+  nSamplesr<-min(nSamplesr,nSamplesSaved) # file where the old results are
   if(zon10){
     filee <- paste0("uncRuns/regRuns/samplexoutzon10_reg",r_no,
                     "_RCP45_Base_Base_samplesize",nSitesRunr,"_iters",nSamplesr0,
