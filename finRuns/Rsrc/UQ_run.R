@@ -780,7 +780,7 @@ for(nii in nii0:niter2){
         harvinten <- harvintens[harvind]  
         harvindRCP <- length(harvintens)*(uncRCPi-1)+harvind
         #print(sampleXs[[1]][[harvindRCP]][1,])
-        print(harvindRCP)
+        #print(harvindRCP)
         hscen <- harvscen
         #if(zon10) hscen <- paste0(hscen,"zon10")
         m <- ncol(sampleXs[[1]][[1]]) # how many variables
@@ -840,9 +840,9 @@ for(nii in nii0:niter2){
                                                                 "_Cr",uncClim,"_str",uncSiteType,".rdata")) 
           }
         }
-        print("make plots")
+        #print("make plots")
         m <- length(sampleOutputb)
-        print(paste(m,"variables"))
+        #print(paste(m,"variables"))
         n <- nrow(sampleOutputb[[1]])
         hscen <- harvscen
         pdf(file = paste0("uncRuns/regRuns/plots_reg",r_no,"_",rcpsname,
@@ -871,10 +871,10 @@ for(nii in nii0:niter2){
           }
         }
         dev.off()
-        print("plots made")
+        #print("plots made")
       }
     }
-    
+    print("Result set and plots saved")
   } else { # if uncSeg
     save(sampleXs, ops,file = paste0("uncRuns/segRuns/samplexouttmp_uncSeg_reg",
                                      r_no,"_NoHarv.rdata"))
