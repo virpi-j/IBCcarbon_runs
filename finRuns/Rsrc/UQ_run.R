@@ -572,7 +572,7 @@ for(nii in nii0:niter2){
     }else{
       harvScen<-harvscen
       harvInten<-harvInten
-      manualRun<-T
+      manualRun<-F
       if(manualRun){
         easyInit=FALSE
         forceSaveInitSoil=F 
@@ -652,7 +652,7 @@ for(nii in nii0:niter2){
               coefN20_1 = 0.23
               coefN20_2 = 0.077#g m-2 y-1
               landClassUnman=2
-              compHarvX = 2
+              compHarvX = 
               initVar=NULL
               initSoilC=NULL
               reInit=F
