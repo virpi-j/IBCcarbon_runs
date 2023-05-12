@@ -610,17 +610,17 @@ for(nii in nii0:niter2){
         print(harvinten)
         if(toVemala){
           nYears<-2050-2015
-          toVemala<-F
-          source_url("https://raw.githubusercontent.com/virpi-j/IBCcarbon_runs/master/finRuns/Rsrc/settings.r")
-          source_url("https://raw.githubusercontent.com/virpi-j/IBCcarbon_runs/master/general/functions.r")
+          #toVemala<-F
+          #source_url("https://raw.githubusercontent.com/virpi-j/IBCcarbon_runs/master/finRuns/Rsrc/settings.r")
+          #source_url("https://raw.githubusercontent.com/virpi-j/IBCcarbon_runs/master/general/functions.r")
           print(paste("initialize for period 2015-2050 =",nYears,"/ testRun"))
           outtmp <- runModel(jx, outType=outType, harvScen="Base",uncRCP=0,nYears=nYears,
                              compHarvX = compHarvX, landClassUnman=landClassUnman,
                              harvInten="Base", procDrPeat = uncPeat)
           nYears<-2100-2015
-          toVemala<-T
-          source_url("https://raw.githubusercontent.com/virpi-j/IBCcarbon_runs/master/finRuns/Rsrc/settings.r")
-          source_url("https://raw.githubusercontent.com/virpi-j/IBCcarbon_runs/master/general/functions.r")
+          #toVemala<-T
+          #source_url("https://raw.githubusercontent.com/virpi-j/IBCcarbon_runs/master/finRuns/Rsrc/settings.r")
+          #source_url("https://raw.githubusercontent.com/virpi-j/IBCcarbon_runs/master/general/functions.r")
         } else {
         outtmp <- runModel(jx, outType=outType, harvScen="Base",uncRCP=0,nYears=nYears,
                            compHarvX = compHarvX, landClassUnman=landClassUnman,
