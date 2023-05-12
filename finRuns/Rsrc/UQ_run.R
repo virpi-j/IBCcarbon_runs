@@ -613,7 +613,7 @@ for(nii in nii0:niter2){
           toVemala<-F
           source_url("https://raw.githubusercontent.com/virpi-j/IBCcarbon_runs/master/general/functions.r")
           source_url("https://raw.githubusercontent.com/virpi-j/IBCcarbon_runs/master/finRuns/Rsrc/settings.r")
-          print("initialize for period 2015-2050")
+          print("initialize for period 2015-2050 / testRun")
           outtmp <- runModel(jx, outType=outType, harvScen="Base",uncRCP=0,
                              compHarvX = compHarvX, landClassUnman=landClassUnman,
                              harvInten="Base", procDrPeat = uncPeat)
