@@ -726,6 +726,20 @@ for(nii in nii0:niter2){
                            rcpsname <- "CurrClim"
                            rcps <- rcpsname
                            print(harvinten)
+                           if(toVemala){
+                             nYears<-2050-2015
+                             toVemala<-F
+                             source_url("https://raw.githubusercontent.com/virpi-j/IBCcarbon_runs/master/general/functions.r")
+                             source_url("https://raw.githubusercontent.com/virpi-j/IBCcarbon_runs/master/finRuns/Rsrc/settings.r")
+                             print("initialize for period 2015-2050")
+                             outtmp <- runModel(jx, outType=outType, harvScen="Base",uncRCP=0,
+                                                compHarvX = compHarvX, landClassUnman=landClassUnman,
+                                                harvInten="Base", procDrPeat = uncPeat)
+                             nYears<-2100-2015
+                             toVemala<-T
+                             source_url("https://raw.githubusercontent.com/virpi-j/IBCcarbon_runs/master/general/functions.r")
+                             source_url("https://raw.githubusercontent.com/virpi-j/IBCcarbon_runs/master/finRuns/Rsrc/settings.r")
+                           }
                            outtmp <- runModel(jx, outType=outType, harvScen="Base",uncRCP=0,
                                               compHarvX = compHarvX, landClassUnman=landClassUnman,
                                               harvInten="Base", procDrPeat = uncPeat)
