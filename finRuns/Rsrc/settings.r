@@ -101,8 +101,11 @@ year1harv=0 ###if 1 set harvLim for Low and MaxSust as 0.6 and 1.2 of HarvLim (B
 domSPrun = 0   ### 1 -> run only dominant layer
 startingYear = 2015
 endingYear = 2051
-if(!exists("nYears")) nYears = endingYear-startingYear
-
+if(!exists("nYears")){ 
+  nYears = endingYear-startingYear
+} else {
+  endingYear <- nYears + startingYear
+}
 rcps = "CurrClim" #c("CanESM2.rcp45.rdata","CanESM2.rcp85.rdata")#c("CurrClim","CanESM2.rcp26.rdata")#,"CanESM2.rcp45.rdata","CanESM2.rcp85.rdata")
 
 if(!exists("nSitesRun")) nSitesRun = 20000  ###aproximative number of samples for set runs
