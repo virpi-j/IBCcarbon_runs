@@ -516,7 +516,7 @@ runModel <- function(sampleID, outType="dTabs", uncRCP=0, segScen="Base",
   
   ##calculate steady state carbon from prebas litter 
   ###run yasso (starting from steady state) using PREBAS litter
-  if(harvScen=="Base" & harvInten =="Base" & initilizeSoil & rcps=="CurrClim"){
+  if(harvScen=="Base" & harvInten =="Base" & initilizeSoil & rcps=="CurrClim" & !toVemala){
     initSoilC <- stXX_GV(region, 1)
     print(paste("initSoilC",sampleID))
     if(outType!="testRun" | forceSaveInitSoil){
