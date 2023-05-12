@@ -614,7 +614,7 @@ for(nii in nii0:niter2){
           source_url("https://raw.githubusercontent.com/virpi-j/IBCcarbon_runs/master/finRuns/Rsrc/settings.r")
           source_url("https://raw.githubusercontent.com/virpi-j/IBCcarbon_runs/master/general/functions.r")
           print(paste("initialize for period 2015-2050 =",nYears,"/ testRun"))
-          outtmp <- runModel(jx, outType=outType, harvScen="Base",uncRCP=0,
+          outtmp <- runModel(jx, outType=outType, harvScen="Base",uncRCP=0,nYears=nYears,
                              compHarvX = compHarvX, landClassUnman=landClassUnman,
                              harvInten="Base", procDrPeat = uncPeat)
           nYears<-2100-2015
@@ -622,7 +622,7 @@ for(nii in nii0:niter2){
           source_url("https://raw.githubusercontent.com/virpi-j/IBCcarbon_runs/master/finRuns/Rsrc/settings.r")
           source_url("https://raw.githubusercontent.com/virpi-j/IBCcarbon_runs/master/general/functions.r")
         }
-        outtmp <- runModel(jx, outType=outType, harvScen="Base",uncRCP=0,
+        outtmp <- runModel(jx, outType=outType, harvScen="Base",uncRCP=0,nYears=nYears,
                            compHarvX = compHarvX, landClassUnman=landClassUnman,
                            harvInten="Base", procDrPeat = uncPeat)
         
@@ -639,7 +639,7 @@ for(nii in nii0:niter2){
           
           #source_url("https://raw.githubusercontent.com/virpi-j/IBCcarbon_runs/master/general/functions.r")
           #source_url("https://raw.githubusercontent.com/ForModLabUHel/IBCcarbon_runs/master/general/functions.r")
-          outtmp <- runModel(jx, outType=outType, harvScen=harvscen,uncRCP=uncRCP,
+          outtmp <- runModel(jx, outType=outType, harvScen=harvscen,uncRCP=uncRCP,nYears=nYears,
                              compHarvX = compHarvX, landClassUnman=landClassUnman,
                              harvInten=harvinten, procDrPeat = uncPeat)
           outXcc[[ind]] <- outtmp
@@ -654,7 +654,7 @@ for(nii in nii0:niter2){
             harvscen <- "Base"
             if(harvinten=="NoHarv") harvscen<-"NoHarv"
             print(harvinten)
-            manualRun<-T
+            manualRun<-F
             if(manualRun){
               easyInit=FALSE
               forceSaveInitSoil=F 
@@ -690,7 +690,7 @@ for(nii in nii0:niter2){
               reStartYear = reStartYearUnc
             }
             outtmp <- runModel(jx, outType=outType, harvScen=harvscen,uncRCP=uncRCP,
-                               harvInten=harvinten, procDrPeat = uncPeat,
+                               harvInten=harvinten, procDrPeat = uncPeat,nYears=nYears,
                                compHarvX = compHarvX, landClassUnman=landClassUnman,
                                outModReStart = reStartMod, initSoilCreStart = reStartSoil,
                                funPreb = reStartRegionPrebas,reStartYear = reStartYearUnc)
@@ -734,7 +734,7 @@ for(nii in nii0:niter2){
                              source_url("https://raw.githubusercontent.com/virpi-j/IBCcarbon_runs/master/general/functions.r")
                              source_url("https://raw.githubusercontent.com/virpi-j/IBCcarbon_runs/master/finRuns/Rsrc/settings.r")
                              print("initialize for period 2015-2050")
-                             outtmp <- runModel(jx, outType=outType, harvScen="Base",uncRCP=0,
+                             outtmp <- runModel(jx, outType=outType, harvScen="Base",uncRCP=0,nYears=nYears,
                                                 compHarvX = compHarvX, landClassUnman=landClassUnman,
                                                 harvInten="Base", procDrPeat = uncPeat)
                              nYears<-2100-2015
@@ -742,7 +742,7 @@ for(nii in nii0:niter2){
                              source_url("https://raw.githubusercontent.com/virpi-j/IBCcarbon_runs/master/general/functions.r")
                              source_url("https://raw.githubusercontent.com/virpi-j/IBCcarbon_runs/master/finRuns/Rsrc/settings.r")
                            }
-                           outtmp <- runModel(jx, outType=outType, harvScen="Base",uncRCP=0,
+                           outtmp <- runModel(jx, outType=outType, harvScen="Base",uncRCP=0,nYears=nYears,
                                               compHarvX = compHarvX, landClassUnman=landClassUnman,
                                               harvInten="Base", procDrPeat = uncPeat)
                            
@@ -756,7 +756,7 @@ for(nii in nii0:niter2){
                                rcpsname <- RCPnames[uncRCP+1]
                              }
                              #source_url("https://raw.githubusercontent.com/virpi-j/IBCcarbon_runs/master/general/functions.r")
-                             outtmp <- runModel(jx, outType=outType, harvScen=harvscen,uncRCP=uncRCP,
+                             outtmp <- runModel(jx, outType=outType, harvScen=harvscen,uncRCP=uncRCP,nYears=nYears,
                                                 compHarvX = compHarvX, landClassUnman=landClassUnman,
                                                 harvInten=harvinten,  procDrPeat = uncPeat)
                              print(outtmp$VroundWood)
@@ -770,7 +770,7 @@ for(nii in nii0:niter2){
                                harvscen <- "Base"
                                if(harvinten=="NoHarv") harvscen<-"NoHarv"
                                outtmp <- runModel(jx, outType=outType, harvScen=harvscen,uncRCP=uncRCP,
-                                                  harvInten=harvinten, procDrPeat = uncPeat,
+                                                  harvInten=harvinten, procDrPeat = uncPeat,nYears=nYears,
                                                   compHarvX = compHarvX, landClassUnman=landClassUnman,
                                                   outModReStart = reStartMod, initSoilCreStart = reStartSoil,
                                                   funPreb = reStartRegionPrebas,reStartYear = reStartYearUnc)
