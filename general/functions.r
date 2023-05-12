@@ -153,12 +153,7 @@ runModel <- function(sampleID, outType="dTabs", uncRCP=0, segScen="Base",
   ## ---------------------------------------------------------
   i = 0
   rcpfile = rcps
-  #if(uncRCP>0){
-  #  climate_url <- "https://a3s.fi/swift/v1/AUTH_70b34f161b3643938200c2ec96aa2ca0/RCP/"
-  #  load(url(paste(climate_url, rcpfile,".rdata", sep="")))
-  #} else {  
-    load(paste(climatepath, rcpfile,".rdata", sep=""))
-   # }  
+  load(paste(climatepath, rcpfile,".rdata", sep=""))
   if(rcpfile=="CurrClim"){
     #####process data considering only current climate###
     # dat <- dat[rday %in% 1:10958] #uncomment to select some years (10958 needs to be modified)
@@ -191,20 +186,7 @@ runModel <- function(sampleID, outType="dTabs", uncRCP=0, segScen="Base",
       }
     }
   }
-  ## Loop regions -------------------------------------------------------
-  # for (r_no in regions) {
-  # print(date())
-  # print(paste("Region", r_no) )
-  # r_no=7
-  ## Load samples from regions; region-files include every 1000th pixel
-  ## Pixel data are from 16 m x 16 m cells, but all numbers are per unit area.
-  ## Model also produces per values  per hectar or m2.
-  ## Note also that some of the pixels are non-forest (not metsamaa, kitumaa, joutomaa)
-  ## or not inside Finland (32767) or may be cloudcovered (32766).
   
-  # data.all = fread(paste(regiondatapath, "data.proc.", r_no, ".txt", sep=""))
-  # data.all = fread(paste("data.proc.", r_no, ".txt",sep=""))
-  # dat = dat[id %in% data.all[, unique(id)]]
   gc()
   ## Prepare the same initial state for all harvest scenarios that are simulated in a loop below
   data.sample = sample_data.f(sampleX, nSample)

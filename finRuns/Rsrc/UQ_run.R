@@ -572,7 +572,7 @@ for(nii in nii0:niter2){
     }else{
       harvScen<-harvscen
       harvInten<-harvInten
-      manualRun<-F
+      manualRun<-T
       if(manualRun){
         easyInit=FALSE
         forceSaveInitSoil=F 
@@ -611,16 +611,16 @@ for(nii in nii0:niter2){
         if(toVemala){
           nYears<-2050-2015
           toVemala<-F
-          source_url("https://raw.githubusercontent.com/virpi-j/IBCcarbon_runs/master/general/functions.r")
           source_url("https://raw.githubusercontent.com/virpi-j/IBCcarbon_runs/master/finRuns/Rsrc/settings.r")
+          source_url("https://raw.githubusercontent.com/virpi-j/IBCcarbon_runs/master/general/functions.r")
           print(paste("initialize for period 2015-2050 =",nYears,"/ testRun"))
           outtmp <- runModel(jx, outType=outType, harvScen="Base",uncRCP=0,
                              compHarvX = compHarvX, landClassUnman=landClassUnman,
                              harvInten="Base", procDrPeat = uncPeat)
           nYears<-2100-2015
           toVemala<-T
-          source_url("https://raw.githubusercontent.com/virpi-j/IBCcarbon_runs/master/general/functions.r")
           source_url("https://raw.githubusercontent.com/virpi-j/IBCcarbon_runs/master/finRuns/Rsrc/settings.r")
+          source_url("https://raw.githubusercontent.com/virpi-j/IBCcarbon_runs/master/general/functions.r")
         }
         outtmp <- runModel(jx, outType=outType, harvScen="Base",uncRCP=0,
                            compHarvX = compHarvX, landClassUnman=landClassUnman,
@@ -654,6 +654,7 @@ for(nii in nii0:niter2){
             harvscen <- "Base"
             if(harvinten=="NoHarv") harvscen<-"NoHarv"
             print(harvinten)
+            manualRun<-T
             if(manualRun){
               easyInit=FALSE
               forceSaveInitSoil=F 
@@ -679,12 +680,13 @@ for(nii in nii0:niter2){
               harvScen=harvscen
               uncRCP=uncRCP
               harvInten=harvinten 
+              landClassUnman=NULL
+              compHarvX = 0
+              funPreb = regionPrebas
+              initSoilCreStart=NULL
+              outModReStart=NULL
+              sampleX=NULL              
               procDrPeat = uncPeat
-              compHarvX = compHarvX 
-              landClassUnman=landClassUnman
-              outModReStart = reStartMod 
-              initSoilCreStart = reStartSoil
-              funPreb = reStartRegionPrebas
               reStartYear = reStartYearUnc
             }
             outtmp <- runModel(jx, outType=outType, harvScen=harvscen,uncRCP=uncRCP,
