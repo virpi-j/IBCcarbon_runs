@@ -7,6 +7,7 @@
 ## ---------------------------------------------------------------------
 runModel <- function(sampleID, outType="dTabs", uncRCP=0, segScen="Base",
                      harvScen,harvInten,easyInit=FALSE,
+                     nYears = 35,
                      forceSaveInitSoil=F, cons10run = F,
                      procDrPeat=F,coeffPeat1=-240,coeffPeat2=70,
                      coefCH4 = 0.34,#g m-2 y-1
