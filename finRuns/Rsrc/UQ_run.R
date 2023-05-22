@@ -440,7 +440,7 @@ if(!uncSeg & !unc100){
         rcpsname <- "CurrClim"
         #rcps <- rcpsname
       } else {
-        rcpsname <- RCPnames[uncRCPi+1]
+        rcpsname <- RCPnames[uncRCPi]
       }
       sampleOutputtmp<-list()
       for(harvind in 1:length(harvintens)){
