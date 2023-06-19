@@ -56,6 +56,7 @@ if(!exists("HcFactor") & regSets=="forCent") HcFactor = 1.
 ###parameters for adaptation scenario
 if(!exists("fertThin")) fertThin=3 ###flag that indicates to which TapioType of thinning apply the fertilization:1->precommercial; 2->firstThin; 3->normal thinning
 if(!exists("nYearsFert")) nYearsFert=20 ###number of years for which the fertilization has effect
+if(!exists("HcModVx")) HcModVx = 1
 
 ###reduce krein parameter in order to increase mortality
 if(!exists("pCrobasX")) pCrobasX <- pCROB
