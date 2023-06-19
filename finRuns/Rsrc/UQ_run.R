@@ -342,9 +342,6 @@ if(uncRun){# sample model parameters, HcFactor and peatland emission coefficient
   } else if(!uncHcFactor) {
     HcFactorr <- matrix(1,1,1000)
   }
-print(HcFactorr)
-  if(HcFactor!=1) HcFactorr[1,]<-HcFactor
-print(HcFactorr)
 
   if(!uncSeg & !loadUnc){ # if region level uncertainty run, sample input variables
     # sample input values for the samples
@@ -528,6 +525,11 @@ mortMod <- 13
 if(!exists("landClassUnman")) landClassUnman <- 2
 print(paste("landClassUnman=",landClassUnman))
 print(paste("mortMod=",mortMod))
+
+print(HcFactorr)
+if(HcFactor!=1) HcFactorr[1,]<-HcFactor
+print(HcFactorr)
+
 
 for(nii in nii0:niter2){
   toMem <- ls()
