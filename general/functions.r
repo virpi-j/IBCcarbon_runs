@@ -207,8 +207,7 @@ runModel <- function(sampleID, outType="dTabs", uncRCP=0, segScen="Base",
     pCrobasX <- pCROBASr[[sampleID]]
     pPRELES <- pPRELr[sampleID,]
     pYAS <- pYASr[sampleID,]
-    HcFactor <- 1.1
-    if(sampleID!=1) HcFactor <- HcFactorr[sampleID] 
+    HcFactor <- HcFactorr[sampleID] 
     print(paste("sampleID",sampleID,"HcFactor =",HcFactor))
   } else {
     HcFactor <- 1
