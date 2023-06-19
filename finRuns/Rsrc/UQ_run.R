@@ -38,7 +38,7 @@ if(unc100) nYears <-100
 source_url("https://raw.githubusercontent.com/ForModLabUHel/IBCcarbon_runs/master/finRuns/Rsrc/settings.r")
 #source_url("https://raw.githubusercontent.com/virpi-j/IBCcarbon_runs/master/finRuns/Rsrc/settings.r")
 
-HcFactor <- 1
+#HcFactor <- 1
 funXX<-funX
 #source_url("https://raw.githubusercontent.com/ForModLabUHel/IBCcarbon_runs/master/general/functions.r")
 #source_url("https://raw.githubusercontent.com/virpi-j/IBCcarbon_runs/master/general/functions.r")
@@ -342,6 +342,7 @@ if(uncRun){# sample model parameters, HcFactor and peatland emission coefficient
   } else if(!uncHcFactor) {
     HcFactorr <- matrix(1,1,1000)
   }
+  if(HcFactor!=1) HcFactorr[1,]<-matrix(HcFactor,1,1000)
   
   if(!uncSeg & !loadUnc){ # if region level uncertainty run, sample input variables
     # sample input values for the samples
