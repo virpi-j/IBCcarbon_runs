@@ -574,7 +574,7 @@ for(nii in nii0:niter2){
     }else{
       harvScen<-harvscen
       harvInten<-harvInten
-      manualRun<-F
+      manualRun<-T
       if(manualRun){
         easyInit=FALSE
         forceSaveInitSoil=F 
