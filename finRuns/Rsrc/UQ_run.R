@@ -526,10 +526,7 @@ if(!exists("landClassUnman")) landClassUnman <- 2
 print(paste("landClassUnman=",landClassUnman))
 print(paste("mortMod=",mortMod))
 
-print(HcFactorr)
-if(HcFactor!=1) HcFactorr[1,]<-HcFactor
-print(HcFactorr)
-
+if(HcFactor!=1) HcFactorr[1,1]<-HcFactor
 
 for(nii in nii0:niter2){
   toMem <- ls()
