@@ -342,8 +342,10 @@ if(uncRun){# sample model parameters, HcFactor and peatland emission coefficient
   } else if(!uncHcFactor) {
     HcFactorr <- matrix(1,1,1000)
   }
-  if(HcFactor!=1) HcFactorr[1,]<-matrix(HcFactor,1,1000)
-  
+print(HcFactorr)
+  if(HcFactor!=1) HcFactorr[1,]<-HcFactor
+print(HcFactorr)
+
   if(!uncSeg & !loadUnc){ # if region level uncertainty run, sample input variables
     # sample input values for the samples
     #if(uncInput){
