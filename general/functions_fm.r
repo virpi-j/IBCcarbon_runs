@@ -215,8 +215,8 @@ runModel <- function(sampleID, outType="dTabs", uncRCP=0,
   # if(outType %in% c("uncRun","uncSeg")){
   ###set parameters
   # if(outType %in% c("uncRun","uncSeg")){
-  HcFactor <- 1
   if(outType %in% c("uncRun","uncSeg")){
+    HcFactor <- 1
     pCrobasX <- pCROBASr[[sampleID]]
     pPRELES <- pPRELr[sampleID,]
     pYAS <- pYASr[sampleID,]
