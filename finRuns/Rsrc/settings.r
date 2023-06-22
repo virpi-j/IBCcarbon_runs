@@ -132,7 +132,7 @@ if(regSets=="forCent"){
   load(paste0("input/maakunta/data.all_maakunta_",r_no,".rdata"))
   data.all$segID <- data.all$maakuntaID
 }
-%% area statistics
+## area statistics
 areas_all <- data.table(areatot = sum(data.all$area), 
                         areacons = sum(data.all[cons==1]$area),
                         area_min = sum(data.all$area[data.all$peatID==100]),
