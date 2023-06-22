@@ -281,7 +281,7 @@ runModel <- function(sampleID, outType="dTabs", uncRCP=0,
       resampleYear <- resampleYears[sampleID,] 
       #sample(1:nYears,nYears,replace=T)
     }else{
-      set.seed(10)
+      set.seed(1)#10
       resampleYear <- sample(1:nYears,nYears)
     } 
     resampleYear[2016:2022-2015]<-c(2016:2022-2015)
@@ -557,13 +557,13 @@ runModel <- function(sampleID, outType="dTabs", uncRCP=0,
     
     ###CH4 <- N20
     # converts coeef to ha
-    coefCH4 = coefCH4/1000*10000 #g m-2 y-1 -> kg ha-1
-    coefN20_1 = coefN20_1/1000*10000 #g m-2 y-1 -> kg ha-1
-    coefN20_2 = coefN20_2/1000*10000 #g m-2 y-1 -> kg ha-1
-    region$CH4emisDrPeat_kgyear = sum(coefCH4*region$areas[siteDrPeat1]) +
-      sum(coefCH4*region$areas[siteDrPeat2])
-    region$N2OemisDrPeat_kgyear = sum(coefN20_1*region$areas[siteDrPeat1]) +
-      sum(coefN20_2*region$areas[siteDrPeat2])
+    #coefCH4 = coefCH4/1000*10000 #g m-2 y-1 -> kg ha-1
+    #coefN20_1 = coefN20_1/1000*10000 #g m-2 y-1 -> kg ha-1
+    #coefN20_2 = coefN20_2/1000*10000 #g m-2 y-1 -> kg ha-1
+    #region$CH4emisDrPeat_kgyear = sum(coefCH4*region$areas[siteDrPeat1]) +
+    #  sum(coefCH4*region$areas[siteDrPeat2])
+    #region$N2OemisDrPeat_kgyear = sum(coefN20_1*region$areas[siteDrPeat1]) +
+    #  sum(coefN20_2*region$areas[siteDrPeat2])
     
     region$multiOut[siteDrPeat1,,46,,1] = 0.
     region$multiOut[siteDrPeat1,,46,,1] = region$multiOut[siteDrPeat1,,18,,1] - 
@@ -655,6 +655,58 @@ runModel <- function(sampleID, outType="dTabs", uncRCP=0,
   if(outType=="dTabs"){
     runModOut(sampleID, sampleX,region,r_no,harvScen,harvInten,rcpfile,areas,
               colsOut1,colsOut2,colsOut3,varSel,sampleForPlots)
+    if(procDrPeat){
+      #siteDrPeat1 <- which(sampleX$pseudoptyp==400 & sampleX$fert<4)
+      #siteDrPeat2 <- which(sampleX$pseudoptyp==400 & sampleX$fert>=4)
+      
+      ###CH4 <- N20
+      # converts coeef to ha
+      #coefCH4 = coefCH4/1000*10000 #g m-2 y-1 -> kg ha-1
+      #coefN20_1 = coefN20_1/1000*10000 #g m-2 y-1 -> kg ha-1
+      #coefN20_2 = coefN20_2/1000*10000 #g m-2 y-1 -> kg ha-1
+      #region$CH4emisDrPeat_kgyear = sum(coefCH4*region$areas[siteDrPeat1]) +
+      #  sum(coefCH4*region$areas[siteDrPeat2])
+      #region$N2OemisDrPeat_kgyear = sum(coefN20_1*region$areas[siteDrPeat1]) +
+      #  sum(coefN20_2*region$areas[siteDrPeat2])
+      
+      segID <- region$siteInfo[,1]
+      # CH4
+      VCH4Mat <- matrix(0,region$nSites,region$maxYears)
+      VCH4Mat[c(siteDrPeat1,siteDrPeat2),] <- coefCH4
+      outX <- data.table(segID=segID,VCH4Mat)
+      if(sampleID==sampleForPlots){testPlot(outX,"CH4",areas)}
+      ###take the most frequent species in the periods
+      p1 <- outX[,.(per1 = Mode(as.numeric(.SD))[1]),.SDcols=colsOut1,by=segID]
+      p2 <- outX[,.(per2 = Mode(as.numeric(.SD))[1]),.SDcols=colsOut2,by=segID]
+      p3 <- outX[,.(per3 = Mode(as.numeric(.SD))[1]),.SDcols=colsOut3,by=segID]
+      pX <- merge(p1,p2)
+      pX <- merge(pX,p3)
+      CH4_em <- pX
+      save(CH4_em,file=paste0("outputDT/forCent",r_no,"/CH4_em",
+                              "_harscen",harvScen,
+                              "_harInten",harvInten,"_",
+                              rcpfile,"_",
+                              "sampleID",sampleID,".rdata"))
+      #N2O    
+      VN2OMat <- matrix(0,region$nSites,region$maxYears)
+      VN2OMat[c(siteDrPeat1),] <- coefN20_1
+      VN2OMat[c(siteDrPeat2),] <- coefN20_2
+      outX <- data.table(segID=segID,VN2OMat)
+      if(sampleID==sampleForPlots){testPlot(outX,"N2O",areas)}
+      ###take the most frequent species in the periods
+      p1 <- outX[,.(per1 = Mode(as.numeric(.SD))[1]),.SDcols=colsOut1,by=segID]
+      p2 <- outX[,.(per2 = Mode(as.numeric(.SD))[1]),.SDcols=colsOut2,by=segID]
+      p3 <- outX[,.(per3 = Mode(as.numeric(.SD))[1]),.SDcols=colsOut3,by=segID]
+      pX <- merge(p1,p2)
+      pX <- merge(pX,p3)
+      N2O_em <- pX
+      save(N2O_em,file=paste0("outputDT/forCent",r_no,"/N2O_em",
+                              "_harscen",harvScen,
+                              "_harInten",harvInten,"_",
+                              rcpfile,"_",
+                              "sampleID",sampleID,".rdata"))
+    }
+    
     return("all outs saved")  
   } 
   if(outType=="uncRun"){
