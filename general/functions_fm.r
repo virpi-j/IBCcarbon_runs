@@ -656,19 +656,6 @@ runModel <- function(sampleID, outType="dTabs", uncRCP=0,
     runModOut(sampleID, sampleX,region,r_no,harvScen,harvInten,rcpfile,areas,
               colsOut1,colsOut2,colsOut3,varSel,sampleForPlots)
     if(procDrPeat){
-      #siteDrPeat1 <- which(sampleX$pseudoptyp==400 & sampleX$fert<4)
-      #siteDrPeat2 <- which(sampleX$pseudoptyp==400 & sampleX$fert>=4)
-      
-      ###CH4 <- N20
-      # converts coeef to ha
-      #coefCH4 = coefCH4/1000*10000 #g m-2 y-1 -> kg ha-1
-      #coefN20_1 = coefN20_1/1000*10000 #g m-2 y-1 -> kg ha-1
-      #coefN20_2 = coefN20_2/1000*10000 #g m-2 y-1 -> kg ha-1
-      #region$CH4emisDrPeat_kgyear = sum(coefCH4*region$areas[siteDrPeat1]) +
-      #  sum(coefCH4*region$areas[siteDrPeat2])
-      #region$N2OemisDrPeat_kgyear = sum(coefN20_1*region$areas[siteDrPeat1]) +
-      #  sum(coefN20_2*region$areas[siteDrPeat2])
-      
       segID <- region$siteInfo[,1]
       # CH4
       VCH4Mat <- matrix(0,region$nSites,region$maxYears)

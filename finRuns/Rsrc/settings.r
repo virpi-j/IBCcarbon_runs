@@ -74,7 +74,7 @@ varOuts <- c("NEP","GPPtrees", "npp", "grossGrowth",
 varSel <- match(varOuts,varNames)
 specialVars <- c("domSpecies","domAge","Vdec","Vpine","Vspruce","VenergyWood",
                  "WenergyWood","Wtot","GVgpp","GVw")
-if(procDrPeat) specialVars <- c(specialVars,"CH4emisDrPeat_kgyear","N2OemisDrPeat_kgyear")
+if(procDrPeat) specialVars <- c(specialVars,"CH4_em","N2O_em")
 
 #varSel <- c(7,8,9,11:13,17:18,22,24:33,37:39,41:46)   #### variables IDs to be stored
 
