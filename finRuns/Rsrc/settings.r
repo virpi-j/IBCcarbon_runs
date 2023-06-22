@@ -65,21 +65,13 @@ if(!exists("nYearsFert")) nYearsFert=20 ###number of years for which the fertili
 if(!exists("pCrobasX")) pCrobasX <- pCROB
 pCrobasX[17,1:3] <- pCROB[17,1:3]
 
-if(!uncRun){
 varOuts <- c("NEP","GPPtrees", "npp", "grossGrowth", 
              "soilC", "V", "age", "WroundWood","VroundWood",
              "Litter_fol", "Litter_fr", 
              "Litter_fWoody", "Litter_cWoody",
              "DeadWoodVolume", "D", "BA", "H", "Vmort","Wdb",
              "Hc_base","wf_STKG","Rh","CH4emisDrPeat_kgyear","N2OemisDrPeat_kgyear")
-} else {
-  varOuts <- c("NEP","GPPtrees", "npp", "grossGrowth", 
-               "soilC", "V", "age", "WroundWood","VroundWood",
-               "Litter_fol", "Litter_fr", 
-               "Litter_fWoody", "Litter_cWoody",
-               "DeadWoodVolume", "D", "BA", "H", "Vmort","Wdb",
-               "Hc_base","wf_STKG","Rh")
-}
+
 varSel <- match(varOuts,varNames)
 specialVars <- c("domSpecies","domAge","Vdec","Vpine","Vspruce","VenergyWood",
                  "WenergyWood","Wtot","GVgpp","GVw")
