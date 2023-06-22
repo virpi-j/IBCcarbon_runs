@@ -187,7 +187,7 @@ if(ExcludeUndrPeatlands){
                " percent of the whole area)"))
   data.all <- copy(data.all[!undrpeatX,]) # cut off 
 }
-
+data.all$cons[which(data.all$landclass==2)]<-1
 
 
 
