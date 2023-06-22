@@ -132,20 +132,20 @@ if(regSets=="forCent"){
   load(paste0("input/maakunta/data.all_maakunta_",r_no,".rdata"))
   data.all$segID <- data.all$maakuntaID
 }
-## area statistics
-areas_all <- data.table(areatot = sum(data.all$area), 
-                        areacons = sum(data.all[cons==1]$area),
-                        area_min = sum(data.all$area[data.all$peatID==100]),
-                        area_drpeat = sum(data.all$area[data.all$peatID==400]),
-                        area_undrpeat = sum(data.all$area[data.all$peatID==700]),
-                        area_nonfor = sum(data.all$area[data.all$peatID==0]),
-                        area_min_cons = sum(data.all$area[data.all$peatID==100 & data.all$cons==1]),
-                        area_drpeat_cons = sum(data.all$area[data.all$peatID==400 & data.all$cons==1]),
-                        area_undrpeat_cons = sum(data.all$area[data.all$peatID==700 & data.all$cons==1]),
-                        area_nonfor_cons = sum(data.all$area[data.all$peatID==0 & data.all$cons==1]))
-print(areas_all)
 ####procData
-print("Remove undrained peatlands")
+
+cloudpixels = data.all[, sum(ba==32766)]
+nonforest = data.all[, sum(ba==32767)]
+forest = data.all[, sum(ba< 32766)]
+AREA = (forest + cloudpixels) * 16 * 16 * 1000 #m2
+AREA_1000ha = AREA / 10000 / 1000
+data.all[,area:=nPix*16^2/10000]
+pixTot <- sum(data.all$nPix)
+setnames(data.all,"nPix","N")
+## REMOVE CLOUD COVERED, AND WHERE cons = NA (...? why)
+data.all = data.all[ba < 32766]
+data.all = data.all[!is.na(cons)]
+
 load(paste0("input/maakunta/maakunta_",r_no,"_IDsTab.rdata"))
 data.all <- cbind(data.all,data.IDs[match(data.all$segID, data.IDs$maakuntaID),4:5])
 finPeats <- raster("/scratch/project_2000994/MVMIsegments/segment-IDs/pseudopty.img")
@@ -159,6 +159,21 @@ if(file.exists(paste0("uncRuns/peatIDraster_reg",r_no,".rdata"))){
   save(peatIDs, file=paste0("uncRuns/peatIDraster_reg",r_no,".rdata"))
 }
 data.all[,peatID:=peatIDs]
+
+## area statistics
+areas_all <- data.table(areatot = sum(data.all$area), 
+                        areacons = sum(data.all[cons==1]$area),
+                        area_min = sum(data.all$area[data.all$peatID==100]),
+                        area_drpeat = sum(data.all$area[data.all$peatID==400]),
+                        area_undrpeat = sum(data.all$area[data.all$peatID==700]),
+                        area_nonfor = sum(data.all$area[data.all$peatID==0]),
+                        area_min_cons = sum(data.all$area[data.all$peatID==100 & data.all$cons==1]),
+                        area_drpeat_cons = sum(data.all$area[data.all$peatID==400 & data.all$cons==1]),
+                        area_undrpeat_cons = sum(data.all$area[data.all$peatID==700 & data.all$cons==1]),
+                        area_nonfor_cons = sum(data.all$area[data.all$peatID==0 & data.all$cons==1]))
+print(areas_all)
+
+# Which segments are included
 ExcludeUndrPeatlands<-T
 if(ExcludeUndrPeatlands){
   # Exclude undrained peatlands
@@ -172,17 +187,6 @@ if(ExcludeUndrPeatlands){
 
 data.all <- data.all[fert %in% siteTypes]
 data.all <- data.all[landclass %in% landClassX]
-cloudpixels = data.all[, sum(ba==32766)]
-nonforest = data.all[, sum(ba==32767)]
-forest = data.all[, sum(ba< 32766)]
-AREA = (forest + cloudpixels) * 16 * 16 * 1000 #m2
-AREA_1000ha = AREA / 10000 / 1000
-data.all[,area:=nPix*16^2/10000]
-pixTot <- sum(data.all$nPix)
-setnames(data.all,"nPix","N")
-## REMOVE CLOUD COVERED, AND WHERE cons = NA (...? why)
-data.all = data.all[ba < 32766]
-data.all = data.all[!is.na(cons)]
 
 
 ####load data
