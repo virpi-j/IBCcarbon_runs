@@ -73,7 +73,8 @@ varOuts <- c("NEP","GPPtrees", "npp", "grossGrowth",
              "Hc_base","wf_STKG","Rh")
 varSel <- match(varOuts,varNames)
 specialVars <- c("domSpecies","domAge","Vdec","Vpine","Vspruce","VenergyWood",
-                 "WenergyWood","Wtot","GVgpp","GVw","CH4emisDrPeat_kgyear","N2OemisDrPeat_kgyear")
+                 "WenergyWood","Wtot","GVgpp","GVw")
+if(procDrPeat) specialVars <- c(specialVars,"CH4emisDrPeat_kgyear","N2OemisDrPeat_kgyear")
 
 #varSel <- c(7,8,9,11:13,17:18,22,24:33,37:39,41:46)   #### variables IDs to be stored
 
@@ -132,6 +133,22 @@ if(regSets=="forCent"){
   data.all$segID <- data.all$maakuntaID
 }
 ####procData
+print("Remove undrained peatlands")
+load(paste0("input/maakunta/maakunta_",r_no,"_IDsTab.rdata"))
+data.all <- cbind(data.all,data.IDs[match(data.all$segID, data.IDs$maakuntaID),4:5])
+finPeats <- raster("/scratch/project_2000994/MVMIsegments/segment-IDs/pseudopty.img")
+undrPeatID <- 700  ### ID = 700 for luke database; undrained peatland
+if(file.exists(paste0("uncRuns/peatID_reg",r_no,".rdata"))){
+  load(paste0("uncRuns/peatID_reg",r_no,".rdata"))
+} else {
+  print("Extract peatIDs...")
+  peatIDs <-extract(finPeats, cbind(data.all$x,data.all$y))
+  print("Save peatIDs.")
+  save(peatIDs, file=paste0("uncRuns/peatID_reg",r_no,".rdata"))
+}
+data.all[,peatID:=peatIDs]
+
+
 data.all <- data.all[fert %in% siteTypes]
 data.all <- data.all[landclass %in% landClassX]
 cloudpixels = data.all[, sum(ba==32766)]
