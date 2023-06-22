@@ -146,17 +146,21 @@ setnames(data.all,"nPix","N")
 data.all = data.all[ba < 32766]
 data.all = data.all[!is.na(cons)]
 
+data.all <- data.all[fert %in% siteTypes]
+data.all <- data.all[landclass %in% landClassX]
+
 load(paste0("input/maakunta/maakunta_",r_no,"_IDsTab.rdata"))
 data.all <- cbind(data.all,data.IDs[match(data.all$segID, data.IDs$maakuntaID),4:5])
 finPeats <- raster("/scratch/project_2000994/MVMIsegments/segment-IDs/pseudopty.img")
 undrPeatID <- 700  ### ID = 700 for luke database; undrained peatland
-if(file.exists(paste0("uncRuns/peatIDraster_reg",r_no,".rdata"))){
-  load(paste0("uncRuns/peatIDraster_reg",r_no,".rdata"))
+if(file.exists(paste0("uncRuns/peatID_reg",r_no,".rdata"))){
+  load(paste0("uncRuns/peatID_reg",r_no,".rdata"))
+  print("PeatIDs loaded")
 } else {
   print("Extract peatIDs...")
   peatIDs <-extract(finPeats, cbind(data.all$x,data.all$y))
   print("Save peatIDs.")
-  save(peatIDs, file=paste0("uncRuns/peatIDraster_reg",r_no,".rdata"))
+  save(peatIDs, file=paste0("uncRuns/peatID_reg",r_no,".rdata"))
 }
 data.all[,peatID:=peatIDs]
 
@@ -185,8 +189,6 @@ if(ExcludeUndrPeatlands){
 }
 
 
-data.all <- data.all[fert %in% siteTypes]
-data.all <- data.all[landclass %in% landClassX]
 
 
 ####load data
