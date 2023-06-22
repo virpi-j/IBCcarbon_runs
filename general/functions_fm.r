@@ -287,6 +287,7 @@ runModel <- function(sampleID, outType="dTabs", uncRCP=0,
       resampleYear <- sample(1:nYears,nYears)
     } 
     resampleYear[2016:2022-2015]<-c(2016:2022-2015)
+    print(resampleYear)
     initPrebas$ETSy <- initPrebas$ETSy[,resampleYear]
     initPrebas$P0y <- initPrebas$P0y[,resampleYear,]
     initPrebas$weather <- initPrebas$weather[,resampleYear,,]
