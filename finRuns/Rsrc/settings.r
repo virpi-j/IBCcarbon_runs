@@ -132,6 +132,18 @@ if(regSets=="forCent"){
   load(paste0("input/maakunta/data.all_maakunta_",r_no,".rdata"))
   data.all$segID <- data.all$maakuntaID
 }
+
+areas_all <- data.table(areatot = sum(data.all$area), 
+                        areacons = sum(data.all[cons==1]$area),
+                        area_min = sum(data.all$area[data.all$peatID==100]),
+                        area_drpeat = sum(data.all$area[data.all$peatID==400]),
+                        area_undrpeat = sum(data.all$area[data.all$peatID==700]),
+                        area_nonfor = sum(data.all$area[data.all$peatID==0]),
+                        area_min_cons = sum(data.all$area[data.all$peatID==100 & data.all$cons==1]),
+                        area_drpeat_cons = sum(data.all$area[data.all$peatID==400 & data.all$cons==1]),
+                        area_undrpeat_cons = sum(data.all$area[data.all$peatID==700 & data.all$cons==1]),
+                        area_nonfor_cons = sum(data.all$area[data.all$peatID==0 & data.all$cons==1]))
+print(areas_all)
 ####procData
 print("Remove undrained peatlands")
 load(paste0("input/maakunta/maakunta_",r_no,"_IDsTab.rdata"))
