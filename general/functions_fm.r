@@ -282,7 +282,8 @@ runModel <- function(sampleID, outType="dTabs", uncRCP=0,
       #sample(1:nYears,nYears,replace=T)
     }else{
       set.seed(1)#10
-      resampleYear <- sample(1:nYears,nYears)
+      resampleYear <- c(29 28  5 27  8  9  5 19 33 18 30 10 16 14 10 19 15 11  9 30 36  8  2 17  8  4  5 17 10  7 16  8 15 31 21  4)
+#      resampleYear <- sample(1:nYears,nYears)
     } 
     resampleYear[2016:2022-2015]<-c(2016:2022-2015)
     initPrebas$ETSy <- initPrebas$ETSy[,resampleYear]
