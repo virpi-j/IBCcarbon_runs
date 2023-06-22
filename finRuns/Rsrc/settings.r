@@ -147,6 +147,15 @@ if(file.exists(paste0("uncRuns/peatIDraster_reg",r_no,".rdata"))){
   save(peatIDs, file=paste0("uncRuns/peatIDraster_reg",r_no,".rdata"))
 }
 data.all[,peatID:=peatIDs]
+ExcludeUndrPeatlands<-T
+if(ExcludeUndrPeatlands){
+  # Exclude undrained peatlands
+  undrpeatX <- data.all$peatID==undrPeatID
+  print(paste0("Discard undrained ", sum(data.all$area[(which(undrpeatX))])," ha (",
+               round(sum(data.all$area[(which(undrpeatX))])/sum(data.all$area)*1000)/10,
+               " percent of the whole area)"))
+  data.all <- copy(data.all[!undrpeatX,]) # cut off 
+}
 
 
 data.all <- data.all[fert %in% siteTypes]
