@@ -224,7 +224,7 @@ runModel <- function(sampleID, outType="dTabs", uncRCP=0,
   }
   print(paste("sampleID",sampleID,"HcFactor =",HcFactor))
   ## Second, continue now starting from soil SS
-  if(vPrebas="v1.0.0"){
+  if(vPREBAS == "v1.0.0"){
     initPrebas = create_prebas_input_v1_0_0.f(r_no, clim, data.sample, nYears = nYears,
                                        startingYear = startingYear,domSPrun=domSPrun,
                                        harv=harvScen, HcFactorX=HcFactor,
@@ -1340,11 +1340,7 @@ create_prebas_input.f = function(r_no, clim, data.sample, nYears,
   ## Set to match climate data years
   if(!exists("ftTapioParX")) ftTapioParX = ftTapio
   if(!exists("tTapioParX")) tTapioParX = tTapio
-  if(vPREBAS == "v1.0.0"){
-    initVar[,6,] <- aaply(initVar,1,findHcNAs,pHcM)[,6,]*HcFactorX  
-  } else {
-    initVar[,6,] <- aaply(initVar,1,findHcNAs,pHcM,pCrobasX,HcModVx)[,6,]*HcFactorX
-  }
+  initVar[,6,] <- aaply(initVar,1,findHcNAs,pHcM,pCrobasX,HcModVx)[,6,]*HcFactorX
   initPrebas <- InitMultiSite(nYearsMS = rep(nYears,nSites),siteInfo=siteInfo,
                               # litterSize = litterSize,#pAWEN = parsAWEN,
                               pCROBAS = pCrobasX,
