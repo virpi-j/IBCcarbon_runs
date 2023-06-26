@@ -215,14 +215,14 @@ runModel <- function(sampleID, outType="dTabs", uncRCP=0,
   # if(outType %in% c("uncRun","uncSeg")){
   ###set parameters
   # if(outType %in% c("uncRun","uncSeg")){
-  HcFactor <- 1
   if(outType %in% c("uncRun","uncSeg")){
+    HcFactor <- 1
     pCrobasX <- pCROBASr[[sampleID]]
     pPRELES <- pPRELr[sampleID,]
     pYAS <- pYASr[sampleID,]
     HcFactor <- HcFactorr[sampleID] 
-    print(paste("sampleID",sampleID,"HcFactor =",HcFactor))
   }
+  print(paste("sampleID",sampleID,"HcFactor =",HcFactor))
   ## Second, continue now starting from soil SS
   initPrebas = create_prebas_input.f(r_no, clim, data.sample, nYears = nYears,
                                      startingYear = startingYear,domSPrun=domSPrun,
