@@ -215,29 +215,21 @@ runModel <- function(sampleID, outType="dTabs", uncRCP=0,
   # if(outType %in% c("uncRun","uncSeg")){
   ###set parameters
   # if(outType %in% c("uncRun","uncSeg")){
+  HcFactor <- 1
   if(outType %in% c("uncRun","uncSeg")){
-    HcFactor <- 1
     pCrobasX <- pCROBASr[[sampleID]]
     pPRELES <- pPRELr[sampleID,]
     pYAS <- pYASr[sampleID,]
     HcFactor <- HcFactorr[sampleID] 
+    print(paste("sampleID",sampleID,"HcFactor =",HcFactor))
   }
-  print(paste("sampleID",sampleID,"HcFactor =",HcFactor))
   ## Second, continue now starting from soil SS
-  
-  if(vPREBAS == "v1.0.0"){
-    initPrebas = create_prebas_input_v1_0_0.f(r_no, clim, data.sample, nYears = nYears,
-                                       startingYear = startingYear,domSPrun=domSPrun,
-                                       harv=harvScen, HcFactorX=HcFactor,
-                                       initSoilC=initSoilCreStart, reStartYear=reStartYear,
-                                       outModReStart=outModReStart)
-  } else {
   initPrebas = create_prebas_input.f(r_no, clim, data.sample, nYears = nYears,
                                      startingYear = startingYear,domSPrun=domSPrun,
                                      harv=harvScen, HcFactorX=HcFactor,
                                      initSoilC=initSoilCreStart, reStartYear=reStartYear,
                                      outModReStart=outModReStart)
-  }
+  
   if(outType %in% c("uncRun","uncSeg")){
     initPrebas$pPRELES <- pPRELES
     initPrebas$pYASSO <- pYAS
@@ -289,14 +281,9 @@ runModel <- function(sampleID, outType="dTabs", uncRCP=0,
       resampleYear <- resampleYears[sampleID,] 
       #sample(1:nYears,nYears,replace=T)
     }else{
-      set.seed(12)#10
-      #resampleYear <- c(29, 28,  5, 27,  8,  9,  5, 19, 33, 18, 30, 10, 16, 14, 10, 19, 15, 11,  9, 30, 36,  8,  2, 17,  8,  4,
-      #                  5, 17, 10,  7, 16,  8, 15, 31, 21,  4)
+      set.seed(10)
       resampleYear <- sample(1:nYears,nYears)
-      load("uncRuns/regRuns/resampleyears.rdata")
     } 
-    resampleYear[1:(2021-2015)]<-c(1:(2021-2015))
-    print(resampleYear)
     initPrebas$ETSy <- initPrebas$ETSy[,resampleYear]
     initPrebas$P0y <- initPrebas$P0y[,resampleYear,]
     initPrebas$weather <- initPrebas$weather[,resampleYear,,]
@@ -569,13 +556,13 @@ runModel <- function(sampleID, outType="dTabs", uncRCP=0,
     
     ###CH4 <- N20
     # converts coeef to ha
-    #coefCH4 = coefCH4/1000*10000 #g m-2 y-1 -> kg ha-1
-    #coefN20_1 = coefN20_1/1000*10000 #g m-2 y-1 -> kg ha-1
-    #coefN20_2 = coefN20_2/1000*10000 #g m-2 y-1 -> kg ha-1
-    #region$CH4emisDrPeat_kgyear = sum(coefCH4*region$areas[siteDrPeat1]) +
-    #  sum(coefCH4*region$areas[siteDrPeat2])
-    #region$N2OemisDrPeat_kgyear = sum(coefN20_1*region$areas[siteDrPeat1]) +
-    #  sum(coefN20_2*region$areas[siteDrPeat2])
+    coefCH4 = coefCH4/1000*10000 #g m-2 y-1 -> kg ha-1
+    coefN20_1 = coefN20_1/1000*10000 #g m-2 y-1 -> kg ha-1
+    coefN20_2 = coefN20_2/1000*10000 #g m-2 y-1 -> kg ha-1
+    region$CH4emisDrPeat_kgyear = sum(coefCH4*region$areas[siteDrPeat1]) +
+      sum(coefCH4*region$areas[siteDrPeat2])
+    region$N2OemisDrPeat_kgyear = sum(coefN20_1*region$areas[siteDrPeat1]) +
+      sum(coefN20_2*region$areas[siteDrPeat2])
     
     region$multiOut[siteDrPeat1,,46,,1] = 0.
     region$multiOut[siteDrPeat1,,46,,1] = region$multiOut[siteDrPeat1,,18,,1] - 
@@ -602,24 +589,8 @@ runModel <- function(sampleID, outType="dTabs", uncRCP=0,
                                          r_no,"_deadWV_mortMod",mortMod,".rdata"))
     return("deadWood volume at steady state saved")
   }else{
-    if(HSIruns){
-      ###start. additional line to average the deadwood volume over the 3 regions used in Ismael runs
-      load(paste0("initDeadWVss/reg4_deadWV_mortMod",mortMod,".rdata"))
-      unmanxx4 <- unmanDeadW$ssDeadW
-      manxx4 <- manDeadW$ssDeadW
-      load(paste0("initDeadWVss/reg6_deadWV_mortMod",mortMod,".rdata"))
-      unmanxx6 <- unmanDeadW$ssDeadW
-      manxx6 <- manDeadW$ssDeadW
-      load(paste0("initDeadWVss/reg14_deadWV_mortMod",mortMod,".rdata"))
-      unmanxx13 <- unmanDeadW$ssDeadW
-      manxx13 <- manDeadW$ssDeadW
-      unmanDeadW$ssDeadW <- (unmanxx4 + unmanxx6 + unmanxx13)/3
-      manDeadW$ssDeadW <- (manxx4 + manxx6 + manxx13)/3
-      ###end. additional line to average the deadwood volume over the 3 regions used in Ismael runs
-    }else{
-      load(paste0("initDeadWVss/reg",
-                  r_no,"_deadWV_mortMod",mortMod,".rdata"))
-    }
+    load(paste0("initDeadWVss/reg",
+                r_no,"_deadWV_mortMod",mortMod,".rdata"))
     if(nrow(unmanDeadW$ssDeadW)<nYears){
       tmp<-unmanDeadW$ssDeadW
       tmp<-rbind(tmp,matrix(tmp[nrow(tmp),],ncol=ncol(tmp),nrow=nYears-nrow(tmp),byrow = T))
@@ -667,45 +638,6 @@ runModel <- function(sampleID, outType="dTabs", uncRCP=0,
   if(outType=="dTabs"){
     runModOut(sampleID, sampleX,region,r_no,harvScen,harvInten,rcpfile,areas,
               colsOut1,colsOut2,colsOut3,varSel,sampleForPlots)
-    if(procDrPeat){
-      segID <- region$siteInfo[,1]
-      # CH4
-      VCH4Mat <- matrix(0,region$nSites,region$maxYears)
-      VCH4Mat[c(siteDrPeat1,siteDrPeat2),] <- coefCH4
-      outX <- data.table(segID=segID,VCH4Mat)
-      if(sampleID==sampleForPlots){testPlot(outX,"CH4",areas)}
-      ###take the most frequent species in the periods
-      p1 <- outX[,.(per1 = Mode(as.numeric(.SD))[1]),.SDcols=colsOut1,by=segID]
-      p2 <- outX[,.(per2 = Mode(as.numeric(.SD))[1]),.SDcols=colsOut2,by=segID]
-      p3 <- outX[,.(per3 = Mode(as.numeric(.SD))[1]),.SDcols=colsOut3,by=segID]
-      pX <- merge(p1,p2)
-      pX <- merge(pX,p3)
-      CH4_em <- pX
-      save(CH4_em,file=paste0("outputDT/forCent",r_no,"/CH4_em",
-                              "_harscen",harvScen,
-                              "_harInten",harvInten,"_",
-                              rcpfile,"_",
-                              "sampleID",sampleID,".rdata"))
-      #N2O    
-      VN2OMat <- matrix(0,region$nSites,region$maxYears)
-      VN2OMat[c(siteDrPeat1),] <- coefN20_1
-      VN2OMat[c(siteDrPeat2),] <- coefN20_2
-      outX <- data.table(segID=segID,VN2OMat)
-      if(sampleID==sampleForPlots){testPlot(outX,"N2O",areas)}
-      ###take the most frequent species in the periods
-      p1 <- outX[,.(per1 = Mode(as.numeric(.SD))[1]),.SDcols=colsOut1,by=segID]
-      p2 <- outX[,.(per2 = Mode(as.numeric(.SD))[1]),.SDcols=colsOut2,by=segID]
-      p3 <- outX[,.(per3 = Mode(as.numeric(.SD))[1]),.SDcols=colsOut3,by=segID]
-      pX <- merge(p1,p2)
-      pX <- merge(pX,p3)
-      N2O_em <- pX
-      save(N2O_em,file=paste0("outputDT/forCent",r_no,"/N2O_em",
-                              "_harscen",harvScen,
-                              "_harInten",harvInten,"_",
-                              rcpfile,"_",
-                              "sampleID",sampleID,".rdata"))
-    }
-    
     return("all outs saved")  
   } 
   if(outType=="uncRun"){
@@ -878,256 +810,6 @@ sample_data.f = function(data.all, nSample) {
   data.sample
 }
 
-
-create_prebas_input_v1_0_0.f = function(r_no, clim, data.sample, nYears,
-                                 startingYear=0,domSPrun=0,
-                                 harv, HcFactorX=HcFactor, reStartYear=1,
-                                 outModReStart=NULL,initSoilC=NULL
-) { 
-  # dat = climscendataset
-  #domSPrun=0 initialize model for mixed forests according to data inputs 
-  #domSPrun=1 initialize model only for dominant species 
-  nSites <- nrow(data.sample)
-  areas <- data.sample$area
-  ###site Info matrix. nrow = nSites, cols: 1 = siteID; 2 = climID; 3=site type;
-  ###4 = nLayers; 5 = nSpecies;
-  ###6=SWinit;   7 = CWinit; 8 = SOGinit; 9 = Sinit
-  
-  siteInfo <- matrix(c(NA,NA,NA,160,0,0,20,3,3,413,0.45,0.118),nSites,12,byrow = T)
-  #siteInfo <- matrix(c(NA,NA,NA,3,3,160,0,0,20),nSites,9,byrow = T)
-  siteInfo[,1] <- data.sample$segID
-  siteInfo[,2] <- as.numeric(data.sample[,id])
-  siteInfo[,3] <- data.sample[,fert]
-  
-  # litterSize <- matrix(0,3,3)
-  # litterSize[1,1:2] <- 30
-  # litterSize[1,3] <- 10
-  # litterSize[2,] <- 2
-  
-  ###Initialise model
-  # initVardension nSites,variables, nLayers
-  # variables: 1 = species; 2 = Age; 3 = H; 4=dbh; 5 = ba; 6 = Hc
-  initVar <- array(NA, dim=c(nSites,7,3))
-  data.sample[,baP:= (ba * pine/(pine+spruce+decid))]
-  data.sample[,baSP:= (ba * spruce/(pine+spruce+decid))]
-  data.sample[,baB:= (ba * decid/(pine+spruce+decid))]
-  data.sample[,dbhP:= dbh]
-  data.sample[,dbhSP:= dbh]
-  data.sample[,h:= h/10]
-  data.sample[,hP:= h]
-  data.sample[,hSP:= h]
-  
-  data.sample[,N:=ba/(pi*(dbh/2)^2/10000)]
-  
-  initVar[,1,] <- as.numeric(rep(1:3,each=nSites))
-  initVar[,2,] <- round(as.numeric(data.sample[,age]))
-  initVar[,3,] <- as.numeric(data.sample[,h])
-  # initVar[,3,][which(initVar[,3,]<1.5)] <- 1.5  ####if H < 1.5 set to 1.5
-  initVar[,4,] <- as.numeric(data.sample[,dbh])
-  
-  if(domSPrun==1){
-    ##initialize model only for dominant species##
-    initVar[,5,] = 0.
-    ix = unlist(data.sample[, which.max(c(pine, spruce, decid)), by=1:nrow(data.sample)] [, 2])
-    for(jx in 1:nSites) initVar[jx,5,ix[jx]] = as.numeric(data.sample[, ba])[jx]
-  }else{
-    ###initialize model for mixed forest runs
-    initVar[,5,1] <- as.numeric(data.sample[,(ba * pine/(pine+spruce+decid))])
-    initVar[,5,2] <- as.numeric(data.sample[,(ba * spruce/(pine+spruce+decid))])
-    initVar[,5,3] <- as.numeric(data.sample[,(ba * decid/(pine+spruce+decid))])
-    
-    if(TRUE){ #### if true will vary H and D of pine and spruce using siteType
-      
-      ###increase spruceP dbh 10% for spruceP sitetype 1:2
-      minDelta <- 0.75
-      data.sample[pine>0. & spruce >0. & fert<2.5,X:=pmax(minDelta,(ba-1.1*baSP-baB)/baP)]
-      data.sample[pine>0. & spruce >0. & fert<2.5,dbhSP:=1.1*dbh]
-      data.sample[pine>0. & spruce >0. & fert<2.5 & X==minDelta,dbhSP:=dbh*(ba-minDelta* baP-baB)/baSP]
-      data.sample[pine>0. & spruce >0. & fert<2.5,dbhP:=X*dbh]
-      data.sample[pine>0. & spruce >0. & fert<2.5 & dbhP<0.5,dbhSP:=pmax(0.5,((ba-(0.5/dbh)*baP-baB)/baSP))]
-      data.sample[pine>0. & spruce >0. & fert<2.5 & dbhP<0.5,dbhP:=0.5]
-      
-      # data.sample[pine>0. & spruce >0. & fert<2.5 & baSP <= baP,dbhSP:=dbh * (ba - 0.9*baP - baB)/baSP]
-      # data.sample[pine>0. & spruce >0. & fert<2.5 & baSP <= baP,dbhP:=pmax(0.9*dbh,0.3)]
-      
-      ####increase spruce h 10% for spruce sitetype 1:2
-      data.sample[pine>0. & spruce >0. & fert<2.5, X:=pmax(minDelta,(ba-1.1*baSP-baB)/baP)]
-      data.sample[pine>0. & spruce >0. & fert<2.5,hSP:=1.1*h]
-      data.sample[pine>0. & spruce >0. & fert<2.5 & X==minDelta,hSP:=h*(ba-minDelta* baP-baB)/baSP]
-      data.sample[pine>0. & spruce >0. & fert<2.5, hP:=X*h]
-      data.sample[pine>0. & spruce >0. & fert<2.5 & hSP<1.5,hSP:=1.5]
-      data.sample[pine>0. & spruce >0. & fert<2.5 & hP<1.5,hP:=1.5]
-      
-      # data.sample[pine>0. & spruce >0. & fert<2.5 & baSP <= baP,hSP:=h * (ba - 0.9*baP - baB)/baSP]
-      # data.sample[pine>0. & spruce >0. & fert<2.5 & baSP <= baP,hP:=pmax(0.9*h,1.3)]
-      #  
-      ####increase spruce dbh 5% for spruce sitetype 3
-      data.sample[pine>0. & spruce >0. & fert==3, X:=pmax(minDelta,(ba-1.05*baSP-baB)/baP)]
-      data.sample[pine>0. & spruce >0. & fert==3, dbhP:=X*dbh]   
-      data.sample[pine>0. & spruce >0. & fert==3, dbhSP:=1.05*dbh]
-      data.sample[pine>0. & spruce >0. & fert==3 & X==minDelta,dbhSP:=dbh*(ba-minDelta* baP-baB)/baSP]
-      data.sample[pine>0. & spruce >0. & fert==3 & dbhP<0.5,dbhSP:=pmax(1.5,((ba-(0.5/dbh)*baP-baB)/baSP)*dbh)]
-      data.sample[pine>0. & spruce >0. & fert==3 & dbhP<0.5,dbhP:=0.5]
-      
-      # data.sample[pine>0. & spruce >0. & fert==3 & baSP <= baP,dbhSP:=pmin(25,(dbh * (ba - 0.95*baP - baB)/baSP))]
-      # data.sample[pine>0. & spruce >0. & fert==3 & baSP <= baP,dbhP:=pmax(0.95*dbh,0.3)]
-      
-      ####increase spruce h 5% for spruce sitetype 3
-      data.sample[pine>0. & spruce >0. & fert==3, X:=pmax(minDelta,(ba-1.05*baSP-baB)/baP)]
-      data.sample[pine>0. & spruce >0. & fert==3, hP:=X*h]
-      data.sample[pine>0. & spruce >0. & fert==3, hSP:=1.05*h]
-      data.sample[pine>0. & spruce >0. & fert==3 & X==minDelta,hSP:=h*(ba-minDelta* baP-baB)/baSP]
-      data.sample[pine>0. & spruce >0. & fert==3 & hSP<1.5, hSP:=1.5]
-      data.sample[pine>0. & spruce >0. & fert==3 & hP<1.5, hP:=1.5]
-      
-      # data.sample[pine>0. & spruce >0. & fert==3 & baSP <= baP,hSP:=pmin(30.,(h * (ba - 0.95*baP - baB)/baSP))]
-      # data.sample[pine>0. & spruce >0. & fert==3 & baSP <= baP,hP:=pmax(0.95*h,1.3)]
-      
-      ####increase pine dbh 10% for sitetype >= 4
-      data.sample[pine>0. & spruce >0. & fert>3.5, X:=pmax(minDelta,(ba-1.1*baP-baB)/baSP)]
-      data.sample[pine>0. & spruce >0. & fert>3.5, dbhSP:=X*dbh]
-      data.sample[pine>0. & spruce >0. & fert>3.5, dbhP:=1.1*dbh]
-      data.sample[pine>0. & spruce >0. & fert>3.5 & X==minDelta,dbhP:=dbh*(ba-minDelta*baSP-baB)/baP]
-      data.sample[pine>0. & spruce >0. & fert>3.5 & dbhSP<0.5,dbhP:=pmax(1.5,((ba-(0.5/dbh)*baSP-baB)/baP)*dbh)]
-      data.sample[pine>0. & spruce >0. & fert>3.5 & dbhSP<0.5,dbhSP:=0.5]
-      # data.sample[pine>0. & spruce >0. & fert>3.5 & baP <= baSP,dbhP:=dbh * (ba - 0.9*baSP - baB)/baP]
-      # data.sample[pine>0. & spruce >0. & fert>3.5 & baP <= baSP,dbhSP:=pmax(0.9*dbh,0.3)]
-      ####increase pine h 10% for sitetype >= 4
-      data.sample[pine>0. & spruce >0. & fert>3.5, X:=pmax(minDelta,(ba-1.1*baP-baB)/baSP)]
-      data.sample[pine>0. & spruce >0. & fert>3.5,hSP:=X*h]
-      data.sample[pine>0. & spruce >0. & fert>3.5,hP:=1.1*h]
-      data.sample[pine>0. & spruce >0. & fert>3.5 & X==minDelta,hP:=h*(ba-minDelta*baSP-baB)/baP]
-      data.sample[pine>0. & spruce >0. & fert>3.5 & hP<1.5,hP:=1.5]
-      data.sample[pine>0. & spruce >0. & fert>3.5 & hSP<1.5,hSP:=1.5]
-      # data.sample[pine>0. & spruce >0. & fert>3.5 & baP <= baSP,hP:=h * (ba - 0.9*baSP - baB)/baP]
-      # data.sample[pine>0. & spruce >0. & fert>3.5 & baP <= baSP,hSP:=pmax(0.9*h,1.3)]
-      
-      initVar[,3,1] <- as.numeric(data.sample[,hP])
-      initVar[,3,2] <- as.numeric(data.sample[,hSP])
-      initVar[,4,1] <- as.numeric(data.sample[,dbhP])
-      initVar[,4,2] <- as.numeric(data.sample[,dbhSP])
-    }
-  }
-  
-  # initVar[,6,] <- as.numeric(data.sample[,hc])
-  
-  if(harv %in% c("adapt","protect","protectNoAdH","protectTapio",
-                 "adaptNoAdH","adaptTapio")){
-    ####always the 3 species layers in this two scenarios
-    ###check which BA ==0. and set to 0 the rest of the variable
-    NoPine <- which(initVar[,5,1]==0.)
-    NoSpruce <- which(initVar[,5,2]==0.)
-    NoDecid <- which(initVar[,5,3]==0.)
-    
-    # siteInfo[NoPine,8] <- siteInfo[NoPine,8] - 1
-    # siteInfo[NoSpruce,8] <- siteInfo[NoSpruce,8] - 1
-    # siteInfo[NoDecid,8] <- siteInfo[NoDecid,8] - 1
-    
-    initVar[NoPine,3:6,1] <- 0.
-    initVar[NoSpruce,3:6,2] <- 0.
-    initVar[NoDecid,3:6,3] <- 0.
-    # initVar[NoSpruce,,2] <- initVar[NoSpruce,,3]
-    # initVar[NoPine,,1:2] <- initVar[NoPine,,2:3]
-    
-    # nLay1 <- which(siteInfo[,8]==1)
-    # nLay2 <- which(siteInfo[,8]==2)
-    # initVar[nLay1,c(1,3:6),2:3] <- 0
-    # initVar[nLay2,c(1,3:6),3] <- 0
-  }else{
-    NoPine <- which(initVar[,5,1]==0.)
-    NoSpruce <- which(initVar[,5,2]==0.)
-    NoDecid <- which(initVar[,5,3]==0.)
-    
-    siteInfo[NoPine,8] <- siteInfo[NoPine,8] - 1
-    siteInfo[NoSpruce,8] <- siteInfo[NoSpruce,8] - 1
-    siteInfo[NoDecid,8] <- siteInfo[NoDecid,8] - 1
-    
-    initVar[NoPine,3:6,1] <- 0.
-    initVar[NoSpruce,3:6,2] <- 0.
-    initVar[NoDecid,3:6,3] <- 0.
-    initVar[NoSpruce,,2] <- initVar[NoSpruce,,3]
-    initVar[NoPine,,1:2] <- initVar[NoPine,,2:3]
-    
-    nLay1 <- which(siteInfo[,8]==1)
-    nLay2 <- which(siteInfo[,8]==2)
-    initVar[nLay1,3:6,2:3] <- 0
-    initVar[nLay2,3:6,3] <- 0
-  }
-  
-  if (FALSE) {
-    dat = dat[id %in% data.sample[, unique(id)]]
-    
-    if(rcps!= "CurrClim.rdata"){
-      # dat[, pvm:= as.Date('1980-01-01') - 1 + rday ]
-      # dat[, DOY:= as.numeric(format(pvm, "%j"))]
-      dat[, Year:= as.numeric(floor(rday/366)+1971)]
-      dat = dat[Year >= startingYear]
-      dat[DOY==366, DOY:=365]
-    }
-    PARtran = t( dcast(dat[, list(id, rday, PAR)], rday ~ id,
-                       value.var="PAR")[, -1])
-    TAirtran = t( dcast(dat[, list(id, rday, TAir)], rday ~ id,
-                        value.var="TAir")[, -1])
-    VPDtran = t( dcast(dat[, list(id, rday, VPD)], rday ~ id,
-                       value.var="VPD")[, -1])
-    Preciptran = t( dcast(dat[, list(id, rday, Precip)], rday ~ id,
-                          value.var="Precip")[, -1])
-    CO2tran = t( dcast(dat[, list(id, rday, CO2)], rday ~ id,
-                       value.var="CO2")[, -1])
-  }
-  siteInfo[, 2]  = match(as.numeric(siteInfo[, 2]), as.numeric(rownames(clim[[1]])))
-  # if(harv %in% c("protect","protectNoAdH","protectTapio")){
-  #   siteInfo[, 8] <- siteInfo[, 8]+1
-  #   oldLayer <- initVar[,,1]
-  #   oldLayer[,4] <- 1
-  #   initVar <- abind(initVar,oldLayer,along=3)
-  # }
-  # siteInfo[, 2]  = match(siteInfo[,2], unique(dat$id))
-  
-  defaultThin=as.numeric(1-data.sample[, cons])
-  energyCut <- ClCut <- as.numeric(1-data.sample[, cons])
-  ## Set to match climate data years
-  if(!exists("ftTapioParX")) ftTapioParX = ftTapio
-  if(!exists("tTapioParX")) tTapioParX = tTapio
-  initVar[,6,] <- aaply(initVar,1,findHcNAs,pHcM)[,6,]*HcFactorX
-  initPrebas <- InitMultiSite(nYearsMS = rep(nYears,nSites),siteInfo=siteInfo,
-                              # litterSize = litterSize,#pAWEN = parsAWEN,
-                              pCROBAS = pCrobasX,
-                              defaultThin=defaultThin,
-                              ClCut = ClCut, areas =areas,
-                              energyCut = energyCut, 
-                              ftTapioPar = ftTapioParX,
-                              tTapioPar = tTapioParX,
-                              multiInitVar = as.array(initVar),
-                              PAR = clim$PAR[, 1:(nYears*365)],
-                              TAir=clim$TAir[, 1:(nYears*365)],
-                              VPD=clim$VPD[, 1:(nYears*365)],
-                              Precip=clim$Precip[, 1:(nYears*365)],
-                              CO2=clim$CO2[, 1:(nYears*365)],
-                              yassoRun = 1,
-                              mortMod = mortMod)
-  
-  if(!is.null(outModReStart)){
-    
-    ####set the mortality model
-    ###reineke for managed forests
-    ### reineke + empirical mod for conservation areas
-    if(mortMod==13){
-      initPrebas$mortMod = c(1,3)#rep(1,nrow(data.sample))
-      # initPrebas$mortMod[data.sample$cons==1] <- 3 
-    }
-    if(!is.null(outModReStart$multiOut)){
-      initPrebas$multiOut[,1:reStartYear,,1:3,] <- outModReStart$multiOut
-      initPrebas$multiOut[,1:reStartYear,8,,] = 0
-      initPrebas$GVout[,1:reStartYear,] <- outModReStart$GVout
-    } 
-    if(!is.null(outModReStart$siteInfo)) initPrebas$siteInfo <- outModReStart$siteInfo
-    if(!is.null(outModReStart$initClearcut)) initPrebas$initClearcut <- outModReStart$initClearcut
-  }
-  if(!is.null(initSoilC)) initPrebas$soilC[,1:reStartYear,,,1:3] <- initSoilC
-  
-  return(initPrebas)
-}
 
 
 # StartingYear = climate data that detrermines simulation period must have year greater than this.
@@ -1341,7 +1023,7 @@ create_prebas_input.f = function(r_no, clim, data.sample, nYears,
   ## Set to match climate data years
   if(!exists("ftTapioParX")) ftTapioParX = ftTapio
   if(!exists("tTapioParX")) tTapioParX = tTapio
-  initVar[,6,] <- aaply(initVar,1,findHcNAs,pHcM,pCrobasX,HcModVx)[,6,]*HcFactorX
+  initVar[,6,] <- aaply(initVar,1,findHcNAs,pHcM)[,6,]*HcFactorX
   initPrebas <- InitMultiSite(nYearsMS = rep(nYears,nSites),siteInfo=siteInfo,
                               # litterSize = litterSize,#pAWEN = parsAWEN,
                               pCROBAS = pCrobasX,
@@ -1825,36 +1507,6 @@ specialVarProc <- function(sampleX,region,r_no,harvScen,harvInten,rcpfile,sample
                         "_harInten",harvInten,"_",
                         rcpfile,"_",
                         "sampleID",sampleID,".rdata"))
-  
-  ###pine Volume Vpine
-  outX <- vSpFun(region,SpID=1)
-  if(sampleID==sampleForPlots){testPlot(outX,"Vpine",areas)}
-  p1 <- outX[, .(per1 = rowMeans(.SD,na.rm=T)), .SDcols = colsOut1, by = segID] 
-  p2 <- outX[, .(per2 = rowMeans(.SD,na.rm=T)), .SDcols = colsOut2, by = segID] 
-  p3 <- outX[, .(per3 = rowMeans(.SD,na.rm=T)), .SDcols = colsOut3, by = segID] 
-  pX <- merge(p1,p2)
-  pX <- merge(pX,p3)
-  Vpine <- pX
-  save(Vpine,file=paste0("outputDT/forCent",r_no,"/Vpine",
-                         "_harscen",harvScen,
-                         "_harInten",harvInten,"_",
-                         rcpfile,"_",
-                         "sampleID",sampleID,".rdata"))
-  
-  ###Spruce Volume Vspruce
-  outX <- vSpFun(region,SpID = 2)
-  if(sampleID==sampleForPlots){testPlot(outX,"Vspruce",areas)}
-  p1 <- outX[, .(per1 = rowMeans(.SD,na.rm=T)), .SDcols = colsOut1, by = segID] 
-  p2 <- outX[, .(per2 = rowMeans(.SD,na.rm=T)), .SDcols = colsOut2, by = segID] 
-  p3 <- outX[, .(per3 = rowMeans(.SD,na.rm=T)), .SDcols = colsOut3, by = segID] 
-  pX <- merge(p1,p2)
-  pX <- merge(pX,p3)
-  Vspruce <- pX
-  save(Vspruce,file=paste0("outputDT/forCent",r_no,"/Vspruce",
-                           "_harscen",harvScen,
-                           "_harInten",harvInten,"_",
-                           rcpfile,"_",
-                           "sampleID",sampleID,".rdata"))
   
   ####WenergyWood
   outX <- data.table(segID=sampleX$segID,apply(region$multiEnergyWood[,,,2],1:2,sum))
@@ -2356,22 +2008,6 @@ vDecFun <- function(modOut){
   outX <- data.table(segID=segID,VdecMat)
 }
 
-###retunrs the Volume by species
-## modOut -> multiPREBAS output
-## SpID -> species ID
-vSpFun <- function(modOut,SpID){
-  segID <- modOut$siteInfo[,1]
-  oo <- data.table(which(modOut$multiOut[,,4,,1]==SpID,arr.ind=T))
-  setnames(oo,c("site","year","layer"))
-  vx <-modOut$multiOut[,,30,,1][as.matrix(oo)]
-  oo$VSp <- vx
-  setkey(oo,site,year)
-  ff <- oo[,sum(VSp),by=.(site,year)]
-  VspMat <- matrix(0,modOut$nSites,modOut$maxYears)
-  VspMat[as.matrix(ff[,1:2])] <- unlist(ff[,3])
-  outX <- data.table(segID=segID,VspMat)
-  return(outX)
-}
 
 #####extract model output as baweighted mean or sum according to funX
 ##modOut -> multiPREBAS output
