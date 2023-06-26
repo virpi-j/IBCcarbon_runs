@@ -286,7 +286,7 @@ runModel <- function(sampleID, outType="dTabs", uncRCP=0,
       load("uncRuns/regRuns/resampleyears.rdata")
       resampleYear<-resampleYears[1,]
     } 
-    #resampleYear[1:(2021-2015)]<-c(1:(2021-2015))    
+    resampleYear[1:(2021-2015)]<-c(1:(2021-2015))    
     initPrebas$ETSy <- initPrebas$ETSy[,resampleYear]
     initPrebas$P0y <- initPrebas$P0y[,resampleYear,]
     initPrebas$weather <- initPrebas$weather[,resampleYear,,]
