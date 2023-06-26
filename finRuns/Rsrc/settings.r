@@ -134,6 +134,8 @@ if(regSets=="forCent"){
 }
 ####procData
 
+data.all <- data.all[fert %in% siteTypes]
+data.all <- data.all[landclass %in% landClassX]
 cloudpixels = data.all[, sum(ba==32766)]
 nonforest = data.all[, sum(ba==32767)]
 forest = data.all[, sum(ba< 32766)]
@@ -146,8 +148,6 @@ setnames(data.all,"nPix","N")
 data.all = data.all[ba < 32766]
 data.all = data.all[!is.na(cons)]
 
-data.all <- data.all[fert %in% siteTypes]
-data.all <- data.all[landclass %in% landClassX]
 
 load(paste0("input/maakunta/maakunta_",r_no,"_IDsTab.rdata"))
 data.all <- cbind(data.all,data.IDs[match(data.all$segID, data.IDs$maakuntaID),4:5])
