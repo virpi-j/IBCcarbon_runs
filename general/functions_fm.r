@@ -287,7 +287,7 @@ runModel <- function(sampleID, outType="dTabs", uncRCP=0,
       resampleYear <- sample(1:nYears,nYears)
       load("uncRuns/regRuns/resampleyears.rdata")
     } 
-    resampleYear[2016:2022-2015]<-c(2016:2022-2015)
+    resampleYear[1:(2021-2015)]<-c(1:(2021-2015))
     print(resampleYear)
     initPrebas$ETSy <- initPrebas$ETSy[,resampleYear]
     initPrebas$P0y <- initPrebas$P0y[,resampleYear,]
