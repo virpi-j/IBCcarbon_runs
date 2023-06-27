@@ -1,5 +1,6 @@
-devtools::source_url("https:///raw.githubusercontent.com/virpi-j/IBCcarbon_runs/master/finRuns/Rsrc/settings.r")
-source_url("https:///raw.githubusercontent.com/virpi-j/IBCcarbon_runs/master/general/functions_fm.r")
+
+devtools::source_url("https://raw.githubusercontent.com/virpi-j/IBCcarbon_runs/master/finRuns/Rsrc/settings.r")
+source_url("https://raw.githubusercontent.com/virpi-j/IBCcarbon_runs/master/general/functions_v1.r")
 #devtools::source_url("https:///raw.githubusercontent.com/ForModLabUHel/IBCcarbon_runs/master/finRuns/Rsrc/settings.r")
 #source_url("https://raw.githubusercontent.com/ForModLabUHel/IBCcarbon_runs/master/general/functions.r")
 
