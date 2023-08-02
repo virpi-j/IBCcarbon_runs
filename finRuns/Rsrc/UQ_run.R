@@ -34,6 +34,7 @@ if(uncSeg) outType <- "uncSeg"
 #harvscen<- "Base" #"Base", adapt","protect","protectNoAdH","adaptNoAdH","adaptTapio"
 #harvinten<- "Base" # "Base", "Low", "MaxSust", "NoHarv" 
 
+if(nYears<50) nYears<-nYears+1
 if(unc100) nYears <-100
 ##### From GitHub
 source_url("https://raw.githubusercontent.com/ForModLabUHel/IBCcarbon_runs/master/finRuns/Rsrc/settings.r")
