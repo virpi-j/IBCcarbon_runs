@@ -16,7 +16,7 @@ runModel <- function(sampleID, outType="dTabs", uncRCP=0, segScen="Base",
                      funPreb = regionPrebas,
                      initSoilCreStart=NULL,
                      outModReStart=NULL,reStartYear=1,
-                     sampleX=NULL){
+                     sampleX=NULL,toRaster=F){
   # outType determines the type of output:
   # dTabs -> standard run, mod outputs saved as data.tables 
   # testRun-> test run reports the mod out and initPrebas as objects

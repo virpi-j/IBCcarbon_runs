@@ -535,8 +535,8 @@ for(nii in nii0:niter2){
   print(paste0("Start running iter ",nii,"/",niter2,"..."))
   if(uncSeg){ # load random input data
     if(!toRaster){
-    resampleYears<-matrix(resampleYears1[nii,], nrow= tail(sampleIDs,n=1), 
-                          ncol=length(resampleYears1[nii,]), byrow=TRUE)
+      resampleYears<-matrix(resampleYears1[nii,], nrow= tail(sampleIDs,n=1), 
+                            ncol=length(resampleYears1[nii,]), byrow=TRUE)
     } 
     ops <- copy(ops_orig)
     
@@ -570,9 +570,33 @@ for(nii in nii0:niter2){
   print("start runModel")
   if(testRun){# | (toRaster & uncSeg)){ # if needed to test an individual sample
     if(uncSeg){
+      harvScen<-harvscen
+      harvInten<-harvInten
+      manualRun<-T
+      if(manualRun){
+        uncRCP=0 
+        segScen="Base"
+        easyInit=FALSE
+        nYears = 35
+        forceSaveInitSoil=F 
+        cons10run = F
+        procDrPeat=F
+        coeffPeat1=-240
+        coeffPeat2=70
+        coefCH4 = 0.34 #g m-2 y-1
+        coefN20_1 = 0.23 
+        coefN20_2 = 0.077 #g m-2 y-1
+        landClassUnman=2 
+        compHarvX = 2
+        funPreb = regionPrebas
+        initSoilCreStart=NULL
+        outModReStart=NULL
+        reStartYear=1
+        sampleX=NULL  
+      }
       sampleXs <- lapply(sampleIDs, function(jx) { 
         runModel(jx, outType=outType, harvScen="Base",
-                 harvInten="Base")})
+                 harvInten="Base",toRaster=toRaster)})
     }else{
       harvScen<-harvscen
       harvInten<-harvInten
@@ -715,7 +739,7 @@ for(nii in nii0:niter2){
     }
   } else if(uncSeg){
     sampleXs <- mclapply(sampleIDs, function(jx) {
-      runModel(jx, outType=outType, harvScen="Base" ,harvInten="Base")}, 
+      runModel(jx, outType=outType, harvScen="Base" ,harvInten="Base",toRaster=toRaster)}, 
       mc.cores = nCores,mc.silent=FALSE)      ## Split this job across 10 cores
   } else {
     if(unc100){
