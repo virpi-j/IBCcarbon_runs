@@ -7,7 +7,7 @@
 ## ---------------------------------------------------------------------
 runModel <- function(sampleID, outType="dTabs", uncRCP=0, segScen="Base",
                      harvScen,harvInten,easyInit=FALSE,
-                     nYears = 36,
+                     nYears = 35,
                      forceSaveInitSoil=F, cons10run = F,
                      procDrPeat=F,coeffPeat1=-240,coeffPeat2=70,
                      coefCH4 = 0.34,#g m-2 y-1
@@ -277,7 +277,7 @@ runModel <- function(sampleID, outType="dTabs", uncRCP=0, segScen="Base",
       set.seed(10)
       resampleYear <- sample(1:nYears,nYears)
     } 
-   # resampleYear[resampleYear>dim(initPrebas$ETSy)[2]] <- dim(initPrebas$ETSy)[2]
+    resampleYear[resampleYear>dim(initPrebas$ETSy)[2]] <- dim(initPrebas$ETSy)[2]
     initPrebas$ETSy <- initPrebas$ETSy[,resampleYear]
     initPrebas$P0y <- initPrebas$P0y[,resampleYear,]
     initPrebas$weather <- initPrebas$weather[,resampleYear,,]
