@@ -523,12 +523,12 @@ runModel <- function(sampleID, outType="dTabs", uncRCP=0, segScen="Base",
       region <- funPreb(initPrebas, HarvLim = as.numeric(HarvLimX),
                         cutAreas =cutArX,compHarv=compHarvX,
                         startSimYear=reStartYear)
-    } else if(outType!="uncSeg"){
+    } else if(outType!="uncSeg" | toRaster){
       region <- funPreb(initPrebas, HarvLim = as.numeric(HarvLimX),
                         minDharv = minDharvX,cutAreas =cutArX,
                         compHarv=compHarvX,
                         startSimYear=reStartYear)
-    } else if(outType=="uncSeg"){
+    } else if(outType=="uncSeg" & !toRaster){
       if(segScen=="NoHarv"){
         print(paste0("Run sampleID",sampleID," with no harvests"))
         initPrebas$ClCut = initPrebas$defaultThin = rep(0,nSample)
@@ -605,7 +605,7 @@ runModel <- function(sampleID, outType="dTabs", uncRCP=0, segScen="Base",
   ####end initialize deadWood Volume
   
   if(outType=="testRun") return(list(region = region,initPrebas=initPrebas))
-  if(outType=="dTabs"){
+  if(outType=="dTabs" | toRaster){
     runModOut(sampleID, sampleX,region,r_no,harvScen,harvInten,rcpfile,areas,
               colsOut1,colsOut2,colsOut3,varSel,sampleForPlots)
     return("all outs saved")  
@@ -621,11 +621,6 @@ runModel <- function(sampleID, outType="dTabs", uncRCP=0, segScen="Base",
       reStartMod$initClearcut <- region$initClearcut
       reStartSoil = region$soilC[,1:reStartYearUnc,,,]
       save(reStartMod,reStartSoil,file=paste0("uncRuns/regRuns/restartRun_uncRun",r_no,"_",sampleID,".rdata"))
-    }
-    if(toRaster){    
-      runModOut(sampleID, sampleX,region,r_no,harvScen,harvInten,rcpfile,areas,
-                   colsOut1,colsOut2,colsOut3,varSel,sampleForPlots)
-      print("all outs saved")  
     }
     uncTab <- UncOutProc(varSel=varSel,#c(46,39,30,37), 
                          funX=funX,#rep("sum",4),
@@ -661,7 +656,7 @@ runModel <- function(sampleID, outType="dTabs", uncRCP=0, segScen="Base",
     return(uncTab)
     
   } 
-  if(outType=="uncSeg"){
+  if(outType=="uncSeg" & !toRaster){
     uncSegTab <- UncOutProcSeg(varSel=varSel, funX=funX,
                                modOut=region,sampleX,colsOut1,colsOut2,colsOut3)
     return(uncSegTab)
