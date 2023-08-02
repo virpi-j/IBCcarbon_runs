@@ -9,6 +9,7 @@
 #rm(list=ls())
 #sampleID <- 4
 print(paste("start UQ_run, date",Sys.Date()))
+if(!exists(toRaster)) toRaster<-F
 rcpfile="CurrClim"
 library(data.table)
 library(devtools)
@@ -270,7 +271,7 @@ if(uncRun & !loadParids){
     save(resampleYears, file=paste0("uncRuns/regRuns/resampleyears.rdata"))
   }
 } else {
-  if(uncSeg){
+  if(uncSeg & !toRaster){
     load("uncRuns/segRuns/resampleyears.rdata")
     #resampleYears1 <- resampleYears
   } else {
