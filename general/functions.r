@@ -268,8 +268,8 @@ runModel <- function(sampleID, outType="dTabs", uncRCP=0, segScen="Base",
   if(rcpfile=="CurrClim"){
     #if(outType=="uncRun"){
     if(outType %in% c("uncRun","uncSeg")){
-      if(nYears %in% c(50,100)){
-        resampleYear <- resampleYears[sampleID,] 
+      if(toRaster | (nYears %in% c(50,100))){
+        resampleYear <- resampleYears[sampleID,1:nYears] 
       } else {
         resampleYear <- sample(1:nYears,nYears,replace=T)
       }

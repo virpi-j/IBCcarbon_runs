@@ -148,7 +148,7 @@ if(file.exists(filee)) {loadUnc<-TRUE
 print("Old results found, use the same input sets to continue")}
 set.seed(10)
 if(loadParids){ 
-  if(!uncSeg) {
+  if(!uncSeg | toRaster) {
     load(paste0("uncRuns/regRuns/loadParids.rdata"))
   } else {
     load(paste0("uncRuns/segRuns/loadParids.rdata"))
@@ -520,7 +520,7 @@ if(nii0 > niter) nii0<-1
 print(paste("start from iteration",nii0))
 niter2 <- niter
 if(uncSeg) niter2 <- 53
-
+if(toRaster) niter2<-1
 #if(!exists("mortMod")) 
 mortMod <- 13
 if(!exists("landClassUnman")) landClassUnman <- 2
@@ -534,9 +534,10 @@ for(nii in nii0:niter2){
   startRun <- Sys.time() 
   print(paste0("Start running iter ",nii,"/",niter2,"..."))
   if(uncSeg){ # load random input data
+    if(!toRaster){
     resampleYears<-matrix(resampleYears1[nii,], nrow= tail(sampleIDs,n=1), 
                           ncol=length(resampleYears1[nii,]), byrow=TRUE)
-    
+    } 
     ops <- copy(ops_orig)
     
     if(uncInput & nii>1){
@@ -567,7 +568,7 @@ for(nii in nii0:niter2){
   source_url("https://raw.githubusercontent.com/virpi-j/IBCcarbon_runs/master/general/functions.r")
   #source_url("https://raw.githubusercontent.com/ForModLabUHel/IBCcarbon_runs/master/general/functions.r")
   print("start runModel")
-  if(testRun){ # if needed to test an individual sample
+  if(testRun){# | (toRaster & uncSeg)){ # if needed to test an individual sample
     if(uncSeg){
       sampleXs <- lapply(sampleIDs, function(jx) { 
         runModel(jx, outType=outType, harvScen="Base",
