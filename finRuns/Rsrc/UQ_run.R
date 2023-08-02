@@ -597,7 +597,7 @@ for(nii in nii0:niter2){
       }
       sampleXs <- lapply(sampleIDs, function(jx) { 
         runModel(jx, outType=outType, harvScen="Base",
-                 harvInten="Base",toRaster=toRaster)})
+                 harvInten="Base",toRaster=toRaster, procDrPeat = uncPeat)})
     }else{
       harvScen<-harvscen
       harvInten<-harvInten
@@ -740,7 +740,7 @@ for(nii in nii0:niter2){
     }
   } else if(uncSeg){
     sampleXs <- mclapply(sampleIDs, function(jx) {
-      runModel(jx, outType=outType, harvScen="Base" ,harvInten="Base",toRaster=toRaster)}, 
+      runModel(jx, outType=outType, harvScen="Base" ,harvInten="Base",toRaster=toRaster, procDrPeat = uncPeat)}, 
       mc.cores = nCores,mc.silent=FALSE)      ## Split this job across 10 cores
   } else {
     if(unc100){
