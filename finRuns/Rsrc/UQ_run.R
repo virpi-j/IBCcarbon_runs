@@ -9,7 +9,7 @@
 #rm(list=ls())
 #sampleID <- 4
 print(paste("start UQ_run, date",Sys.Date()))
-if(!exists(toRaster)) toRaster<-F
+if(!exists("toRaster")) toRaster<-F
 rcpfile="CurrClim"
 library(data.table)
 library(devtools)
