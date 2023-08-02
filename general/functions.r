@@ -277,6 +277,7 @@ runModel <- function(sampleID, outType="dTabs", uncRCP=0, segScen="Base",
       set.seed(10)
       resampleYear <- sample(1:nYears,nYears)
     } 
+   # resampleYear[resampleYear>dim(initPrebas$ETSy)[2]] <- dim(initPrebas$ETSy)[2]
     initPrebas$ETSy <- initPrebas$ETSy[,resampleYear]
     initPrebas$P0y <- initPrebas$P0y[,resampleYear,]
     initPrebas$weather <- initPrebas$weather[,resampleYear,,]
