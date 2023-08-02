@@ -530,6 +530,7 @@ print(paste("mortMod=",mortMod))
 
 #if(HcFactor!=1) HcFactorr[1]<-as.numeric(HcFactor*HcFactorr[1])
 
+############################################################################################################
 for(nii in nii0:niter2){
   toMem <- ls()
   startRun <- Sys.time() 
@@ -578,7 +579,6 @@ for(nii in nii0:niter2){
         uncRCP=0 
         segScen="Base"
         easyInit=FALSE
-        nYears = 35
         forceSaveInitSoil=F 
         cons10run = F
         procDrPeat=F
