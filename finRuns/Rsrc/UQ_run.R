@@ -57,7 +57,11 @@ rcpx <- c("rcp26","rcp45","rcp85")
 
 # Give new set of outputs ------------------------------------------------
 if(uncSeg){
+  if(!toRaster){
   varOuts <- c("NEP","DeadWoodVolume","soilC","V","D","BA","H") 
+  } else {
+    varOuts <- c("NEP","DeadWoodVolume","soilC","V","D","BA","H","VroundWood","WroundWood") 
+  }
   # added; Wtot, age, Vdec, species, sitetype!
 } else {
   varOuts <- c("NEP","V","npp","VroundWood","WroundWood",
