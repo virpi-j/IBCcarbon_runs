@@ -662,6 +662,7 @@ runModel <- function(sampleID, outType="dTabs", uncRCP=0, segScen="Base",
                            modOut=region,sampleID=sampleID,
                            finPeats=finPeats,sampleX=sampleX)#,
       print(uncTab$NEP)
+      if(!uncRun) return(uncTab)
     } else {
       return("all outs saved")  
     }

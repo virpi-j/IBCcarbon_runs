@@ -576,7 +576,7 @@ for(nii in nii0:niter2){
     if(uncSeg){
       harvScen<-harvscen
       harvInten<-harvInten
-      manualRun<-T
+      manualRun<-F
       if(manualRun){
         uncRCP=0 
         segScen="Base"
