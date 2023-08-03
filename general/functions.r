@@ -615,11 +615,14 @@ runModel <- function(sampleID, outType="dTabs", uncRCP=0, segScen="Base",
       VCH4Mat <- matrix(0,region$nSites,region$maxYears)
       VCH4Mat[c(siteDrPeat1,siteDrPeat2),] <- coefCH4
       outX <- data.table(segID=segID,VCH4Mat)
-      if(sampleID==sampleForPlots){testPlot(outX,"CH4",areas)}
+      #if(sampleID==sampleForPlots){testPlot(outX,"CH4",areas)}
       ###take the most frequent species in the periods
-      p1 <- outX[,.(per1 = Mode(as.numeric(.SD))[1]),.SDcols=colsOut1,by=segID]
-      p2 <- outX[,.(per2 = Mode(as.numeric(.SD))[1]),.SDcols=colsOut2,by=segID]
-      p3 <- outX[,.(per3 = Mode(as.numeric(.SD))[1]),.SDcols=colsOut3,by=segID]
+      p1 <- outX[,.(per1 = mean(as.numeric(.SD))[1]),.SDcols=colsOut1,by=segID]
+      p2 <- outX[,.(per2 = mean(as.numeric(.SD))[1]),.SDcols=colsOut2,by=segID]
+      p3 <- outX[,.(per3 = mean(as.numeric(.SD))[1]),.SDcols=colsOut3,by=segID]
+#      p1 <- outX[,.(per1 = Mode(as.numeric(.SD))[1]),.SDcols=colsOut1,by=segID]
+#      p2 <- outX[,.(per2 = Mode(as.numeric(.SD))[1]),.SDcols=colsOut2,by=segID]
+#      p3 <- outX[,.(per3 = Mode(as.numeric(.SD))[1]),.SDcols=colsOut3,by=segID]
       pX <- merge(p1,p2)
       pX <- merge(pX,p3)
       CH4_em <- pX
@@ -633,11 +636,14 @@ runModel <- function(sampleID, outType="dTabs", uncRCP=0, segScen="Base",
       VN2OMat[c(siteDrPeat1),] <- coefN20_1
       VN2OMat[c(siteDrPeat2),] <- coefN20_2
       outX <- data.table(segID=segID,VN2OMat)
-      if(sampleID==sampleForPlots){testPlot(outX,"N2O",areas)}
+      #if(sampleID==sampleForPlots){testPlot(outX,"N2O",areas)}
       ###take the most frequent species in the periods
-      p1 <- outX[,.(per1 = Mode(as.numeric(.SD))[1]),.SDcols=colsOut1,by=segID]
-      p2 <- outX[,.(per2 = Mode(as.numeric(.SD))[1]),.SDcols=colsOut2,by=segID]
-      p3 <- outX[,.(per3 = Mode(as.numeric(.SD))[1]),.SDcols=colsOut3,by=segID]
+      p1 <- outX[,.(per1 = mean(as.numeric(.SD))[1]),.SDcols=colsOut1,by=segID]
+      p2 <- outX[,.(per2 = mean(as.numeric(.SD))[1]),.SDcols=colsOut2,by=segID]
+      p3 <- outX[,.(per3 = mean(as.numeric(.SD))[1]),.SDcols=colsOut3,by=segID]
+#      p1 <- outX[,.(per1 = Mode(as.numeric(.SD))[1]),.SDcols=colsOut1,by=segID]
+#      p2 <- outX[,.(per2 = Mode(as.numeric(.SD))[1]),.SDcols=colsOut2,by=segID]
+#      p3 <- outX[,.(per3 = Mode(as.numeric(.SD))[1]),.SDcols=colsOut3,by=segID]
       pX <- merge(p1,p2)
       pX <- merge(pX,p3)
       N2O_em <- pX
@@ -737,7 +743,7 @@ runModOut <- function(sampleID, sampleX,modOut,r_no,harvScen,harvInten,rcpfile,a
     ####test plot
     # print(outX)
     if(sampleID==sampleForPlots){testPlot(outX,varNames[varSel[ij]],areas)}
-    
+
     p1 <- outX[, .(per1 = rowMeans(.SD,na.rm=T)), .SDcols = colsOut1, by = segID] 
     p2 <- outX[, .(per2 = rowMeans(.SD,na.rm=T)), .SDcols = colsOut2, by = segID] 
     p3 <- outX[, .(per3 = rowMeans(.SD,na.rm=T)), .SDcols = colsOut3, by = segID] 

@@ -601,7 +601,7 @@ for(nii in nii0:niter2){
     }else{
       harvScen<-harvscen
       harvInten<-harvInten
-      manualRun<-T
+      manualRun<-F
       if(manualRun){
         easyInit=FALSE
         forceSaveInitSoil=F 
@@ -670,7 +670,7 @@ for(nii in nii0:niter2){
           #source_url("https://raw.githubusercontent.com/ForModLabUHel/IBCcarbon_runs/master/general/functions.r")
           outtmp <- runModel(jx, outType=outType, harvScen=harvscen,uncRCP=uncRCP,nYears=nYears,
                              compHarvX = compHarvX, landClassUnman=landClassUnman,
-                             harvInten=harvinten, procDrPeat = uncPeat)
+                             harvInten=harvinten, procDrPeat = uncPeat, toRaster = toRaster)
           outXcc[[ind]] <- outtmp
           print(outtmp$VroundWood)
           names(outXcc)[ind] <- paste0(harvscen,"_",harvinten,"_",rcpsname)
@@ -722,7 +722,7 @@ for(nii in nii0:niter2){
                                harvInten=harvinten, procDrPeat = uncPeat,nYears=nYears,
                                compHarvX = compHarvX, landClassUnman=landClassUnman,
                                outModReStart = reStartMod, initSoilCreStart = reStartSoil,
-                               funPreb = reStartRegionPrebas,reStartYear = reStartYearUnc)
+                               funPreb = reStartRegionPrebas,reStartYear = reStartYearUnc, toRaster = toRaster)
             outXcc[[ind]] <- outtmp
             print(outtmp$VroundWood)
             names(outXcc)[ind] <- paste0(harvscen,"_",harvinten,"_",rcpsname)
