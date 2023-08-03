@@ -117,10 +117,10 @@ if(!exists("nSitesRun")) nSitesRun = 20000  ###aproximative number of samples fo
 per1=2017:2025
 per2=2026:2033
 per3=2034:2050
-simYear1 = per1 - startingYear
+simYear1 = 1+per1 - startingYear
 simYear1 <- simYear1[simYear1>0]
-simYear2 = per2 - startingYear
-simYear3 = per3 - startingYear
+simYear2 = 1+per2 - startingYear
+simYear3 = 1+per3 - startingYear
 colsOut1 = c(paste("V", simYear1, sep=""))
 colsOut2 = c(paste("V", simYear2, sep=""))
 colsOut3 = c(paste("V", simYear3, sep=""))
