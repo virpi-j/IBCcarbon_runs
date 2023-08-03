@@ -127,7 +127,7 @@ runModel <- function(sampleID, outType="dTabs", uncRCP=0, segScen="Base",
   
   if(outType %in% c("uncRun","uncSeg")){
     area_tot <- sum(data.all$area) # ha
-    if(outType=="uncRun") sampleX[,area := 16^2/10000] 
+    if(outType=="uncRun" & !toRaster) sampleX[,area := 16^2/10000] 
     cA <- 1/nrow(sampleX) #area_tot/nrow(sampleX) 
     harvestLims <- as.numeric(harvestLimsr[sampleID,])
     HarvLimMaak[,1]<-harvestLims[1]*HarvLimMaak[,1]
@@ -657,12 +657,12 @@ runModel <- function(sampleID, outType="dTabs", uncRCP=0, segScen="Base",
     }
     if(toRaster){
       print("all outs saved")  
-      uncTab <- UncOutProc(varSel=varSel,#c(46,39,30,37), 
-                           funX=funX,#rep("sum",4),
-                           modOut=region,sampleID=sampleID,
-                           finPeats=finPeats,sampleX=sampleX)#,
-      print(uncTab$NEP)
-      if(!uncRun) return(uncTab)
+    #  uncTab <- UncOutProc(varSel=varSel,#c(46,39,30,37), 
+    #                       funX=funX,#rep("sum",4),
+    #                       modOut=region,sampleID=sampleID,
+    #                       finPeats=finPeats,sampleX=sampleX)#,
+    #  print(uncTab$NEP)
+    #  if(!uncRun) return(uncTab)
     } else {
       return("all outs saved")  
     }

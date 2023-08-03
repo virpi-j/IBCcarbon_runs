@@ -596,10 +596,17 @@ for(nii in nii0:niter2){
         reStartYear=1
         sampleX=NULL  
       }
+      if(toRaster){
+        sampleXs <- lapply(sampleIDs, function(jx) { 
+          runModel(jx,outType="uncRun", harvScen=harvscen,uncRCP=uncRCP,nYears=nYears,
+                   compHarvX = compHarvX, landClassUnman=landClassUnman,
+                   harvInten=harvinten, procDrPeat = uncPeat, toRaster = toRaster)})
+      } else {
       sampleXs <- lapply(sampleIDs, function(jx) { 
         runModel(jx,outType=outType, harvScen=harvscen,uncRCP=uncRCP,nYears=nYears,
                  compHarvX = compHarvX, landClassUnman=landClassUnman,
                  harvInten=harvinten, procDrPeat = uncPeat, toRaster = toRaster)})
+      }
     }else{
       harvScen<-harvscen
       harvInten<-harvInten
