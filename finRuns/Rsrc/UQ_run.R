@@ -672,8 +672,10 @@ for(nii in nii0:niter2){
                              compHarvX = compHarvX, landClassUnman=landClassUnman,
                              harvInten=harvinten, procDrPeat = uncPeat, toRaster = toRaster)
           outXcc[[ind]] <- outtmp
-          print(outtmp$VroundWood)
+          print(outtmp$WroundWood)
+          print(outtmp$NEP)
           names(outXcc)[ind] <- paste0(harvscen,"_",harvinten,"_",rcpsname)
+          if(!toRaster){
           ind<-ind+1
           print(paste("Load 2015-2021 results for sampleID",jx))
           load(file=paste0("uncRuns/regRuns/restartRun_uncRun",r_no,"_",jx,".rdata"))
@@ -727,6 +729,7 @@ for(nii in nii0:niter2){
             print(outtmp$VroundWood)
             names(outXcc)[ind] <- paste0(harvscen,"_",harvinten,"_",rcpsname)
             ind<-ind+1
+          }
           }
         }
         unlink(paste0("uncRuns/regRuns/restartRun_uncRun",r_no,"_",jx,".rdata"))
