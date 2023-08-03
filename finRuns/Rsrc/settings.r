@@ -122,6 +122,7 @@ simYear1 <- simYear1[simYear1>0]
 simYear2 = 1+per2 - startingYear
 simYear3 = 1+per3 - startingYear
 colsOut1 = c(paste("V", simYear1, sep=""))
+print(colsOut1)
 colsOut2 = c(paste("V", simYear2, sep=""))
 colsOut3 = c(paste("V", simYear3, sep=""))
 
