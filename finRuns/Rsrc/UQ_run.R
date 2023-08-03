@@ -598,8 +598,9 @@ for(nii in nii0:niter2){
         sampleX=NULL  
       }
       sampleXs <- lapply(sampleIDs, function(jx) { 
-        runModel(jx, outType=outType, harvScen="Base",
-                 harvInten="Base",toRaster=toRaster, procDrPeat = uncPeat)})
+        runModel(jx,outType=outType, harvScen=harvscen,uncRCP=uncRCP,nYears=nYears,
+                 compHarvX = compHarvX, landClassUnman=landClassUnman,
+                 harvInten=harvinten, procDrPeat = uncPeat, toRaster = toRaster)})
     }else{
       harvScen<-harvscen
       harvInten<-harvInten
@@ -939,7 +940,7 @@ for(nii in nii0:niter2){
       }
     }
     print("Result set and plots saved")
-  } else { # if uncSeg
+  } else if(nSamplesr>1) { # if uncSeg
     save(sampleXs, ops,file = paste0("uncRuns/segRuns/samplexouttmp_uncSeg_reg",
                                      r_no,"_NoHarv.rdata"))
     n <- length(sampleXs)
