@@ -193,7 +193,9 @@ runModel <- function(sampleID, outType="dTabs", uncRCP=0, segScen="Base",
   data.sample = sample_data.f(sampleX, nSample)
   if(rcpfile=="CurrClim") data.sample$id <- data.sample$CurrClimID
   areas <- data.sample$area
+  print(areas[1:10])
   totAreaSample <- sum(data.sample$area)
+  print(totAreaSample)
   print(paste("Climate data for",nYears,"years"))
   clim = prep.climate.f(dat, data.sample, startingYear, nYears)
   
