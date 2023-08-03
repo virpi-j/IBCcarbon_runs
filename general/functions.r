@@ -655,6 +655,11 @@ runModel <- function(sampleID, outType="dTabs", uncRCP=0, segScen="Base",
     }
     if(toRaster){
       print("all outs saved")  
+      uncTab <- UncOutProc(varSel=varSel,#c(46,39,30,37), 
+                           funX=funX,#rep("sum",4),
+                           modOut=region,sampleID=sampleID,
+                           finPeats=finPeats,sampleX=sampleX)#,
+      print(uncTab$NEP)
     } else {
       return("all outs saved")  
     }
