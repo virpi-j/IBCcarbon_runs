@@ -824,7 +824,7 @@ for(nii in nii0:niter2){
   }
   timeRun <- Sys.time() - startRun
   print(paste("time for runs",timeRun))
-  if(!uncSeg){
+  if(!uncSeg & nSamplesr>1){
     save(area_total,areas_all,sampleXs,
          file=paste0("uncRuns/regRuns/samplexout_reg",r_no,
                      "_tmp.rdata")) 
