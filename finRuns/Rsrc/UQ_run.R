@@ -173,8 +173,7 @@ if(uncRun){ # load distribution data
       area_total <- sum(data.all$area)#areas_all[1,1]
       areas <- data.all$area
       areas <- areas/area_total
-    } else {
-    }
+    } 
   }
   if(uncPCrobas){
     load(paste0(parPath,"pCROB_unc.rdata"))
@@ -230,7 +229,7 @@ if(!uncSeg & !loadUnc){ # sample pixel indices
 }
 
 # Load peatland post-processing raster for uncRun and allocate emission factor vectors
-if(uncRun & !uncSeg & uncPeat){
+if(toRaster | (uncRun & !uncSeg & uncPeat)){
   soilSyke <- FALSE  ####If TRUE uses Syke peatland database if FALSE uses luke database
   # luke database pseudoptyp.img: Whole Finland, 100 = mineral soil, 400 = drained peatland, 700=other peatland, 0=non-forest
   # syke database peatSyke16res.tif: 1 = Undrained peatland; 2 = Drained peatland; 3 = Peat extraction area 
