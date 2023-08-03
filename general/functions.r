@@ -609,6 +609,44 @@ runModel <- function(sampleID, outType="dTabs", uncRCP=0, segScen="Base",
   if(outType=="dTabs" | toRaster){
     runModOut(sampleID, sampleX,region,r_no,harvScen,harvInten,rcpfile,areas,
               colsOut1,colsOut2,colsOut3,varSel,sampleForPlots)
+    if(procDrPeat){
+      segID <- region$siteInfo[,1]
+      # CH4
+      VCH4Mat <- matrix(0,region$nSites,region$maxYears)
+      VCH4Mat[c(siteDrPeat1,siteDrPeat2),] <- coefCH4
+      outX <- data.table(segID=segID,VCH4Mat)
+      if(sampleID==sampleForPlots){testPlot(outX,"CH4",areas)}
+      ###take the most frequent species in the periods
+      p1 <- outX[,.(per1 = Mode(as.numeric(.SD))[1]),.SDcols=colsOut1,by=segID]
+      p2 <- outX[,.(per2 = Mode(as.numeric(.SD))[1]),.SDcols=colsOut2,by=segID]
+      p3 <- outX[,.(per3 = Mode(as.numeric(.SD))[1]),.SDcols=colsOut3,by=segID]
+      pX <- merge(p1,p2)
+      pX <- merge(pX,p3)
+      CH4_em <- pX
+      save(CH4_em,file=paste0("outputDT/forCent",r_no,"/CH4_em",
+                              "_harscen",harvScen,
+                              "_harInten",harvInten,"_",
+                              rcpfile,"_",
+                              "sampleID",sampleID,".rdata"))
+      #N2O    
+      VN2OMat <- matrix(0,region$nSites,region$maxYears)
+      VN2OMat[c(siteDrPeat1),] <- coefN20_1
+      VN2OMat[c(siteDrPeat2),] <- coefN20_2
+      outX <- data.table(segID=segID,VN2OMat)
+      if(sampleID==sampleForPlots){testPlot(outX,"N2O",areas)}
+      ###take the most frequent species in the periods
+      p1 <- outX[,.(per1 = Mode(as.numeric(.SD))[1]),.SDcols=colsOut1,by=segID]
+      p2 <- outX[,.(per2 = Mode(as.numeric(.SD))[1]),.SDcols=colsOut2,by=segID]
+      p3 <- outX[,.(per3 = Mode(as.numeric(.SD))[1]),.SDcols=colsOut3,by=segID]
+      pX <- merge(p1,p2)
+      pX <- merge(pX,p3)
+      N2O_em <- pX
+      save(N2O_em,file=paste0("outputDT/forCent",r_no,"/N2O_em",
+                              "_harscen",harvScen,
+                              "_harInten",harvInten,"_",
+                              rcpfile,"_",
+                              "sampleID",sampleID,".rdata"))
+    }
     return("all outs saved")  
   } 
   if(outType=="uncRun"){
