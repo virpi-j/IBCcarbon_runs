@@ -149,7 +149,7 @@ setnames(data.all,"nPix","N")
 data.all = data.all[ba < 32766]
 data.all = data.all[!is.na(cons)]
 
-
+if(!outType%in%c("uncRun","uncSeg")){ #if unc-simulations, this done in separate script
 load(paste0("input/maakunta/maakunta_",r_no,"_IDsTab.rdata"))
 data.all <- cbind(data.all,data.IDs[match(data.all$segID, data.IDs$maakuntaID),4:5])
 if(file.exists(paste0("uncRuns/peatID_reg",r_no,".rdata"))){
@@ -190,7 +190,7 @@ if(ExcludeUndrPeatlands){
 }
 data.all$cons[which(data.all$landclass==2)]<-1
 
-
+}
 
 ####load data
 # load("outSoil/InitSoilCstst_Base.rdata")
