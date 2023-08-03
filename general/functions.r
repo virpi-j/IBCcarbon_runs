@@ -1555,11 +1555,11 @@ specialVarProc <- function(sampleX,region,r_no,harvScen,harvInten,rcpfile,sample
 
 ####test plot
 testPlot <- function(outX,titleX,areas){
-  cc <- data.table(rbind(cbind(1:nYears,apply(outX[,2:(nYears+1)],2,min,na.rm=T),"min"),
-                         cbind(1:nYears,apply(outX[,2:(nYears+1)],2,max,na.rm=T),"max"),
-                         cbind(1:nYears,apply(outX[,2:(nYears+1)],2,median,na.rm=T),"median"),
-                         cbind(1:nYears,apply(outX[,2:(nYears+1)],2,mean,na.rm=T),"aritMean"),
-                         cbind(1:nYears,apply((outX[,2:(nYears+1)]*areas/sum(areas)),2,sum,na.rm=T),"regionMean")))
+  cc <- data.table(rbind(cbind(1:nYears,apply(outX[,2:(nYears)],2,min,na.rm=T),"min"),
+                         cbind(1:nYears,apply(outX[,2:(nYears)],2,max,na.rm=T),"max"),
+                         cbind(1:nYears,apply(outX[,2:(nYears)],2,median,na.rm=T),"median"),
+                         cbind(1:nYears,apply(outX[,2:(nYears)],2,mean,na.rm=T),"aritMean"),
+                         cbind(1:nYears,apply((outX[,2:(nYears)]*areas/sum(areas)),2,sum,na.rm=T),"regionMean")))
   setnames(cc,c("simYear","value","metric"))
   # cc$metric=as.factor(cc$metric)
   cc$metric=factor(cc$metric)
