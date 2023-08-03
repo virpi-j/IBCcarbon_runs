@@ -76,6 +76,7 @@ load(paste0("input/maakunta/maakunta_",r_no,"_IDsTab.rdata"))
 data.all <- cbind(data.all,data.IDs[match(data.all$segID, data.IDs$maakuntaID),4:5])
 finPeats <- raster("/scratch/project_2000994/MVMIsegments/segment-IDs/pseudopty.img")
 drpeatID <- 400 # ID = 400 for luke database; drained peatland
+print(drpeatID)
 undrPeatID <- 700  ### ID = 700 for luke database; undrained peatland
 if(file.exists(paste0("uncRuns/peatID_reg",r_no,".rdata"))){
   load(paste0("uncRuns/peatID_reg",r_no,".rdata"))
