@@ -145,11 +145,16 @@ runModel <- function(sampleID, outType="dTabs", uncRCP=0, segScen="Base",
     sampleX[,area := N*16^2/10000] 
   }
   sampleX[,id:=climID]
-  HarvLimX <- harvestLims * sum(sampleX$area)/sum(data.all$area)
-  nSample = nrow(sampleX)#200#nrow(data.all)
-  
   # leave unmaned land classes in landClassUnman
   if(!is.null(landClassUnman)) sampleX[landclass %in% landClassUnman]$cons=1
+  
+  if(toRaster){
+    HarvLimX <- harvestLims * sum(sampleX$area[sampleX$cons!=1])/sum(data.all$area[data.all$cons!=1]) # consider only harvested areas in the limits
+  } else {
+    HarvLimX <- harvestLims * sum(sampleX$area)/sum(data.all$area)
+  }
+  nSample = nrow(sampleX)#200#nrow(data.all)
+  
   
   ## ---------------------------------------------------------
   i = 0
@@ -343,7 +348,12 @@ runModel <- function(sampleID, outType="dTabs", uncRCP=0, segScen="Base",
       HarvLim1 <- cbind(roundWood,enWood)
     }
   }else{
-    HarvLim1 <- HarvLimMaak*1000*sum(areas)/sum(data.all$area)
+    if(toRaster){
+      HarvLimX <- HarvLimMaak*1000*sum(data.sample$area[data.sample$cons!=1])/sum(data.all$area[data.all$cons!=1]) # consider only harvested areas in the limits
+    } else {
+      HarvLim1 <- HarvLimMaak*1000*sum(areas)/sum(data.all$area)
+    }
+    
     if(harvInten == "Low"){ HarvLim1 <- HarvLim1 * 0.6}
     if(harvInten == "MaxSust"){HarvLim1 <- HarvLim1 * 1.2}
     if(harvScen == "NoHarv"){
@@ -356,13 +366,18 @@ runModel <- function(sampleID, outType="dTabs", uncRCP=0, segScen="Base",
   ###calculate clearcutting area for the sample
   #if(!is.na(cutArX)){
   print("calculating clearcutting areas")
-  clcutArX <- clcutAr * sum(areas)/sum(data.all$area)
+  if(toRaster){
+    areaHarvFrac <- sum(data.sample$area[data.sample$cons!=1])/sum(data.all$area[data.all$cons!=1])
+  } else {
+    areaHarvFrac <- sum(areas)/sum(data.all$area)
+  }
+  clcutArX <- clcutAr * areaHarvFrac
   if(length(clcutArX)<nYears) clcutArX<-c(clcutArX,clcutArX[rep(length(clcutArX),nYears-length(clcutArX))])
   clcutArX <- cbind(clcutArX[1:nYears],0.)
-  tendX <- tendingAr * sum(areas)/sum(data.all$area)
+  tendX <- tendingAr * areaHarvFrac
   if(length(tendX)<nYears) tendX<-c(tendX,tendX[rep(length(tendX),nYears-length(tendX))])
   tendX <- cbind(tendX[1:nYears],0.)
-  fThinX <- firstThinAr * sum(areas)/sum(data.all$area)
+  fThinX <- firstThinAr * areaHarvFrac
   if(length(fThinX)<nYears) fThinX<-c(fThinX,fThinX[rep(length(fThinX),nYears-length(fThinX))])
   fThinX <- cbind(fThinX[1:nYears],0.)
   cutArX <- cbind(clcutArX,tendX)
@@ -371,13 +386,6 @@ runModel <- function(sampleID, outType="dTabs", uncRCP=0, segScen="Base",
   if(harvInten == "MaxSust"){cutArX <- cutArX * 1.2}
   if(harvScen == "NoHarv"){cutArX <- cutArX * 0.}
   
-  # }else{
-  #   cutArX <- NA
-  # } 
-  # initPrebas$energyCut <- rep(0.,length(initPrebas$energyCut))
-  # HarvLim1 <- rep(0,2)
-  # save(initPrebas,HarvLim1,file=paste0("test1",harvScen,".rdata"))
-  # region <- regionPrebas(initPrebas)
   ###run PREBAS
   if(initilizeSoil){
     if(!(harvScen =="Base" & harvInten == "Base") | rcps!="CurrClim"){
