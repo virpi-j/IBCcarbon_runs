@@ -353,7 +353,9 @@ runModel <- function(sampleID, outType="dTabs", uncRCP=0, segScen="Base",
   }else{
     if(toRaster){
       HarvLim1 <- HarvLimMaak*1000*sum(data.sample$area[data.sample$cons!=1])/sum(data.all$area[data.all$cons!=1]) # consider only harvested areas in the limits
-      print(paste("TotArea=",sum(data.all$area),", no harvest fract % =",round(sum(data.all$area[data.all$cons==1])/sum(data.all$area)*100)))
+      print(paste("TotArea=",sum(data.all$area),", no harvest fract % =",round(sum(data.all$area[data.all$landclass > 1  | data.all$cons==1])/sum(data.all$area)*100)))
+      print(paste("SampleArea=",sum(data.sample$area),", no harvest fract % =",
+                  round(sum(data.sample$area[data.sample$landclass > 1  | data.sample$cons==1])/sum(data.sample$area)*100)))
     } else {
       HarvLim1 <- HarvLimMaak*1000*sum(areas)/sum(data.all$area)
     }
