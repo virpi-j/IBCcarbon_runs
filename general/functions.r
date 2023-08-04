@@ -200,7 +200,10 @@ runModel <- function(sampleID, outType="dTabs", uncRCP=0, segScen="Base",
   areas <- data.sample$area
   print(areas[1:10])
   totAreaSample <- sum(data.sample$area)
-  print(totAreaSample)
+  totAreaSampleHarvested <- sum(data.sample$area[data.sample$cons!=1])
+  print(paste("Sample area:",totAreaSample))
+  print(paste("Sample Harvest area:",totAreaSampleHarvested))
+  
   print(paste("Climate data for",nYears,"years"))
   clim = prep.climate.f(dat, data.sample, startingYear, nYears)
   
