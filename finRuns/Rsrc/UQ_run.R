@@ -203,15 +203,24 @@ if(uncRun){ # load distribution data
 if(!uncSeg & !loadUnc){ # sample pixel indices
   ops <- list()
   
-  sampleIDs <- 1:nSamplesr
-  area_total <- sum(data.all$area)
-  areas <- data.all$area
-  areas <- areas/area_total
-  opsInd <- list() 
-  for(ij in 1:nSamplesr){ 
-    opsInd[[ij]] <- sample(1:nrow(data.all), nSitesRunr, 
-                           replace = sampleReplace, prob = areas)
-    ops[[ij]] <- copy(data.all[opsInd[[ij]],])
+  if(!toRaster){
+    sampleIDs <- 1:nSamplesr
+    area_total <- sum(data.all$area)
+    areas <- data.all$area
+    areas <- areas/area_total
+    opsInd <- list() 
+    for(ij in 1:nSamplesr){ 
+      opsInd[[ij]] <- sample(1:nrow(data.all), nSitesRunr, 
+                             replace = sampleReplace, prob = areas)
+      ops[[ij]] <- copy(data.all[opsInd[[ij]],])
+    }
+  } else {
+    nSamples <- ceiling(dim(data.all)[1]/nSitesRun)
+    sampleIDs <- split(1:nSamples,             # Applying split() function
+                       cut(seq_along(1:nSamples),
+                           10,#nSetRuns,
+                           labels = FALSE))[[setX]]
+    ops_orig <- split(data.all, sample(1:nSamples, nrow(data.all), replace=T))
   }
 } else if(uncSeg){ # if(!uncSeg & !loadUnc)
   if(!loadUnc){
@@ -540,7 +549,7 @@ for(nii in nii0:niter2){
   toMem <- ls()
   startRun <- Sys.time() 
   print(paste0("Start running iter ",nii,"/",niter2,"..."))
-  if(uncSeg){ # load random input data
+  if(uncSeg | toRaster){ # load random input data
     if(!toRaster){
       resampleYears<-matrix(resampleYears1[nii,], nrow= tail(sampleIDs,n=1), 
                             ncol=length(resampleYears1[nii,]), byrow=TRUE)
@@ -566,7 +575,7 @@ for(nii in nii0:niter2){
     }
     
   }
-  set.seed(.Random.seed[r_no])
+  #set.seed(.Random.seed[r_no])
   
   #sampleXs <- lapply(sampleIDs[1:3], function(jx) { runModel(jx, outType=outType)})      
   #sampleXs <- mclapply(sampleIDs[(1+(nii-1)*nParRuns):(nii*nParRuns)], function(jx) {
