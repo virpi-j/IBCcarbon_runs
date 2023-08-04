@@ -564,7 +564,7 @@ for(nii in nii0:niter2){
     if(uncInput & nii==1){
       print("First iteration without input uncertainty.")
     }
-    HcFactorr <- matrix(1,1,length(sampleIDs))
+    HcFactorr <- matrix(1,1,max(sampleIDs))
     if(uncHcFactor & nii>1){
       HcFactorr <- matrix(HcFactorrOr[nii],1,length(sampleIDs))#(1 + rHcFactor*rnorm(1))*matrix(1,1,length(sampleIDs))#length(sampleIDs))
     }
