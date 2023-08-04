@@ -349,7 +349,7 @@ runModel <- function(sampleID, outType="dTabs", uncRCP=0, segScen="Base",
     }
   }else{
     if(toRaster){
-      HarvLimX <- HarvLimMaak*1000*sum(data.sample$area[data.sample$cons!=1])/sum(data.all$area[data.all$cons!=1]) # consider only harvested areas in the limits
+      HarvLim1 <- HarvLimMaak*1000*sum(data.sample$area[data.sample$cons!=1])/sum(data.all$area[data.all$cons!=1]) # consider only harvested areas in the limits
     } else {
       HarvLim1 <- HarvLimMaak*1000*sum(areas)/sum(data.all$area)
     }
