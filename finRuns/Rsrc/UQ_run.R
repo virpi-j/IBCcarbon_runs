@@ -221,6 +221,9 @@ if(!uncSeg & !loadUnc){ # sample pixel indices
                            10,#nSetRuns,
                            labels = FALSE))[[setX]]
     ops_orig <- ops <- split(data.all, sample(1:nSamples, nrow(data.all), replace=T))
+    if(testRun){
+      sampleIDs <- sampleIDs[1:min(sampleID,nSamples)]
+    } 
   }
 } else if(uncSeg){ # if(!uncSeg & !loadUnc)
   if(!loadUnc){
