@@ -220,7 +220,7 @@ if(!uncSeg & !loadUnc){ # sample pixel indices
                        cut(seq_along(1:nSamples),
                            10,#nSetRuns,
                            labels = FALSE))[[setX]]
-    ops_orig <- split(data.all, sample(1:nSamples, nrow(data.all), replace=T))
+    ops_orig <- ops <- split(data.all, sample(1:nSamples, nrow(data.all), replace=T))
   }
 } else if(uncSeg){ # if(!uncSeg & !loadUnc)
   if(!loadUnc){
@@ -416,7 +416,7 @@ if(uncRCP == 0){
 ##
 sampleOutput <- list()
 
-if(uncSeg){
+if(uncSeg | toRaster){
   pCROBASrseg <- copy(pCROBASr)
   pPRELrseg <- copy(pPRELr)
   pYASrseg <- copy(pYASr)
@@ -568,6 +568,8 @@ for(nii in nii0:niter2){
     if(uncHcFactor & nii>1){
       HcFactorr <- matrix(HcFactorrOr[nii],1,length(sampleIDs))#(1 + rHcFactor*rnorm(1))*matrix(1,1,length(sampleIDs))#length(sampleIDs))
     }
+    pPRELr <- matrix(pPREL,nrow=max(sampleIDs),ncol=length(pPREL),byrow = T)
+    pYASr <- matrix(pYAS,nrow=max(sampleIDs),ncol=length(pYAS),byrow = T)
     for(ij in sampleIDs){ 
       pCROBASr[[ij]] <- pCROBASrseg[[nii]]
       pPRELr[ij,] <- pPRELrseg[nii,]
