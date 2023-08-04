@@ -235,7 +235,7 @@ if(!uncSeg & !loadUnc){ # sample pixel indices
     load(paste0("uncRuns/segRuns/opsdata",r_no,".rdata"))
   }
   if(testRun){
-    sampleIDs <- c(1:min(sampleID,nSamples))
+    sampleIDs <- sampleIDs[1:min(sampleID,nSamples)]
   } else {
     sampleIDs <- c(1:nSamples)
   }
