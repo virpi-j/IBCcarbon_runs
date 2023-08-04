@@ -225,7 +225,7 @@ runModel <- function(sampleID, outType="dTabs", uncRCP=0, segScen="Base",
   } else {
 #    HcFactor <- 1
   }
-  print(paste("sampleID",sampleID,"HcFactor =",HcFactor))
+  print(paste("sampleID",sampleID,"HcFactor =",round(HcFactor,2)))
   
   ## Second, continue now starting from soil SS
   initPrebas = create_prebas_input.f(r_no, clim, data.sample, nYears = nYears,
