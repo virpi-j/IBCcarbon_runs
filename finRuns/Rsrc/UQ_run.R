@@ -566,7 +566,7 @@ for(nii in nii0:niter2){
     }
     HcFactorr <- matrix(1,1,max(sampleIDs))
     if(uncHcFactor & nii>1){
-      HcFactorr <- matrix(HcFactorrOr[nii],1,length(sampleIDs))#(1 + rHcFactor*rnorm(1))*matrix(1,1,length(sampleIDs))#length(sampleIDs))
+      HcFactorr <- matrix(HcFactorrOr[nii],1,max(sampleIDs))#(1 + rHcFactor*rnorm(1))*matrix(1,1,length(sampleIDs))#length(sampleIDs))
     }
     pPRELr <- matrix(pPREL,nrow=max(sampleIDs),ncol=length(pPREL),byrow = T)
     pYASr <- matrix(pYAS,nrow=max(sampleIDs),ncol=length(pYAS),byrow = T)
