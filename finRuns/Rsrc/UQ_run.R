@@ -674,10 +674,10 @@ for(nii in nii0:niter2){
           #toVemala<-T
           #source_url("https://raw.githubusercontent.com/virpi-j/IBCcarbon_runs/master/finRuns/Rsrc/settings.r")
           #source_url("https://raw.githubusercontent.com/virpi-j/IBCcarbon_runs/master/general/functions.r")
-        } else {
-        outtmp <- runModel(jx, outType=outType, harvScen="Base",uncRCP=0,nYears=nYears,
-                           compHarvX = compHarvX, landClassUnman=landClassUnman,
-                           harvInten="Base", procDrPeat = uncPeat)
+        } else if(uncRCPs[1]!=0) {
+          outtmp <- runModel(jx, outType=outType, harvScen="Base",uncRCP=0,nYears=nYears,
+                             compHarvX = compHarvX, landClassUnman=landClassUnman,
+                             harvInten="Base", procDrPeat = uncPeat)
         }
         for(uncRCP in uncRCPs){
           harvscen<-"Base" 
