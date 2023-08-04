@@ -179,24 +179,24 @@ if(uncRun){ # load distribution data
       areas <- areas/area_total
     } 
   }
-  if(uncPCrobas){
+  #if(uncPCrobas){
     load(paste0(parPath,"pCROB_unc.rdata"))
     parindCrob <- parind
     pCrobdim <- nrow(pCROBbirch)
-  }
-  if(uncPPrel){
+  #}
+  #if(uncPPrel){
     load(paste0(parPath,"pPREL_unc.rdata"))
     parindPrel <- parind
     pPreldim <- nrow(pPREL_unc)
-  }
-  if(uncPYas){
+  #}
+  #if(uncPYas){
     data <- read.delim(paste0(parPath,"Yasso15.dat"), header = TRUE, sep="\t") 
     pYasdim <- length(data[[1]])
     pYas_unc <- matrix(0,pYasdim,35)
     for(ind in 1:pYasdim){ # read parameter values to matrix
       pYas_unc[ind,] <-as.numeric(unlist(str_split(data[[1]][[ind]], pattern = "  ")))[2:36]
     }
-  }
+  #}
 } # if(uncRun){ # load distribution data
 #----------------------------------------------------------------------------
 # Generate nSamples sample initial value sets

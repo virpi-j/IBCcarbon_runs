@@ -127,7 +127,11 @@ runModel <- function(sampleID, outType="dTabs", uncRCP=0, segScen="Base",
   
   if(outType %in% c("uncRun","uncSeg")){
     area_tot <- sum(data.all$area) # ha
-    if(outType=="uncRun" & !toRaster) sampleX[,area := 16^2/10000] 
+    if(outType=="uncRun" & !toRaster){ 
+      sampleX[,area := 16^2/10000] 
+    } else {
+      sampleX[,area := N*16^2/10000] 
+    }    
     cA <- 1/nrow(sampleX) #area_tot/nrow(sampleX) 
     harvestLims <- as.numeric(harvestLimsr[sampleID,])
     HarvLimMaak[,1]<-harvestLims[1]*HarvLimMaak[,1]
